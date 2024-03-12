@@ -1,1 +1,3 @@
-# akari-flutter
+# akari
+
+A new Flutter project.
