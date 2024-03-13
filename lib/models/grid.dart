@@ -18,6 +18,14 @@ class Grid {
     generateGrid();
   }
 
+  bool isInGrid(int x, int y) {
+    if (x < 0 || y < 0 || x >= _gridSize || y >= _gridSize) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   void generateGrid() {
     //Initialisation des listes
     for (int i = 0; i < _gridSize; i++) {
@@ -105,11 +113,79 @@ class Grid {
         }
       }
     }
-    //On remet à 0 les cases temporairement mises à 4
+    //On remet à -2 les cases temporairement mises à 4
     for (int i = 0; i < _gridSize; i++) {
       for (int j = 0; j < _gridSize; j++) {
         if (startGrid[i][j] == -4) {
-          startGrid[i][j] = 0;
+          startGrid[i][j] = -2;
+        }
+      }
+    }
+    //Mise en place des contraintes aux murs
+    int nbContraintesTotal = (ratiosChiffreMurs[_difficulty] * cpt).round();
+    int nbContraintes = 0;
+    //Placement du bon nombre de contraintes
+    while (nbContraintes < nbContraintesTotal) {
+      //Parcourt de la grille
+      for (int i = 0; i < _gridSize; i++) {
+        for (int j = 0; j < _gridSize; j++) {
+          if (startGrid[i][j] == -1) {
+            //Si on a un mur
+            if (rand.nextDouble() < ratiosChiffreMurs[_difficulty]) {
+              //Aléatoire
+              startGrid[i][j] = -5; //Mur à placer
+              nbContraintes++;
+            }
+          }
+        }
+      }
+    }
+    //Update des contraintes avec le nombre d'ampoules autour
+    for (int j = 0; j < _gridSize; j++) {
+      for (int k = 0; k < _gridSize; k++) {
+        //Si on doit placer une contrainter
+        if (startGrid[j][k] == -5) {
+          int ampoulesNear = 0;
+          int nbCasesVidesNear = 0;
+          //On regarde au dessus, en dessous et sur les côtés le nombre d'ampoules et le nombre de cases vides
+          if (isInGrid(k + 1, j)) {
+            if (startGrid[j][k + 1] == -3) {
+              ampoulesNear++;
+              nbCasesVidesNear++;
+            } else if (startGrid[j][k + 1] == -1) {
+              nbCasesVidesNear++;
+            }
+          }
+          if (isInGrid(k - 1, j)) {
+            if (startGrid[j][k - 1] == -3) {
+              ampoulesNear++;
+              nbCasesVidesNear++;
+            } else if (startGrid[j][k - 1] == -1) {
+              nbCasesVidesNear++;
+            }
+          }
+          if (isInGrid(k, j + 1)) {
+            if (startGrid[j + 1][k] == -3) {
+              ampoulesNear++;
+              nbCasesVidesNear++;
+            } else if (startGrid[j + 1][k] == -1) {
+              nbCasesVidesNear++;
+            }
+          }
+          if (isInGrid(k, j - 1)) {
+            if (startGrid[j - 1][k] == -3) {
+              ampoulesNear++;
+              nbCasesVidesNear++;
+            } else if (startGrid[j - 1][k] == -1) {
+              nbCasesVidesNear++;
+            }
+          }
+          //On retire les contraintes des murs qui ne sont pas à côté d'un emplacement possible
+          if (nbCasesVidesNear != 0) {
+            startGrid[j][k] = ampoulesNear;
+          } else {
+            startGrid[j][k] = -1;
+          }
         }
       }
     }
