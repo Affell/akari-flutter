@@ -30,7 +30,8 @@ class Grid {
 
     //Calcul du nombre de murs à placer
     int nbMurs =
-        (ratiosMursSurface[_difficulty] * (_gridSize * _gridSize)) as int;
+        (ratiosMursSurface[_difficulty] * (_gridSize * _gridSize)).round();
+
     //Placement des murs
     Random rand = Random();
     int cpt = 0, x = 0, y = 0;

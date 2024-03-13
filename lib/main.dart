@@ -20,7 +20,7 @@ class MainApp extends StatelessWidget {
 }
 
 class MyGridWidget extends StatelessWidget {
-  final Grid grid1 = Grid(difficulty: 0, gridSize: 10);
+  final Grid grid1 = Grid(difficulty: 0, gridSize: 7);
 
   MyGridWidget({super.key});
 
