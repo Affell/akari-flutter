@@ -1,7 +1,14 @@
+import 'package:akari/models/database.dart';
 import 'package:flutter/material.dart';
 import 'models/grid.dart';
 
-void main() => runApp(MainApp());
+DatabaseManager databaseManager = DatabaseManager();
+
+Future main() async {
+  databaseManager.initDatabase();
+
+  runApp(const MainApp());
+}
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
@@ -20,7 +27,7 @@ class MainApp extends StatelessWidget {
 }
 
 class MyGridWidget extends StatelessWidget {
-  final Grid grid1 = Grid(difficulty: 0, gridSize: 10);
+  final Grid grid1 = Grid.createGrid(0, 10);
 
   MyGridWidget({super.key});
 

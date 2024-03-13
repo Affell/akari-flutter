@@ -1,23 +1,29 @@
+import 'package:akari/models/action.dart';
 import 'package:flutter/material.dart';
+import 'package:tuple/tuple.dart';
 
 class Grid {
-  // int _difficulty;
-  int _gridSize;
+  final int creationTime;
+  final int difficulty;
+  final int gridSize;
   List<List<int>> startGrid = [];
-  List<List<int>> currentGrid = [];
+  List<Tuple2<int, int>> lights = [];
+  List<GridAction> actions = [];
 
-  Grid({
-    required int difficulty,
-    required int gridSize,
-  }) : // _difficulty = difficulty//,
-        _gridSize = gridSize {
+  Grid(this.creationTime, this.difficulty, this.gridSize, this.startGrid,
+      this.lights, this.actions);
+
+  Grid.createGrid(
+    this.difficulty,
+    this.gridSize,
+  ) : creationTime = DateTime.now().millisecondsSinceEpoch {
     generateGrid();
   }
 
   void generateGrid() {
-    for (int i = 0; i < _gridSize; i++) {
+    for (int i = 0; i < gridSize; i++) {
       List<int> startRow = [];
-      for (int j = 0; j < _gridSize; j++) {
+      for (int j = 0; j < gridSize; j++) {
         startRow.add(0);
       }
       startGrid.add(startRow);
@@ -27,11 +33,11 @@ class Grid {
   Widget displayGrid() {
     return GridView.builder(
       gridDelegate:
-          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: _gridSize),
-      itemCount: _gridSize * _gridSize,
+          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: gridSize),
+      itemCount: gridSize * gridSize,
       itemBuilder: (BuildContext context, int index) {
-        int row = index ~/ _gridSize;
-        int col = index % _gridSize;
+        int row = index ~/ gridSize;
+        int col = index % gridSize;
         return GridTile(
           child: Container(
             decoration: BoxDecoration(
