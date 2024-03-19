@@ -201,137 +201,146 @@ class Grid {
   This function checks a grid to determine if the solution grid is correct.
   If solution correct: true, else false.
 */
-  bool solutionChecker(List<List<int>> grid){
+  bool solutionChecker(List<List<int>> grid) {
     int n = grid.length;
-    for (int i=0; i<n; i++){
-      for (int j=0; j<n; j++){
-        if (grid[i][j]>=0){ // Wall with condition
-          int nb = 0;             // Counter to count the number of bulbs around the cell
-          if (i-1>=0){
-            if (grid[i-1][j]==-3){  // Condition to count bulbs north, south, east, west
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n; j++) {
+        if (grid[i][j] >= 0) {
+          // Wall with condition
+          int nb = 0; // Counter to count the number of bulbs around the cell
+          if (i - 1 >= 0) {
+            if (grid[i - 1][j] == -3) {
+              // Condition to count bulbs north, south, east, west
               nb++;
             }
           }
-          if (i+1<n){
-            if (grid[i+1][j]==-3){
+          if (i + 1 < n) {
+            if (grid[i + 1][j] == -3) {
               nb++;
             }
           }
-          if (j-1>=0){
-            if (grid[i][j-1]==-3){
+          if (j - 1 >= 0) {
+            if (grid[i][j - 1] == -3) {
               nb++;
             }
           }
-          if (j+1<n){
-            if (grid[i][j+1]==-3){
+          if (j + 1 < n) {
+            if (grid[i][j + 1] == -3) {
               nb++;
             }
           }
-          if (nb!=grid[i][j]){    // If the expected number does not match the found number then return false
-            print("Invalid grid");
+          if (nb != grid[i][j]) {
+            // If the expected number does not match the found number then return false
             return false;
           }
         }
-        if (grid[i][j]==-3){  // If bulb, check that there is no adjacent bulb
+        if (grid[i][j] == -3) {
+          // If bulb, check that there is no adjacent bulb
           bool southWall = false; // South wall encountered
           bool northWall = false; // North wall encountered
-          bool eastWall = false;  // East wall encountered
-          bool westWall = false;  // West wall encountered
+          bool eastWall = false; // East wall encountered
+          bool westWall = false; // West wall encountered
           bool ampouleFind = false; // Illuminating bulb found
-          for (int k=1; k<n; k++){    // Look at each cell around the cell until reaching the edge of the grid or encountering a wall
-            if (!eastWall && ((i-k)>=0)){  // Check east direction 
-              if (grid[i-k][j]==-3){
+          for (int k = 1; k < n; k++) {
+            // Look at each cell around the cell until reaching the edge of the grid or encountering a wall
+            if (!eastWall && ((i - k) >= 0)) {
+              // Check east direction
+              if (grid[i - k][j] == -3) {
                 ampouleFind = true;
               }
-              if (grid[i-k][j]>=-1){
+              if (grid[i - k][j] >= -1) {
                 eastWall = true;
               }
             }
-            if (!northWall && ((j-k)>=0)){  // Check north direction
-              if (grid[i][j-k]==-3){
+            if (!northWall && ((j - k) >= 0)) {
+              // Check north direction
+              if (grid[i][j - k] == -3) {
                 ampouleFind = true;
               }
-              if (grid[i][j-k]>=-1){
+              if (grid[i][j - k] >= -1) {
                 northWall = true;
               }
             }
-            if (!southWall && ((j+k)<n)){   // Check south direction
-              if (grid[i][j+k]==-3){
+            if (!southWall && ((j + k) < n)) {
+              // Check south direction
+              if (grid[i][j + k] == -3) {
                 ampouleFind = true;
               }
-              if (grid[i][j+k]>=-1){
+              if (grid[i][j + k] >= -1) {
                 southWall = true;
               }
             }
-            if (!westWall && ((i+k)<n)){    // Check west direction
-              if (grid[i+k][j]==-3){
+            if (!westWall && ((i + k) < n)) {
+              // Check west direction
+              if (grid[i + k][j] == -3) {
                 ampouleFind = true;
               }
-              if (grid[i+k][j]>=-1){
+              if (grid[i + k][j] >= -1) {
                 westWall = true;
               }
             }
           }
-          if (ampouleFind){        // If bulb found then false
-            print("Invalid grid");
+          if (ampouleFind) {
+            // If bulb found then false
             return false;
           }
-          
         }
-        if (grid[i][j]==-2){ // White cell, we must check if it is illuminated, if it is not then no solution
+        if (grid[i][j] == -2) {
+          // White cell, we must check if it is illuminated, if it is not then no solution
           bool southWall = false; // South wall encountered
           bool northWall = false; // North wall encountered
-          bool eastWall = false;  // East wall encountered
-          bool westWall = false;  // West wall encountered
+          bool eastWall = false; // East wall encountered
+          bool westWall = false; // West wall encountered
           bool ampouleFind = false; // Illuminating bulb found
-          for (int k=1; k<n; k++){    // Look at each cell around the cell until reaching the edge of the grid or encountering a wall
-            if (!eastWall && ((i-k)>=0)){  // Check east direction 
-              if (grid[i-k][j]==-3){
+          for (int k = 1; k < n; k++) {
+            // Look at each cell around the cell until reaching the edge of the grid or encountering a wall
+            if (!eastWall && ((i - k) >= 0)) {
+              // Check east direction
+              if (grid[i - k][j] == -3) {
                 ampouleFind = true;
               }
-              if (grid[i-k][j]>=-1){
+              if (grid[i - k][j] >= -1) {
                 eastWall = true;
               }
             }
-            if (!northWall && ((j-k)>=0)){  // Check north direction
-              if (grid[i][j-k]==-3){
+            if (!northWall && ((j - k) >= 0)) {
+              // Check north direction
+              if (grid[i][j - k] == -3) {
                 ampouleFind = true;
               }
-              if (grid[i][j-k]>=-1){
+              if (grid[i][j - k] >= -1) {
                 northWall = true;
               }
             }
-            if (!southWall && ((j+k)<n)){   // Check south direction
-              if (grid[i][j+k]==-3){
+            if (!southWall && ((j + k) < n)) {
+              // Check south direction
+              if (grid[i][j + k] == -3) {
                 ampouleFind = true;
               }
-              if (grid[i][j+k]>=-1){
+              if (grid[i][j + k] >= -1) {
                 southWall = true;
               }
             }
-            if (!westWall && ((i+k)<n)){    // Check west direction
-              if (grid[i+k][j]==-3){
+            if (!westWall && ((i + k) < n)) {
+              // Check west direction
+              if (grid[i + k][j] == -3) {
                 ampouleFind = true;
               }
-              if (grid[i+k][j]>=-1){
+              if (grid[i + k][j] >= -1) {
                 westWall = true;
               }
             }
           }
-          if (!ampouleFind){        // If no bulb found then false
-            print("Invalid grid");
+          if (!ampouleFind) {
+            // If no bulb found then false
             return false;
           }
         }
-          // If the cell is -1 (wall), nothing to check
+        // If the cell is -1 (wall), nothing to check
       }
     }
-    print("Valid grid");
     return true;
   }
-
-
-
 
   Widget displayGrid() {
     return GridView.builder(
