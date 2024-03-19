@@ -195,6 +195,14 @@ class Grid {
         }
       }
     }
+    //On remet à -2 les cases temporairement mises à -3 (les ampoules)
+    for (int i = 0; i < gridSize; i++) {
+      for (int j = 0; j < gridSize; j++) {
+        if (startGrid[i][j] == -3) {
+          startGrid[i][j] = -2;
+        }
+      }
+    }
   }
 
 /*
