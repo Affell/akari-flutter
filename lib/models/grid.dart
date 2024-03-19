@@ -362,9 +362,12 @@ class Grid {
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(color: Colors.black),
+              color: startGrid[row][col] == -1 ? Colors.black : Colors.white,
             ),
             child: Center(
-              child: Text('${startGrid[row][col]}'),
+              child: Text(startGrid[row][col] >= 0
+                  ? startGrid[row][col].toString()
+                  : ''),
             ),
           ),
         );
