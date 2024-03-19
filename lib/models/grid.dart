@@ -361,13 +361,19 @@ class Grid {
         return GridTile(
           child: Container(
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
-              color: startGrid[row][col] == -1 ? Colors.black : Colors.white,
-            ),
+                border: Border.all(color: Colors.black),
+                color: startGrid[row][col] == -1
+                    ? Colors.black
+                    : startGrid[row][col] >= 0
+                        ? Colors.black
+                        : Colors.white),
             child: Center(
-              child: Text(startGrid[row][col] >= 0
-                  ? startGrid[row][col].toString()
-                  : ''),
+              child: Text(
+                startGrid[row][col] >= 0 ? startGrid[row][col].toString() : '',
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
+              ),
             ),
           ),
         );
