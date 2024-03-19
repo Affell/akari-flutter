@@ -20,19 +20,22 @@ class MainApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Akari Game'),
         ),
-        body: MyGridWidget(),
+        body: const MyGridWidget(),
       ),
     );
   }
 }
 
 class MyGridWidget extends StatelessWidget {
-  final Grid grid1 = Grid.createGrid(0, 10);
-
-  MyGridWidget({super.key});
+  const MyGridWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return grid1.displayGrid();
+    return GridWidget(
+      grid: Grid.createGrid(
+          difficulty: 0,
+          gridSize: 10,
+          creationTime: DateTime.now().millisecondsSinceEpoch ~/ 1000),
+    );
   }
 }

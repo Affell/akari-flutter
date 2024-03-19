@@ -8,22 +8,24 @@ const List<double> ratiosMursSurface = [0.3, 0.2, 0.1];
 const List<double> ratiosChiffreMurs = [0.6, 0.7, 0.8];
 
 class Grid {
-  final int creationTime;
-  final int difficulty;
-  final int gridSize;
+  int difficulty;
+  int gridSize;
+  int creationTime;
   List<List<int>> startGrid = [];
   List<Tuple2<int, int>> lights = [];
   List<GridAction> actions = [];
 
+  Grid.createGrid(
+      {required this.difficulty,
+      required this.gridSize,
+      required this.creationTime}) {
+    generateGrid();
+  }
+
   Grid(this.creationTime, this.difficulty, this.gridSize, this.startGrid,
       this.lights, this.actions);
 
-  Grid.createGrid(
-    this.difficulty,
-    this.gridSize,
-  ) : creationTime = DateTime.now().millisecondsSinceEpoch ~/ 1000 {
-    generateGrid();
-  }
+  //Méthodes
 
   bool isInGrid(int x, int y) {
     if (x < 0 || y < 0 || x >= gridSize || y >= gridSize) {
@@ -41,7 +43,6 @@ class Grid {
       }
       startGrid.add(startRow);
     }
-
     //Calcul du nombre de murs à placer
     int nbMurs =
         (ratiosMursSurface[difficulty] * (gridSize * gridSize)).round();
@@ -205,7 +206,7 @@ class Grid {
     }
   }
 
-/*
+  /*
   This function checks a grid to determine if the solution grid is correct.
   If solution correct: true, else false.
 */
@@ -349,8 +350,41 @@ class Grid {
     }
     return true;
   }
+}
 
-  Widget displayGrid() {
+class GridWidget extends StatefulWidget {
+  final Grid grid;
+  const GridWidget({super.key, required this.grid});
+
+  @override
+  State<StatefulWidget> createState() => _GridWidget();
+}
+
+class _GridWidget extends State<GridWidget> {
+  void clickDetected(int index) {
+    List<List<int>> startGrid = widget.grid.startGrid;
+    int ligne = index ~/ widget.grid.gridSize;
+    int colonne = index % widget.grid.gridSize;
+    if (startGrid[ligne][colonne] == -2) {
+      startGrid[ligne][colonne] = -3; //Poser une ampoule
+      widget.grid.lights.add(Tuple2(ligne, colonne));
+      setState(() {});
+    } else if (startGrid[ligne][colonne] == -3) {
+      startGrid[ligne][colonne] = -2; //Retirer une ampoule
+      widget.grid.lights.remove(Tuple2(ligne, colonne));
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    int gridSize = widget.grid.gridSize;
+    List<List<int>> startGrid = widget.grid.startGrid;
     return GridView.builder(
       gridDelegate:
           SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: gridSize),
@@ -358,20 +392,31 @@ class Grid {
       itemBuilder: (BuildContext context, int index) {
         int row = index ~/ gridSize;
         int col = index % gridSize;
-        return GridTile(
-          child: Container(
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
-                color: startGrid[row][col] == -1
-                    ? Colors.black
-                    : startGrid[row][col] >= 0
-                        ? Colors.black
-                        : Colors.white),
-            child: Center(
-              child: Text(
-                startGrid[row][col] >= 0 ? startGrid[row][col].toString() : '',
-                style: const TextStyle(
-                  color: Colors.white,
+        return GestureDetector(
+          onTap: () {
+            clickDetected(index);
+          },
+          child: GridTile(
+            child: Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  color: startGrid[row][col] == -1
+                      ? Colors.black
+                      : startGrid[row][col] >= 0
+                          ? Colors.black
+                          : startGrid[row][col] == -3
+                              ? Colors.blue //Temporaire pour les ampoules
+                              : startGrid[row][col] == -4
+                                  ? Colors.amber
+                                  : Colors.white),
+              child: Center(
+                child: Text(
+                  startGrid[row][col] >= 0
+                      ? startGrid[row][col].toString()
+                      : '',
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
