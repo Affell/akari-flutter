@@ -21,7 +21,7 @@ class Grid {
   Grid.createGrid(
     this.difficulty,
     this.gridSize,
-  ) : creationTime = DateTime.now().millisecondsSinceEpoch {
+  ) : creationTime = DateTime.now().millisecondsSinceEpoch ~/ 1000 {
     generateGrid();
   }
 
