@@ -294,7 +294,7 @@ class Grid {
             return false;
           }
         }
-        if (grid[i][j] == -2) {
+        if (grid[i][j] == -2 || grid[i][j] <= -4) {
           // White cell, we must check if it is illuminated, if it is not then no solution
           bool southWall = false; // South wall encountered
           bool northWall = false; // North wall encountered
@@ -365,15 +365,110 @@ class _GridWidget extends State<GridWidget> {
     List<List<int>> startGrid = widget.grid.startGrid;
     int ligne = index ~/ widget.grid.gridSize;
     int colonne = index % widget.grid.gridSize;
-    if (startGrid[ligne][colonne] == -2) {
+    if (startGrid[ligne][colonne] == -2 || startGrid[ligne][colonne] <= -4) {
       startGrid[ligne][colonne] = -3; //Poser une ampoule
       widget.grid.lights.add(Tuple2(ligne, colonne));
+
+      //Eclairage des cases en ligne / colonne
+      int x = colonne;
+      while (x < widget.grid.gridSize && startGrid[ligne][x] < -1) {
+        if (startGrid[ligne][x] == -2) {
+          startGrid[ligne][x] = -4;
+        } else if (startGrid[ligne][x] <= -4) {
+          startGrid[ligne][x]--;
+        }
+        x++;
+      }
+      x = colonne;
+      while (x >= 0 && startGrid[ligne][x] < -1) {
+        if (startGrid[ligne][x] == -2) {
+          startGrid[ligne][x] = -4;
+        } else if (startGrid[ligne][x] <= -4) {
+          startGrid[ligne][x]--;
+        }
+        x--;
+      }
+      int y = ligne;
+      while (y < widget.grid.gridSize && startGrid[y][colonne] < -1) {
+        if (startGrid[y][colonne] == -2) {
+          startGrid[y][colonne] = -4;
+        } else if (startGrid[y][colonne] <= -4) {
+          startGrid[y][colonne]--;
+        }
+        y++;
+      }
+      y = ligne;
+      while (y >= 0 && startGrid[y][colonne] < -1) {
+        if (startGrid[y][colonne] == -2) {
+          startGrid[y][colonne] = -4;
+        } else if (startGrid[y][colonne] <= -4) {
+          startGrid[y][colonne]--;
+        }
+        y--;
+      }
+
       setState(() {});
     } else if (startGrid[ligne][colonne] == -3) {
       startGrid[ligne][colonne] = -2; //Retirer une ampoule
       widget.grid.lights.remove(Tuple2(ligne, colonne));
+
+      //Réduire l'éclairage des cases en ligne / colonne
+      int autresAmpoulesAlignees = 0;
+      int x = colonne;
+      while (x < widget.grid.gridSize && startGrid[ligne][x] < -1) {
+        if (startGrid[ligne][x] == -4) {
+          startGrid[ligne][x] = -2;
+        } else if (startGrid[ligne][x] < -4) {
+          startGrid[ligne][x]++;
+        }
+        if (startGrid[ligne][x] == -3) {
+          autresAmpoulesAlignees++;
+        }
+        x++;
+      }
+      x = colonne;
+      while (x >= 0 && startGrid[ligne][x] < -1) {
+        if (startGrid[ligne][x] == -4) {
+          startGrid[ligne][x] = -2;
+        } else if (startGrid[ligne][x] < -4) {
+          startGrid[ligne][x]++;
+        }
+        if (startGrid[ligne][x] == -3) {
+          autresAmpoulesAlignees++;
+        }
+        x--;
+      }
+      int y = ligne;
+      while (y < widget.grid.gridSize && startGrid[y][colonne] < -1) {
+        if (startGrid[y][colonne] == -4) {
+          startGrid[y][colonne] = -2;
+        } else if (startGrid[y][colonne] < -4) {
+          startGrid[y][colonne]++;
+        }
+        if (startGrid[y][colonne] == -3) {
+          autresAmpoulesAlignees++;
+        }
+        y++;
+      }
+      y = ligne;
+      while (y >= 0 && startGrid[y][colonne] < -1) {
+        if (startGrid[y][colonne] == -4) {
+          startGrid[y][colonne] = -2;
+        } else if (startGrid[y][colonne] < -4) {
+          startGrid[y][colonne]++;
+        }
+        if (startGrid[y][colonne] == -3) {
+          autresAmpoulesAlignees++;
+        }
+        y--;
+      }
+      if (autresAmpoulesAlignees > 0) {
+        startGrid[ligne][colonne] = -3 - autresAmpoulesAlignees;
+      }
+
       setState(() {});
     }
+    //print(widget.grid.solutionChecker(widget.grid.startGrid));
   }
 
   @override
@@ -406,7 +501,7 @@ class _GridWidget extends State<GridWidget> {
                           ? Colors.black
                           : startGrid[row][col] == -3
                               ? Colors.blue //Temporaire pour les ampoules
-                              : startGrid[row][col] == -4
+                              : startGrid[row][col] <= -4
                                   ? Colors.amber
                                   : Colors.white),
               child: Center(
