@@ -1,8 +1,11 @@
 import 'package:akari/models/database.dart';
 import 'package:flutter/material.dart';
 import 'models/grid.dart';
+import 'package:just_audio/just_audio.dart';
 
 DatabaseManager databaseManager = DatabaseManager();
+final player = AudioPlayer();
+
 
 Future main() async {
   databaseManager.initDatabase();
@@ -15,6 +18,12 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  player.setUrl('asset:lib/assets/musics/backgroundMusic.mp3');
+  
+  player.setVolume(0.5);
+
+  player.setLoopMode(LoopMode.all);
+  player.play();
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(

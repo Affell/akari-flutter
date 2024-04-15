@@ -1,11 +1,17 @@
 import 'dart:math';
 
+import 'package:akari/main.dart';
 import 'package:akari/models/action.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
+import 'package:just_audio/just_audio.dart';
 
 const List<double> ratiosMursSurface = [0.3, 0.2, 0.1];
 const List<double> ratiosChiffreMurs = [0.6, 0.7, 0.8];
+
+final lampBuild = AudioPlayer();
+final lampBreak = AudioPlayer();
+
 
 class Grid {
   int difficulty;
@@ -366,8 +372,14 @@ class _GridWidget extends State<GridWidget> {
     int ligne = index ~/ widget.grid.gridSize;
     int colonne = index % widget.grid.gridSize;
     if (startGrid[ligne][colonne] == -2 || startGrid[ligne][colonne] <= -4) {
+      lampBuild.setVolume(1);
+      lampBuild.setUrl('asset:lib/assets/musics/lampBuildSound.mp3');
+      lampBuild.play();
+      lampBuild.setUrl('asset:lib/assets/musics/lampBuildSound.mp3');
+
       startGrid[ligne][colonne] = -3; //Poser une ampoule
       widget.grid.lights.add(Tuple2(ligne, colonne));
+
 
       //Eclairage des cases en ligne / colonne
       int x = colonne;
@@ -409,6 +421,12 @@ class _GridWidget extends State<GridWidget> {
 
       setState(() {});
     } else if (startGrid[ligne][colonne] == -3) {
+      lampBreak.setVolume(0.5);
+      lampBreak.setUrl('asset:lib/assets/musics/lampBreakSound.mp3');
+      lampBreak.play();
+      lampBreak.setUrl('asset:lib/assets/musics/lampBreakSound.mp3');
+
+
       startGrid[ligne][colonne] = -2; //Retirer une ampoule
       widget.grid.lights.remove(Tuple2(ligne, colonne));
 
