@@ -78,7 +78,7 @@ class Grid {
         x = rand.nextInt(gridSize);
         y = rand.nextInt(gridSize);
       } while (startGrid[x][y] != 0);
-      startGrid[x][y] = -3;
+      startGrid[x][y] = 5;
       nbCasesTotalEteintes--; //Une case en moins à allumer car on y place une ampoule
       //Actualisation du nombre de cases éclairées
       murSurChemin = false;
@@ -146,7 +146,7 @@ class Grid {
             //Si on a un mur
             if (rand.nextDouble() < ratiosChiffreMurs[difficulty]) {
               //Aléatoire
-              startGrid[i][j] = -5; //Mur à placer
+              startGrid[i][j] = -5; //Contrainte à placer
               nbContraintes++;
             }
           }
@@ -156,40 +156,40 @@ class Grid {
     //Update des contraintes avec le nombre d'ampoules autour
     for (int j = 0; j < gridSize; j++) {
       for (int k = 0; k < gridSize; k++) {
-        //Si on doit placer une contrainter
+        //Si on doit placer une contrainte
         if (startGrid[j][k] == -5) {
           int ampoulesNear = 0;
           int nbCasesVidesNear = 0;
           //On regarde au dessus, en dessous et sur les côtés le nombre d'ampoules et le nombre de cases vides
           if (isInGrid(k + 1, j)) {
-            if (startGrid[j][k + 1] == -3) {
+            if (startGrid[j][k + 1] == 5) {
               ampoulesNear++;
               nbCasesVidesNear++;
-            } else if (startGrid[j][k + 1] == -1) {
+            } else if (startGrid[j][k + 1] == -2) {
               nbCasesVidesNear++;
             }
           }
           if (isInGrid(k - 1, j)) {
-            if (startGrid[j][k - 1] == -3) {
+            if (startGrid[j][k - 1] == 5) {
               ampoulesNear++;
               nbCasesVidesNear++;
-            } else if (startGrid[j][k - 1] == -1) {
+            } else if (startGrid[j][k - 1] == -2) {
               nbCasesVidesNear++;
             }
           }
           if (isInGrid(k, j + 1)) {
-            if (startGrid[j + 1][k] == -3) {
+            if (startGrid[j + 1][k] == 5) {
               ampoulesNear++;
               nbCasesVidesNear++;
-            } else if (startGrid[j + 1][k] == -1) {
+            } else if (startGrid[j + 1][k] == -2) {
               nbCasesVidesNear++;
             }
           }
           if (isInGrid(k, j - 1)) {
-            if (startGrid[j - 1][k] == -3) {
+            if (startGrid[j - 1][k] == 5) {
               ampoulesNear++;
               nbCasesVidesNear++;
-            } else if (startGrid[j - 1][k] == -1) {
+            } else if (startGrid[j - 1][k] == -2) {
               nbCasesVidesNear++;
             }
           }
@@ -202,10 +202,10 @@ class Grid {
         }
       }
     }
-    //On remet à -2 les cases temporairement mises à -3 (les ampoules)
+    //On remet à -2 les cases temporairement mises à 5 (les ampoules)
     for (int i = 0; i < gridSize; i++) {
       for (int j = 0; j < gridSize; j++) {
-        if (startGrid[i][j] == -3) {
+        if (startGrid[i][j] == 5) {
           startGrid[i][j] = -2;
         }
       }
@@ -230,42 +230,59 @@ class Grid {
       int colonne = lights[i].item1;
       if (currentGrid[ligne][colonne] == -2 ||
           currentGrid[ligne][colonne] <= -4) {
-        currentGrid[ligne][colonne] = -3;
+        currentGrid[ligne][colonne] = 5;
 
         //Eclairage des cases en ligne / colonne
         int x = colonne;
-        while (x < gridSize && currentGrid[ligne][x] < -1) {
+        while (x < gridSize &&
+            (currentGrid[ligne][x] < -1 || currentGrid[ligne][x] >= 5)) {
           if (currentGrid[ligne][x] == -2) {
             currentGrid[ligne][x] = -4;
           } else if (currentGrid[ligne][x] <= -4) {
             currentGrid[ligne][x]--;
+          } else if (currentGrid[ligne][x] >= 5 && x != colonne) {
+            currentGrid[ligne][colonne]++;
+            currentGrid[ligne][x]++;
           }
+
           x++;
         }
         x = colonne;
-        while (x >= 0 && currentGrid[ligne][x] < -1) {
+        while (x >= 0 &&
+            (currentGrid[ligne][x] < -1 || currentGrid[ligne][x] >= 5)) {
           if (currentGrid[ligne][x] == -2) {
             currentGrid[ligne][x] = -4;
           } else if (currentGrid[ligne][x] <= -4) {
             currentGrid[ligne][x]--;
+          } else if (currentGrid[ligne][x] >= 5 && x != colonne) {
+            currentGrid[ligne][colonne]++;
+            currentGrid[ligne][x]++;
           }
           x--;
         }
         int y = ligne;
-        while (y < gridSize && currentGrid[y][colonne] < -1) {
+        while (y < gridSize &&
+            (currentGrid[y][colonne] < -1 || currentGrid[y][colonne] >= 5)) {
           if (currentGrid[y][colonne] == -2) {
             currentGrid[y][colonne] = -4;
           } else if (currentGrid[y][colonne] <= -4) {
             currentGrid[y][colonne]--;
+          } else if (currentGrid[y][colonne] >= 5 && y != ligne) {
+            currentGrid[ligne][colonne]++;
+            currentGrid[y][colonne]++;
           }
           y++;
         }
         y = ligne;
-        while (y >= 0 && currentGrid[y][colonne] < -1) {
+        while (y >= 0 &&
+            (currentGrid[y][colonne] < -1 || currentGrid[y][colonne] >= 5)) {
           if (currentGrid[y][colonne] == -2) {
             currentGrid[y][colonne] = -4;
           } else if (currentGrid[y][colonne] <= -4) {
             currentGrid[y][colonne]--;
+          } else if (currentGrid[y][colonne] >= 5 && y != ligne) {
+            currentGrid[ligne][colonne]++;
+            currentGrid[y][colonne]++;
           }
           y--;
         }
@@ -285,23 +302,23 @@ class Grid {
           // Wall with condition
           int nb = 0; // Counter to count the number of bulbs around the cell
           if (i - 1 >= 0) {
-            if (grid[i - 1][j] == -3) {
+            if (grid[i - 1][j] == 5) {
               // Condition to count bulbs north, south, east, west
               nb++;
             }
           }
           if (i + 1 < n) {
-            if (grid[i + 1][j] == -3) {
+            if (grid[i + 1][j] == 5) {
               nb++;
             }
           }
           if (j - 1 >= 0) {
-            if (grid[i][j - 1] == -3) {
+            if (grid[i][j - 1] == 5) {
               nb++;
             }
           }
           if (j + 1 < n) {
-            if (grid[i][j + 1] == -3) {
+            if (grid[i][j + 1] == 5) {
               nb++;
             }
           }
@@ -310,7 +327,7 @@ class Grid {
             return false;
           }
         }
-        if (grid[i][j] == -3) {
+        if (grid[i][j] == 5) {
           // If bulb, check that there is no adjacent bulb
           bool southWall = false; // South wall encountered
           bool northWall = false; // North wall encountered
@@ -321,7 +338,7 @@ class Grid {
             // Look at each cell around the cell until reaching the edge of the grid or encountering a wall
             if (!eastWall && ((i - k) >= 0)) {
               // Check east direction
-              if (grid[i - k][j] == -3) {
+              if (grid[i - k][j] == 5) {
                 ampouleFind = true;
               }
               if (grid[i - k][j] >= -1) {
@@ -330,7 +347,7 @@ class Grid {
             }
             if (!northWall && ((j - k) >= 0)) {
               // Check north direction
-              if (grid[i][j - k] == -3) {
+              if (grid[i][j - k] == 5) {
                 ampouleFind = true;
               }
               if (grid[i][j - k] >= -1) {
@@ -339,7 +356,7 @@ class Grid {
             }
             if (!southWall && ((j + k) < n)) {
               // Check south direction
-              if (grid[i][j + k] == -3) {
+              if (grid[i][j + k] == 5) {
                 ampouleFind = true;
               }
               if (grid[i][j + k] >= -1) {
@@ -348,7 +365,7 @@ class Grid {
             }
             if (!westWall && ((i + k) < n)) {
               // Check west direction
-              if (grid[i + k][j] == -3) {
+              if (grid[i + k][j] == 5) {
                 ampouleFind = true;
               }
               if (grid[i + k][j] >= -1) {
@@ -372,7 +389,7 @@ class Grid {
             // Look at each cell around the cell until reaching the edge of the grid or encountering a wall
             if (!eastWall && ((i - k) >= 0)) {
               // Check east direction
-              if (grid[i - k][j] == -3) {
+              if (grid[i - k][j] == 5) {
                 ampouleFind = true;
               }
               if (grid[i - k][j] >= -1) {
@@ -381,7 +398,7 @@ class Grid {
             }
             if (!northWall && ((j - k) >= 0)) {
               // Check north direction
-              if (grid[i][j - k] == -3) {
+              if (grid[i][j - k] == 5) {
                 ampouleFind = true;
               }
               if (grid[i][j - k] >= -1) {
@@ -390,7 +407,7 @@ class Grid {
             }
             if (!southWall && ((j + k) < n)) {
               // Check south direction
-              if (grid[i][j + k] == -3) {
+              if (grid[i][j + k] == 5) {
                 ampouleFind = true;
               }
               if (grid[i][j + k] >= -1) {
@@ -399,7 +416,7 @@ class Grid {
             }
             if (!westWall && ((i + k) < n)) {
               // Check west direction
-              if (grid[i + k][j] == -3) {
+              if (grid[i + k][j] == 5) {
                 ampouleFind = true;
               }
               if (grid[i + k][j] >= -1) {
@@ -422,7 +439,6 @@ class Grid {
 class GridWidget extends StatefulWidget {
   final Grid grid;
   const GridWidget({super.key, required this.grid});
-  
 
   @override
   State<StatefulWidget> createState() => _GridWidget();
@@ -438,107 +454,135 @@ class _GridWidget extends State<GridWidget> {
       lampBuild.setVolume(1);
       lampBuild.setUrl('asset:lib/assets/musics/lampBuildSound.mp3');
       lampBuild.play();
-      
-      currentGrid[ligne][colonne] = -3; //Poser une ampoule
+
+      currentGrid[ligne][colonne] = 5; //Poser une ampoule
       widget.grid.lights.add(Tuple2(ligne, colonne));
 
       //Eclairage des cases en ligne / colonne
       int x = colonne;
-      while (x < widget.grid.gridSize && currentGrid[ligne][x] < -1) {
+      while (x < widget.grid.gridSize &&
+          (currentGrid[ligne][x] < -1 || currentGrid[ligne][x] >= 5)) {
         if (currentGrid[ligne][x] == -2) {
           currentGrid[ligne][x] = -4;
         } else if (currentGrid[ligne][x] <= -4) {
           currentGrid[ligne][x]--;
+        } else if (currentGrid[ligne][x] >= 5 && x != colonne) {
+          currentGrid[ligne][colonne]++;
+          currentGrid[ligne][x]++;
         }
         x++;
       }
       x = colonne;
-      while (x >= 0 && currentGrid[ligne][x] < -1) {
+      while (x >= 0 &&
+          (currentGrid[ligne][x] < -1 || currentGrid[ligne][x] >= 5)) {
         if (currentGrid[ligne][x] == -2) {
           currentGrid[ligne][x] = -4;
         } else if (currentGrid[ligne][x] <= -4) {
           currentGrid[ligne][x]--;
+        } else if (currentGrid[ligne][x] >= 5 && x != colonne) {
+          currentGrid[ligne][colonne]++;
+          currentGrid[ligne][x]++;
         }
         x--;
       }
       int y = ligne;
-      while (y < widget.grid.gridSize && currentGrid[y][colonne] < -1) {
+      while (y < widget.grid.gridSize &&
+          (currentGrid[y][colonne] < -1 || currentGrid[y][colonne] >= 5)) {
         if (currentGrid[y][colonne] == -2) {
           currentGrid[y][colonne] = -4;
         } else if (currentGrid[y][colonne] <= -4) {
           currentGrid[y][colonne]--;
+        } else if (currentGrid[y][colonne] >= 5 && y != ligne) {
+          currentGrid[ligne][colonne]++;
+          currentGrid[y][colonne]++;
         }
         y++;
       }
       y = ligne;
-      while (y >= 0 && currentGrid[y][colonne] < -1) {
+      while (y >= 0 &&
+          (currentGrid[y][colonne] < -1 || currentGrid[y][colonne] >= 5)) {
         if (currentGrid[y][colonne] == -2) {
           currentGrid[y][colonne] = -4;
         } else if (currentGrid[y][colonne] <= -4) {
           currentGrid[y][colonne]--;
+        } else if (currentGrid[y][colonne] >= 5 && y != ligne) {
+          currentGrid[ligne][colonne]++;
+          currentGrid[y][colonne]++;
         }
         y--;
       }
 
       setState(() {});
-    } else if (currentGrid[ligne][colonne] == -3) {
+    } else if (currentGrid[ligne][colonne] >= 5) {
       lampBreak.setVolume(0.5);
       lampBreak.setUrl('asset:lib/assets/musics/lampBreakSound.mp3');
       lampBreak.play();
 
-      currentGrid[ligne][colonne] = -2; //Retirer une ampoule
+      //Retirer une ampoule
+
+      currentGrid[ligne][colonne] = -2;
+
       widget.grid.lights.remove(Tuple2(ligne, colonne));
 
       //Réduire l'éclairage des cases en ligne / colonne
       int autresAmpoulesAlignees = 0;
       int x = colonne;
-      while (x < widget.grid.gridSize && currentGrid[ligne][x] < -1) {
+      while (x < widget.grid.gridSize &&
+          (currentGrid[ligne][x] < -1 || currentGrid[ligne][x] >= 5)) {
         if (currentGrid[ligne][x] == -4) {
           currentGrid[ligne][x] = -2;
         } else if (currentGrid[ligne][x] < -4) {
           currentGrid[ligne][x]++;
         }
-        if (currentGrid[ligne][x] == -3) {
+        if (currentGrid[ligne][x] >= 5) {
           autresAmpoulesAlignees++;
+          currentGrid[ligne][x]--;
         }
         x++;
       }
       x = colonne;
-      while (x >= 0 && currentGrid[ligne][x] < -1) {
+      while (x >= 0 &&
+          (currentGrid[ligne][x] < -1 || currentGrid[ligne][x] >= 5)) {
         if (currentGrid[ligne][x] == -4) {
           currentGrid[ligne][x] = -2;
         } else if (currentGrid[ligne][x] < -4) {
           currentGrid[ligne][x]++;
         }
-        if (currentGrid[ligne][x] == -3) {
+        if (currentGrid[ligne][x] >= 5) {
           autresAmpoulesAlignees++;
+          currentGrid[ligne][x]--;
         }
         x--;
       }
       int y = ligne;
-      while (y < widget.grid.gridSize && currentGrid[y][colonne] < -1) {
+      while (y < widget.grid.gridSize &&
+          (currentGrid[y][colonne] < -1 || currentGrid[y][colonne] >= 5)) {
         if (currentGrid[y][colonne] == -4) {
           currentGrid[y][colonne] = -2;
         } else if (currentGrid[y][colonne] < -4) {
           currentGrid[y][colonne]++;
         }
-        if (currentGrid[y][colonne] == -3) {
+        if (currentGrid[y][colonne] >= 5) {
           autresAmpoulesAlignees++;
+          currentGrid[y][colonne]--;
         }
         y++;
       }
       y = ligne;
-      while (y >= 0 && currentGrid[y][colonne] < -1) {
+      while (y >= 0 &&
+          (currentGrid[y][colonne] < -1 || currentGrid[y][colonne] >= 5)) {
         if (currentGrid[y][colonne] == -4) {
           currentGrid[y][colonne] = -2;
         } else if (currentGrid[y][colonne] < -4) {
           currentGrid[y][colonne]++;
         }
-        if (currentGrid[y][colonne] == -3) {
+        if (currentGrid[y][colonne] >= 5) {
           autresAmpoulesAlignees++;
+          currentGrid[y][colonne]--;
         }
         y--;
       }
+
       if (autresAmpoulesAlignees > 0) {
         currentGrid[ligne][colonne] = -3 - autresAmpoulesAlignees;
       }
@@ -565,7 +609,7 @@ class _GridWidget extends State<GridWidget> {
         int row = index ~/ gridSize;
         int col = index % gridSize;
 
-        if (currentGrid[row][col] == -3) {
+        if (currentGrid[row][col] == 5) {
           return GestureDetector(
             onTap: () {
               clickDetected(index);
@@ -575,6 +619,23 @@ class _GridWidget extends State<GridWidget> {
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.black),
                     color: Colors.lightBlue //Temporaire pour les ampoules
+                    ),
+                child: Center(
+                  child: Image.asset("lib/assets/images/bulb.png"),
+                ),
+              ),
+            ),
+          );
+        } else if (currentGrid[row][col] > 5) {
+          return GestureDetector(
+            onTap: () {
+              clickDetected(index);
+            },
+            child: GridTile(
+              child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    color: Colors.red //Temporaire pour les ampoules
                     ),
                 child: Center(
                   child: Image.asset("lib/assets/images/bulb.png"),
@@ -628,7 +689,35 @@ class _GridWidget extends State<GridWidget> {
               ),
             ),
           );
-        } else {
+        }
+        /*
+        else if (currentGrid[row][col] <= -4) {
+          return GestureDetector(
+            onTap: () {
+              clickDetected(index);
+            },
+            child: GridTile(
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  color: Colors.yellow,
+                ),
+                child: Center(
+                  child: Text(
+                    "${currentGrid[row][col]}",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+        */
+        else {
           return GestureDetector(
             onTap: () {
               clickDetected(index);

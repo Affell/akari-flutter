@@ -6,7 +6,6 @@ import 'package:just_audio/just_audio.dart';
 DatabaseManager databaseManager = DatabaseManager();
 final player = AudioPlayer();
 
-
 Future main() async {
   databaseManager.initDatabase();
 
@@ -18,12 +17,12 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  player.setUrl('asset:lib/assets/musics/backgroundMusic.mp3');
-  
-  player.setVolume(0.5);
+    player.setUrl('asset:lib/assets/musics/backgroundMusic.mp3');
 
-  player.setLoopMode(LoopMode.all);
-  player.play();
+    player.setVolume(0.5);
+
+    player.setLoopMode(LoopMode.all);
+    player.play();
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
