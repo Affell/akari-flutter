@@ -298,12 +298,12 @@ class Grid {
     int n = grid.length;
     for (int i = 0; i < n; i++) {
       for (int j = 0; j < n; j++) {
-        if (grid[i][j] >= 0) {
+        if (grid[i][j] >= 0 && grid[i][j] < 5) {
           // Wall with condition
           int nb = 0; // Counter to count the number of bulbs around the cell
+          // Condition to count bulbs north, south, east, west
           if (i - 1 >= 0) {
             if (grid[i - 1][j] == 5) {
-              // Condition to count bulbs north, south, east, west
               nb++;
             }
           }
@@ -324,10 +324,14 @@ class Grid {
           }
           if (nb != grid[i][j]) {
             // If the expected number does not match the found number then return false
+            //print("pas le bon nombre d'ampoules en $i $j");
             return false;
           }
         }
-        if (grid[i][j] == 5) {
+        if (grid[i][j] > 5) {
+          //print("ampoule alignée avec une autre en $i $j");
+          return false;
+          /*
           // If bulb, check that there is no adjacent bulb
           bool southWall = false; // South wall encountered
           bool northWall = false; // North wall encountered
@@ -377,7 +381,10 @@ class Grid {
             // If bulb found then false
             return false;
           }
+          */
         }
+
+        /*
         if (grid[i][j] == -2 || grid[i][j] <= -4) {
           // White cell, we must check if it is illuminated, if it is not then no solution
           bool southWall = false; // South wall encountered
@@ -428,6 +435,11 @@ class Grid {
             // If no bulb found then false
             return false;
           }
+        }
+        */
+        if (grid[i][j] == -2) {
+          //print("il y a une case non éclairée en $i $j");
+          return false;
         }
         // If the cell is -1 (wall), nothing to check
       }
@@ -589,7 +601,8 @@ class _GridWidget extends State<GridWidget> {
 
       setState(() {});
     }
-    //print(widget.grid.solutionChecker(widget.grid.startGrid));
+    print(
+        "Grille terminée et valide : ${widget.grid.solutionChecker(widget.grid.currentGrid)}");
   }
 
   @override
