@@ -24,3 +24,5 @@ flutter:
   assets:
     - lib/assets/images/
     - lib/assets/musics/
+    - lib/assets/images/
+    - lib/assets/
