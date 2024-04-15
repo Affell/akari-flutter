@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:akari/main.dart';
 import 'package:akari/models/action.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
@@ -361,6 +360,7 @@ class Grid {
 class GridWidget extends StatefulWidget {
   final Grid grid;
   const GridWidget({super.key, required this.grid});
+  
 
   @override
   State<StatefulWidget> createState() => _GridWidget();
@@ -375,11 +375,8 @@ class _GridWidget extends State<GridWidget> {
       lampBuild.setVolume(1);
       lampBuild.setUrl('asset:lib/assets/musics/lampBuildSound.mp3');
       lampBuild.play();
-      lampBuild.setUrl('asset:lib/assets/musics/lampBuildSound.mp3');
-
       startGrid[ligne][colonne] = -3; //Poser une ampoule
       widget.grid.lights.add(Tuple2(ligne, colonne));
-
 
       //Eclairage des cases en ligne / colonne
       int x = colonne;
@@ -424,8 +421,6 @@ class _GridWidget extends State<GridWidget> {
       lampBreak.setVolume(0.5);
       lampBreak.setUrl('asset:lib/assets/musics/lampBreakSound.mp3');
       lampBreak.play();
-      lampBreak.setUrl('asset:lib/assets/musics/lampBreakSound.mp3');
-
 
       startGrid[ligne][colonne] = -2; //Retirer une ampoule
       widget.grid.lights.remove(Tuple2(ligne, colonne));
