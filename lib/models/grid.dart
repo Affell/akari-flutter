@@ -611,6 +611,7 @@ class _GridWidget extends State<GridWidget> {
         int col = index % gridSize;
 
         if (currentGrid[row][col] == 5) {
+          //Ampoule valide
           return GestureDetector(
             onTap: () {
               clickDetected(index);
@@ -619,8 +620,7 @@ class _GridWidget extends State<GridWidget> {
               child: Container(
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.black),
-                    color: Colors.lightBlue //Temporaire pour les ampoules
-                    ),
+                    color: Colors.lightBlue),
                 child: Center(
                   child: Image.asset("lib/assets/images/bulb.png"),
                 ),
@@ -628,6 +628,7 @@ class _GridWidget extends State<GridWidget> {
             ),
           );
         } else if (currentGrid[row][col] > 5) {
+          //Ampoule invalide
           return GestureDetector(
             onTap: () {
               clickDetected(index);
@@ -635,9 +636,9 @@ class _GridWidget extends State<GridWidget> {
             child: GridTile(
               child: Container(
                 decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    color: Colors.red //Temporaire pour les ampoules
-                    ),
+                  border: Border.all(color: Colors.black),
+                  color: wrongLamp ? Colors.red : Colors.lightBlue,
+                ),
                 child: Center(
                   child: Image.asset("lib/assets/images/bulb.png"),
                 ),
@@ -645,6 +646,7 @@ class _GridWidget extends State<GridWidget> {
             ),
           );
         } else if (currentGrid[row][col] == -1) {
+          //Murs de base
           return GestureDetector(
             onTap: () {
               clickDetected(index);
@@ -662,6 +664,7 @@ class _GridWidget extends State<GridWidget> {
             ),
           );
         } else if (currentGrid[row][col] >= 0) {
+          //Murs avec contraintes
           return GestureDetector(
             onTap: () {
               clickDetected(index);
@@ -691,7 +694,7 @@ class _GridWidget extends State<GridWidget> {
             ),
           );
         }
-        /*
+        /* Débug
         else if (currentGrid[row][col] <= -4) {
           return GestureDetector(
             onTap: () {
@@ -701,7 +704,7 @@ class _GridWidget extends State<GridWidget> {
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.black),
-                  color: Colors.yellow,
+                  color: passLamp ? Colors.yellow : Colors.white,
                 ),
                 child: Center(
                   child: Text(
@@ -716,9 +719,25 @@ class _GridWidget extends State<GridWidget> {
               ),
             ),
           );
-        }
+          }
         */
-        else {
+        else if (currentGrid[row][col] <= -4) {
+          //Cases éclairées
+          return GestureDetector(
+            onTap: () {
+              clickDetected(index);
+            },
+            child: GridTile(
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  color: passLamp ? Colors.yellow : Colors.white,
+                ),
+              ),
+            ),
+          );
+        } else {
+          //Cases vides
           return GestureDetector(
             onTap: () {
               clickDetected(index);
@@ -727,9 +746,7 @@ class _GridWidget extends State<GridWidget> {
               child: Container(
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.black),
-                    color: currentGrid[row][col] <= -4
-                        ? Colors.yellow
-                        : Colors.white),
+                    color: Colors.white),
                 child: Center(
                   child: Text(
                     currentGrid[row][col] >= 0
