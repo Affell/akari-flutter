@@ -9,18 +9,17 @@ AudioPlayer player = AudioPlayer();
 
 void main() {
   databaseManager.initDatabase();
-  runApp(MainApp());
+  runApp(const MainApp());
 }
 
 class MainApp extends StatefulWidget {
-  const MainApp({Key? key}) : super(key: key);
+  const MainApp({super.key});
 
   @override
-  _MainAppState createState() => _MainAppState();
+  State<StatefulWidget> createState() => _MainAppState();
 }
 
 class _MainAppState extends State<MainApp> {
-
   @override
   void initState() {
     super.initState();
@@ -39,11 +38,12 @@ class _MainAppState extends State<MainApp> {
     return MaterialApp(
       title: 'Akari',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 192, 195, 197)),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 192, 195, 197)),
         useMaterial3: true,
-        scaffoldBackgroundColor: Color.fromARGB(255, 192, 195, 197),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 192, 195, 197),
       ),
-      home: Home(title: "Akari"),
+      home: const Home(title: "Akari"),
     );
   }
 }

@@ -3,19 +3,18 @@ import 'package:akari/models/grid.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
-double backGroungMusicVol=0.5;
+double backGroungMusicVol = 0.5;
 double soundVol = 1;
 bool wrongLamp = true;
 bool passLamp = true;
 
 AudioPlayer volSoundTest = AudioPlayer();
 
-
 double lastSoundVol = 0.0; // Variable pour suivre la dernière valeur de volume
 
-
 void _playSoundIfChanged(double value) {
-  int divisionsChanged = ((value - lastSoundVol).abs() * 100).toInt(); // Calculer le nombre de divisions franchies
+  int divisionsChanged = ((value - lastSoundVol).abs() * 100)
+      .toInt(); // Calculer le nombre de divisions franchies
 
   if (divisionsChanged >= 2) {
     volSoundTest.setUrl('asset:lib/assets/musics/soundVolTest.mp3');
@@ -25,20 +24,19 @@ void _playSoundIfChanged(double value) {
   }
 }
 
-
 class Settings extends StatefulWidget {
+  const Settings({super.key});
+
   @override
-  _SettingsPageState createState() => _SettingsPageState();
+  State<StatefulWidget> createState() => _SettingsPageState();
 }
 
 class _SettingsPageState extends State<Settings> {
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -48,7 +46,7 @@ class _SettingsPageState extends State<Settings> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
+                const Row(
                   children: [
                     Icon(Icons.close),
                     SizedBox(width: 16.0),
@@ -65,11 +63,11 @@ class _SettingsPageState extends State<Settings> {
                 ),
               ],
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
+                const Row(
                   children: [
                     Icon(Icons.light_mode),
                     SizedBox(width: 16.0),
@@ -86,8 +84,8 @@ class _SettingsPageState extends State<Settings> {
                 ),
               ],
             ),
-            SizedBox(height: 16.0),
-            Text('Volume Background Music:'),
+            const SizedBox(height: 16.0),
+            const Text('Volume Background Music:'),
             Slider(
               value: backGroungMusicVol,
               min: 0,
@@ -100,18 +98,19 @@ class _SettingsPageState extends State<Settings> {
                 });
               },
             ),
-            SizedBox(height: 16.0),
-            Text('Volume Sounds:'),
+            const SizedBox(height: 16.0),
+            const Text('Volume Sounds:'),
             Slider(
               value: soundVol,
-  min: 0,
-  max: 1,
-  divisions: 100,
-  onChanged: (value) {
-    setState(() {
-      soundVol = value;
-      _playSoundIfChanged(value); // Appeler la fonction pour jouer le son si le changement est de 4 divisions
-    });
+              min: 0,
+              max: 1,
+              divisions: 100,
+              onChanged: (value) {
+                setState(() {
+                  soundVol = value;
+                  _playSoundIfChanged(
+                      value); // Appeler la fonction pour jouer le son si le changement est de 4 divisions
+                });
               },
             ),
           ],
@@ -120,4 +119,3 @@ class _SettingsPageState extends State<Settings> {
     );
   }
 }
-
