@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:akari/models/action.dart';
+import 'package:akari/views/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 import 'package:just_audio/just_audio.dart';
@@ -451,7 +452,7 @@ class _GridWidget extends State<GridWidget> {
     int colonne = index % widget.grid.gridSize;
     if (currentGrid[ligne][colonne] == -2 ||
         currentGrid[ligne][colonne] <= -4) {
-      lampBuild.setVolume(1);
+      lampBuild.setVolume(soundVol);
       lampBuild.setUrl('asset:lib/assets/musics/lampBuildSound.mp3');
       lampBuild.play();
 
@@ -514,7 +515,7 @@ class _GridWidget extends State<GridWidget> {
 
       setState(() {});
     } else if (currentGrid[ligne][colonne] >= 5) {
-      lampBreak.setVolume(0.5);
+      lampBreak.setVolume(soundVol);
       lampBreak.setUrl('asset:lib/assets/musics/lampBreakSound.mp3');
       lampBreak.play();
 

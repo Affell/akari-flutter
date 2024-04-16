@@ -1,49 +1,49 @@
-import 'package:akari/models/database.dart';
+import 'package:akari/views/settings.dart';
 import 'package:flutter/material.dart';
-import 'models/grid.dart';
+import 'package:akari/models/database.dart';
 import 'package:just_audio/just_audio.dart';
+import 'views/home.dart'; // Importation de votre fichier home.dart
 
 DatabaseManager databaseManager = DatabaseManager();
-final player = AudioPlayer();
+AudioPlayer player = AudioPlayer();
 
-Future main() async {
+void main() {
   databaseManager.initDatabase();
-
-  runApp(const MainApp());
+  runApp(MainApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class MainApp extends StatefulWidget {
+  const MainApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    player.setUrl('asset:lib/assets/musics/backgroundMusic.mp3');
+  _MainAppState createState() => _MainAppState();
+}
 
-    player.setVolume(0.5);
+class _MainAppState extends State<MainApp> {
 
+  @override
+  void initState() {
+    super.initState();
+    initializeApp();
+  }
+
+  Future<void> initializeApp() async {
+    await player.setUrl('asset:lib/assets/musics/backgroundMusic.mp3');
+    player.setVolume(backGroungMusicVol);
     player.setLoopMode(LoopMode.all);
     player.play();
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Akari Game'),
-        ),
-        body: const MyGridWidget(),
-      ),
-    );
   }
-}
-
-class MyGridWidget extends StatelessWidget {
-  const MyGridWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GridWidget(
-      grid: Grid.createGrid(
-          difficulty: 0,
-          gridSize: 10,
-          creationTime: DateTime.now().millisecondsSinceEpoch ~/ 1000),
+    return MaterialApp(
+      title: 'Akari',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 192, 195, 197)),
+        useMaterial3: true,
+        scaffoldBackgroundColor: Color.fromARGB(255, 192, 195, 197),
+      ),
+      home: Home(title: "Akari"),
     );
   }
 }
