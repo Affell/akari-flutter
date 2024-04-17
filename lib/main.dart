@@ -1,11 +1,8 @@
-import 'package:akari/views/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:akari/models/database.dart';
 import 'package:just_audio/just_audio.dart';
 import 'views/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-
 
 DatabaseManager databaseManager = DatabaseManager();
 AudioPlayer player = AudioPlayer();
@@ -31,10 +28,8 @@ _loadData() {
   passLamp = _prefs.getBool('passLamp') ?? true;
 }
 
-
-
 class MainApp extends StatefulWidget {
-  const MainApp({Key? key}) : super(key: key);
+  const MainApp({super.key});
 
   @override
   State<StatefulWidget> createState() => _MainAppState();
