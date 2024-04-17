@@ -158,7 +158,7 @@ class _HomeState extends State<Home> {
               NavigationDestination(
                 icon: InkWell(
                   onTap: () {
-                    print("Home icon tapped");
+                
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -169,7 +169,7 @@ class _HomeState extends State<Home> {
                 ),
                 selectedIcon: InkWell(
                   onTap: () {
-                    print("Home icon tapped");
+                   
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -183,7 +183,7 @@ class _HomeState extends State<Home> {
               NavigationDestination(
                 icon: InkWell(
                   onTap: () {
-                    print("Settings icon tapped");
+                    
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const Settings()),
@@ -193,7 +193,7 @@ class _HomeState extends State<Home> {
                 ),
                 selectedIcon: InkWell(
                   onTap: () {
-                    print("Settings icon tapped");
+                    
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const Settings()),

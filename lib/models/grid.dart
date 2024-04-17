@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:akari/main.dart';
 import 'package:akari/models/action.dart';
+import 'package:akari/views/home.dart';
 import 'package:akari/views/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
@@ -705,13 +706,14 @@ class _GridWidget extends State<GridWidget> {
   Widget build(BuildContext context) {
     int gridSize = widget.grid.gridSize;
     List<List<int>> currentGrid = widget.grid.currentGrid;
+    var currentPageIndex=1;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(height: 30),
         SizedBox(
-          height: 380,
+          height: 470,
           child: Expanded(
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -797,9 +799,7 @@ class _GridWidget extends State<GridWidget> {
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: (1 / 3 * (110 - 4 * gridSize)) >= 1
-                                  ? (1 / 3 * (110 - 4 * gridSize))
-                                  : 1, //Taille des chiffres inversement proportionnelle à la taille de la grille
+                              fontSize: (1/9*(340-10*gridSize))  //Taille des chiffres inversement proportionnelle à la taille de la grille pour Ctrl F
                             ),
                           ),
                         ),
@@ -902,7 +902,96 @@ class _GridWidget extends State<GridWidget> {
           ],
         ),
         const Spacer(),
+        // Ajout du NavigationBar
+        NavigationBar(
+          onDestinationSelected: (int index) {
+            setState(() {
+              if (index == 0 &&
+                  ModalRoute.of(context)?.settings.name != '/') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const Home(title: "Akari")),
+                );
+              } else if (index == 2 &&
+                  ModalRoute.of(context)?.settings.name != '/settings') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Settings()),
+                );
+              }
+            });
+          },
+          indicatorColor: const Color.fromARGB(255, 94, 94, 93),
+          selectedIndex: currentPageIndex,
+          destinations: [
+            NavigationDestination(
+              icon: InkWell(
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const Home(title: "Akari")),
+                  );
+                },
+                child: const Icon(Icons.home),
+              ),
+              selectedIcon: InkWell(
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const Home(title: "Akari")),
+                  );
+                },
+                child: const Icon(Icons.home_filled),
+              ),
+              label: 'Home',
+            ),
+            NavigationDestination(
+              icon: InkWell(
+                onTap: () {
+                },
+                child: const Icon(Icons.games),
+              ),
+              selectedIcon: InkWell(
+                onTap: () {
+                },
+                child: const Icon(Icons.games),
+              ),
+              label: 'Game',
+            ),
+            NavigationDestination(
+              icon: InkWell(
+                onTap: () {
+                  
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Settings()),
+                  );
+                },
+                child: const Icon(Icons.settings),
+              ),
+              selectedIcon: InkWell(
+                onTap: () {
+                  
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Settings()),
+                  );
+                },
+                child: const Icon(Icons.settings),
+              ),
+              label: 'Settings',
+            ),
+          ],
+        ),
       ],
     );
   }
 }
+
+
+
+
+
