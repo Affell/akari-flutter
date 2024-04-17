@@ -47,7 +47,7 @@ class _NewGamePageState extends State<NewGame> {
       MaterialPageRoute(
         builder: (context) => Game(
           size: [7, 10, 14, 25][_sizeIndex.toInt()],
-          difficulty: _difficultyIndex.toInt() + 1,
+          difficulty: _difficultyIndex.toInt(),
         ),
       ),
     );
