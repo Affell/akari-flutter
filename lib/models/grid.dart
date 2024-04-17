@@ -706,7 +706,7 @@ class _GridWidget extends State<GridWidget> {
   Widget build(BuildContext context) {
     int gridSize = widget.grid.gridSize;
     List<List<int>> currentGrid = widget.grid.currentGrid;
-    var currentPageIndex=1;
+    var currentPageIndex = 1;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -714,100 +714,101 @@ class _GridWidget extends State<GridWidget> {
         const SizedBox(height: 30),
         SizedBox(
           height: 470,
-          child: Expanded(
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: gridSize),
-              itemCount: gridSize * gridSize,
-              itemBuilder: (BuildContext context, int index) {
-                int row = index ~/ gridSize;
-                int col = index % gridSize;
+          child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: gridSize),
+            itemCount: gridSize * gridSize,
+            itemBuilder: (BuildContext context, int index) {
+              int row = index ~/ gridSize;
+              int col = index % gridSize;
 
-                if (currentGrid[row][col] == 5) {
-                  //Ampoule valide
-                  return GestureDetector(
-                    onTap: () {
-                      clickDetected(index);
-                    },
-                    child: GridTile(
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black),
-                            color: Colors.lightBlue),
-                        child: Center(
-                          child: Image.asset("lib/assets/images/bulb.png"),
+              if (currentGrid[row][col] == 5) {
+                //Ampoule valide
+                return GestureDetector(
+                  onTap: () {
+                    clickDetected(index);
+                  },
+                  child: GridTile(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black),
+                          color: Colors.lightBlue),
+                      child: Center(
+                        child: Image.asset("lib/assets/images/bulb.png"),
+                      ),
+                    ),
+                  ),
+                );
+              } else if (currentGrid[row][col] > 5) {
+                //Ampoule invalide
+                return GestureDetector(
+                  onTap: () {
+                    clickDetected(index);
+                  },
+                  child: GridTile(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        color: wrongLamp ? Colors.red : Colors.lightBlue,
+                      ),
+                      child: Center(
+                        child: Image.asset("lib/assets/images/bulb.png"),
+                      ),
+                    ),
+                  ),
+                );
+              } else if (currentGrid[row][col] == -1) {
+                //Murs de base
+                return GestureDetector(
+                  onTap: () {
+                    clickDetected(index);
+                  },
+                  child: GridTile(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        image: const DecorationImage(
+                          image: AssetImage("lib/assets/images/brick_wall.png"),
+                          fit: BoxFit.fill,
                         ),
                       ),
                     ),
-                  );
-                } else if (currentGrid[row][col] > 5) {
-                  //Ampoule invalide
-                  return GestureDetector(
-                    onTap: () {
-                      clickDetected(index);
-                    },
-                    child: GridTile(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          color: wrongLamp ? Colors.red : Colors.lightBlue,
-                        ),
-                        child: Center(
-                          child: Image.asset("lib/assets/images/bulb.png"),
-                        ),
-                      ),
-                    ),
-                  );
-                } else if (currentGrid[row][col] == -1) {
-                  //Murs de base
-                  return GestureDetector(
-                    onTap: () {
-                      clickDetected(index);
-                    },
-                    child: GridTile(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          image: const DecorationImage(
-                            image:
-                                AssetImage("lib/assets/images/brick_wall.png"),
-                            fit: BoxFit.fill,
-                          ),
+                  ),
+                );
+              } else if (currentGrid[row][col] >= 0) {
+                //Murs avec contraintes
+                return GestureDetector(
+                  onTap: () {
+                    clickDetected(index);
+                  },
+                  child: GridTile(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        image: const DecorationImage(
+                          image: AssetImage("lib/assets/images/brick_wall.png"),
+                          fit: BoxFit.fill,
                         ),
                       ),
-                    ),
-                  );
-                } else if (currentGrid[row][col] >= 0) {
-                  //Murs avec contraintes
-                  return GestureDetector(
-                    onTap: () {
-                      clickDetected(index);
-                    },
-                    child: GridTile(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          image: const DecorationImage(
-                            image:
-                                AssetImage("lib/assets/images/brick_wall.png"),
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "${currentGrid[row][col]}",
-                            style: TextStyle(
+                      child: Center(
+                        child: Text(
+                          "${currentGrid[row][col]}",
+                          style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: (1/9*(340-10*gridSize))  //Taille des chiffres inversement proportionnelle à la taille de la grille pour Ctrl F
-                            ),
-                          ),
+                              fontSize: (1 /
+                                  9 *
+                                  (340 -
+                                      10 *
+                                          gridSize)) //Taille des chiffres inversement proportionnelle à la taille de la grille pour Ctrl F
+                              ),
                         ),
                       ),
                     ),
-                  );
-                }
-                /* Débug
+                  ),
+                );
+              }
+              /* Débug
         else if (currentGrid[row][col] <= -4) {
           return GestureDetector(
             onTap: () {
@@ -834,48 +835,47 @@ class _GridWidget extends State<GridWidget> {
           );
           }
         */
-                else if (currentGrid[row][col] <= -4) {
-                  //Cases éclairées
-                  return GestureDetector(
-                    onTap: () {
-                      clickDetected(index);
-                    },
-                    child: GridTile(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          color: passLamp ? Colors.yellow : Colors.white,
-                        ),
+              else if (currentGrid[row][col] <= -4) {
+                //Cases éclairées
+                return GestureDetector(
+                  onTap: () {
+                    clickDetected(index);
+                  },
+                  child: GridTile(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        color: passLamp ? Colors.yellow : Colors.white,
                       ),
                     ),
-                  );
-                } else {
-                  //Cases vides
-                  return GestureDetector(
-                    onTap: () {
-                      clickDetected(index);
-                    },
-                    child: GridTile(
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black),
-                            color: Colors.white),
-                        child: Center(
-                          child: Text(
-                            currentGrid[row][col] >= 0
-                                ? currentGrid[row][col].toString()
-                                : '',
-                            style: const TextStyle(
-                              color: Colors.white,
-                            ),
+                  ),
+                );
+              } else {
+                //Cases vides
+                return GestureDetector(
+                  onTap: () {
+                    clickDetected(index);
+                  },
+                  child: GridTile(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black),
+                          color: Colors.white),
+                      child: Center(
+                        child: Text(
+                          currentGrid[row][col] >= 0
+                              ? currentGrid[row][col].toString()
+                              : '',
+                          style: const TextStyle(
+                            color: Colors.white,
                           ),
                         ),
                       ),
                     ),
-                  );
-                }
-              },
-            ),
+                  ),
+                );
+              }
+            },
           ),
         ),
         Row(
@@ -883,18 +883,21 @@ class _GridWidget extends State<GridWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             FloatingActionButton(
+              heroTag: "Undo",
               onPressed: undo,
               backgroundColor: Colors.white,
               child: const Icon(Icons.arrow_back),
             ),
             const SizedBox(width: 10),
             FloatingActionButton(
+              heroTag: "Redo",
               onPressed: redo,
               backgroundColor: Colors.white,
               child: const Icon(Icons.arrow_forward),
             ),
             const SizedBox(width: 10),
             FloatingActionButton(
+              heroTag: "Validate",
               onPressed: () {}, //A faire : Validation + animation si valide
               backgroundColor: Colors.green.shade200,
               child: const Icon(Icons.check),
@@ -906,8 +909,7 @@ class _GridWidget extends State<GridWidget> {
         NavigationBar(
           onDestinationSelected: (int index) {
             setState(() {
-              if (index == 0 &&
-                  ModalRoute.of(context)?.settings.name != '/') {
+              if (index == 0 && ModalRoute.of(context)?.settings.name != '/') {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -950,13 +952,11 @@ class _GridWidget extends State<GridWidget> {
             ),
             NavigationDestination(
               icon: InkWell(
-                onTap: () {
-                },
+                onTap: () {},
                 child: const Icon(Icons.games),
               ),
               selectedIcon: InkWell(
-                onTap: () {
-                },
+                onTap: () {},
                 child: const Icon(Icons.games),
               ),
               label: 'Game',
@@ -964,7 +964,6 @@ class _GridWidget extends State<GridWidget> {
             NavigationDestination(
               icon: InkWell(
                 onTap: () {
-                  
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const Settings()),
@@ -974,7 +973,6 @@ class _GridWidget extends State<GridWidget> {
               ),
               selectedIcon: InkWell(
                 onTap: () {
-                  
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const Settings()),
@@ -990,8 +988,3 @@ class _GridWidget extends State<GridWidget> {
     );
   }
 }
-
-
-
-
-
