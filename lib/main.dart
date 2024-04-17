@@ -1,49 +1,65 @@
-import 'package:akari/models/database.dart';
 import 'package:flutter/material.dart';
-import 'models/grid.dart';
+import 'package:akari/models/database.dart';
 import 'package:just_audio/just_audio.dart';
+import 'views/home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 DatabaseManager databaseManager = DatabaseManager();
-final player = AudioPlayer();
+AudioPlayer player = AudioPlayer();
+late SharedPreferences _prefs;
+late double backGroungMusicVol;
+late double soundVol;
+late bool wrongLamp;
+late bool passLamp;
 
-Future main() async {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  _prefs = await SharedPreferences.getInstance();
+  await _loadData();
+
   databaseManager.initDatabase();
-
   runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget {
+_loadData() {
+  backGroungMusicVol = _prefs.getDouble('backGroungMusicVol') ?? 0.5;
+  soundVol = _prefs.getDouble('soundVol') ?? 1;
+  wrongLamp = _prefs.getBool('wrongLamp') ?? true;
+  passLamp = _prefs.getBool('passLamp') ?? true;
+}
+
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    player.setUrl('asset:lib/assets/musics/backgroundMusic.mp3');
-
-    player.setVolume(0.5);
-
-    player.setLoopMode(LoopMode.all);
-    player.play();
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Akari Game'),
-        ),
-        body: const MyGridWidget(),
-      ),
-    );
-  }
+  State<StatefulWidget> createState() => _MainAppState();
 }
 
-class MyGridWidget extends StatelessWidget {
-  const MyGridWidget({super.key});
+class _MainAppState extends State<MainApp> {
+  @override
+  void initState() {
+    super.initState();
+    initializeApp();
+  }
+
+  Future<void> initializeApp() async {
+    await player.setUrl('asset:lib/assets/musics/backgroundMusic.mp3');
+    player.setVolume(backGroungMusicVol);
+    player.setLoopMode(LoopMode.all);
+    player.play();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GridWidget(
-      grid: Grid.createGrid(
-          difficulty: 0,
-          gridSize: 10,
-          creationTime: DateTime.now().millisecondsSinceEpoch ~/ 1000),
+    return MaterialApp(
+      title: 'Akari',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 192, 195, 197)),
+        useMaterial3: true,
+        scaffoldBackgroundColor: const Color.fromARGB(255, 192, 195, 197),
+      ),
+      home: const Home(title: "Akari"),
     );
   }
 }
