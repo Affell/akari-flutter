@@ -164,10 +164,15 @@ class _SettingsPageState extends State<Settings> {
                 });
               },
             ),
+
+
+
+
+
             const SizedBox(height: 16.0),
             const Text('Available bulbs:'),
             Container(
-              height: 70, // Définir une hauteur fixe pour le Container
+              height: 50,
               child: ListView.builder(
                 padding: EdgeInsets.zero,
                 scrollDirection: Axis.horizontal,
@@ -175,15 +180,27 @@ class _SettingsPageState extends State<Settings> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      iBulb = index;
-                      _saveData();
+                      setState(() {
+                        iBulb = index;
+                        _saveData();
+                      });
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Image.asset(
-                        bulbImages[index],
-                        width: 50,
+                      child: Container(
                         height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: iBulb == index ? Colors.black : Colors.transparent,
+                            width: 3.0,
+                          ),
+                        ),
+                        child: Image.asset(
+                          bulbImages[index],
+                          width: 50,
+                          height: 50,
+                        ),
                       ),
                     ),
                   );
@@ -193,7 +210,7 @@ class _SettingsPageState extends State<Settings> {
             const SizedBox(height: 16.0),
             const Text('Available walls:'),
             Container(
-              height: 70, // Définir une hauteur fixe pour le Container
+              height: 50,
               child: ListView.builder(
                 padding: EdgeInsets.zero,
                 scrollDirection: Axis.horizontal,
@@ -201,15 +218,27 @@ class _SettingsPageState extends State<Settings> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      iWall = index;
-                      _saveData();
+                      setState(() {
+                        iWall = index;
+                        _saveData();
+                      });
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Image.asset(
-                        wallImages[index],
-                        width: 50,
+                      child: Container(
                         height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: iWall == index ? Colors.black : Colors.transparent,
+                            width: 3.0,
+                          ),
+                        ),
+                        child: Image.asset(
+                          wallImages[index],
+                          width: 50,
+                          height: 50,
+                        ),
                       ),
                     ),
                   );
@@ -219,7 +248,7 @@ class _SettingsPageState extends State<Settings> {
             const SizedBox(height: 16.0),
             const Text('Available tile backgrounds:'),
             Container(
-              height: 70, // Définir une hauteur fixe pour le Container
+              height: 50,
               child: ListView.builder(
                 padding: EdgeInsets.zero,
                 scrollDirection: Axis.horizontal,
@@ -227,21 +256,40 @@ class _SettingsPageState extends State<Settings> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      iCase = index;
-                      _saveData();
+                      setState(() {
+                        iCase = index;
+                        _saveData();
+                      });
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Image.asset(
-                        caseImages[index],
-                        width: 50,
+                      child: Container(
                         height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: iCase == index ? Colors.black : Colors.transparent,
+                            width: 3.0,
+                          ),
+                        ),
+                        child: Image.asset(
+                          caseImages[index],
+                          width: 50,
+                          height: 50,
+                        ),
                       ),
                     ),
                   );
                 },
               ),
             ),
+
+
+
+
+
+
+
           ],
         ),
       ),
