@@ -1,15 +1,12 @@
 import 'package:akari/main.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-
-double backGroungMusicVol = 0.5;
-double soundVol = 1;
-bool wrongLamp = true;
-bool passLamp = true;
+import 'package:shared_preferences/shared_preferences.dart';
 
 AudioPlayer volSoundTest = AudioPlayer();
 
 double lastSoundVol = 0.0; // Variable pour suivre la dernière valeur de volume
+late SharedPreferences _prefs;
 
 void _playSoundIfChanged(double value) {
   int divisionsChanged = ((value - lastSoundVol).abs() * 100)
@@ -23,6 +20,16 @@ void _playSoundIfChanged(double value) {
   }
 }
 
+_initPrefs() async {
+  _prefs = await SharedPreferences.getInstance();
+}
+
+_saveData() async {
+  await _prefs.setDouble('backGroungMusicVol', backGroungMusicVol);
+  await _prefs.setDouble('soundVol', soundVol);
+  await _prefs.setBool('wrongLamp', wrongLamp);
+  await _prefs.setBool('passLamp', passLamp);
+}
 class Settings extends StatefulWidget {
   const Settings({super.key});
 
@@ -30,12 +37,29 @@ class Settings extends StatefulWidget {
   State<StatefulWidget> createState() => _SettingsPageState();
 }
 
+
+
+
 class _SettingsPageState extends State<Settings> {
+  @override
+void initState() {
+  super.initState();
+  _initPrefs();
+}
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
+      leading: IconButton(
+  icon: Icon(Icons.arrow_back),
+  onPressed: () {
+    _saveData();
+    Navigator.pop(context);
+  },
+),
+      
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

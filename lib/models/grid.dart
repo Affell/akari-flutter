@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:akari/main.dart';
 import 'package:akari/models/action.dart';
 import 'package:akari/views/settings.dart';
 import 'package:flutter/material.dart';

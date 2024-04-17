@@ -2,18 +2,39 @@ import 'package:akari/views/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:akari/models/database.dart';
 import 'package:just_audio/just_audio.dart';
-import 'views/home.dart'; // Importation de votre fichier home.dart
+import 'views/home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
 
 DatabaseManager databaseManager = DatabaseManager();
 AudioPlayer player = AudioPlayer();
+late SharedPreferences _prefs;
+late double backGroungMusicVol;
+late double soundVol;
+late bool wrongLamp;
+late bool passLamp;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  _prefs = await SharedPreferences.getInstance();
+  await _loadData();
+
   databaseManager.initDatabase();
   runApp(const MainApp());
 }
 
+_loadData() {
+  backGroungMusicVol = _prefs.getDouble('backGroungMusicVol') ?? 0.5;
+  soundVol = _prefs.getDouble('soundVol') ?? 1;
+  wrongLamp = _prefs.getBool('wrongLamp') ?? true;
+  passLamp = _prefs.getBool('passLamp') ?? true;
+}
+
+
+
 class MainApp extends StatefulWidget {
-  const MainApp({super.key});
+  const MainApp({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _MainAppState();
