@@ -1,22 +1,23 @@
 import 'package:akari/main.dart';
+import 'package:akari/utils/save.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 AudioPlayer volSoundTest = AudioPlayer();
-
-double lastSoundVol = 0.0; // Variable pour suivre la dernière valeur de volume
+double lastSoundVol = 0.0;
 late SharedPreferences _prefs;
+int nbTheme = 3;
+
 
 void _playSoundIfChanged(double value) {
-  int divisionsChanged = ((value - lastSoundVol).abs() * 100)
-      .toInt(); // Calculer le nombre de divisions franchies
+  int divisionsChanged = ((value - lastSoundVol).abs() * 100).toInt();
 
   if (divisionsChanged >= 2) {
     volSoundTest.setUrl('asset:lib/assets/musics/soundVolTest.mp3');
-    volSoundTest.setVolume(soundVol);
+    volSoundTest.setVolume(value);
     volSoundTest.play();
-    lastSoundVol = value; // Mettre à jour la dernière valeur de volume
+    lastSoundVol = value;
   }
 }
 
@@ -29,37 +30,65 @@ _saveData() async {
   await _prefs.setDouble('soundVol', soundVol);
   await _prefs.setBool('wrongLamp', wrongLamp);
   await _prefs.setBool('passLamp', passLamp);
+  await _prefs.setInt('iBulb', iBulb);
+  await _prefs.setInt('iWall', iWall);
+  await _prefs.setInt('iCase', iCase);
 }
+
 class Settings extends StatefulWidget {
-  const Settings({super.key});
+  const Settings({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _SettingsPageState();
 }
 
-
-
-
 class _SettingsPageState extends State<Settings> {
+  List<String> bulbImages = [];
+  List<String> wallImages = [];
+  List<String> caseImages = [];
+
   @override
-void initState() {
-  super.initState();
-  _initPrefs();
-}
-  
+  void initState() {
+    super.initState();
+    _initPrefs();
+    _loadImagesBulb();
+    _loadImagesWall();
+    _loadImagesCase();
+  }
+
+  _loadImagesBulb() {
+    for (int i = 0; i < nbTheme; i++) {
+      String imagePath = 'lib/assets/images/bulb_$i.png';
+      bulbImages.add(imagePath);
+    }
+  }
+
+  _loadImagesWall() {
+    for (int i = 0; i < nbTheme; i++) {
+      String imagePath = 'lib/assets/images/wall_$i.png';
+      wallImages.add(imagePath);
+    }
+  }
+
+  _loadImagesCase() {
+    for (int i = 0; i < nbTheme; i++) {
+      String imagePath = 'lib/assets/images/case_$i.png';
+      caseImages.add(imagePath);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
-      leading: IconButton(
-  icon: Icon(Icons.arrow_back),
-  onPressed: () {
-    _saveData();
-    Navigator.pop(context);
-  },
-),
-      
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            _saveData();
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -131,10 +160,87 @@ void initState() {
               onChanged: (value) {
                 setState(() {
                   soundVol = value;
-                  _playSoundIfChanged(
-                      value); // Appeler la fonction pour jouer le son si le changement est de 4 divisions
+                  _playSoundIfChanged(value);
                 });
               },
+            ),
+            const SizedBox(height: 16.0),
+            const Text('Available bulbs:'),
+            Container(
+              height: 70, // Définir une hauteur fixe pour le Container
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                scrollDirection: Axis.horizontal,
+                itemCount: bulbImages.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      iBulb = index;
+                      _saveData();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Image.asset(
+                        bulbImages[index],
+                        width: 50,
+                        height: 50,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 16.0),
+            const Text('Available walls:'),
+            Container(
+              height: 70, // Définir une hauteur fixe pour le Container
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                scrollDirection: Axis.horizontal,
+                itemCount: wallImages.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      iWall = index;
+                      _saveData();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Image.asset(
+                        wallImages[index],
+                        width: 50,
+                        height: 50,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 16.0),
+            const Text('Available tile backgrounds:'),
+            Container(
+              height: 70, // Définir une hauteur fixe pour le Container
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                scrollDirection: Axis.horizontal,
+                itemCount: caseImages.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      iCase = index;
+                      _saveData();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Image.asset(
+                        caseImages[index],
+                        width: 50,
+                        height: 50,
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),

@@ -735,7 +735,7 @@ class _GridWidget extends State<GridWidget> {
                             border: Border.all(color: Colors.black),
                             color: Colors.lightBlue),
                         child: Center(
-                          child: Image.asset("lib/assets/images/bulb.png"),
+                          child: Image.asset("lib/assets/images/bulb_0.png"),
                         ),
                       ),
                     ),
@@ -753,7 +753,7 @@ class _GridWidget extends State<GridWidget> {
                           color: wrongLamp ? Colors.red : Colors.lightBlue,
                         ),
                         child: Center(
-                          child: Image.asset("lib/assets/images/bulb.png"),
+                          child: Image.asset("lib/assets/images/bulb_0.png"),
                         ),
                       ),
                     ),
@@ -770,7 +770,7 @@ class _GridWidget extends State<GridWidget> {
                           border: Border.all(color: Colors.black),
                           image: const DecorationImage(
                             image:
-                                AssetImage("lib/assets/images/brick_wall.png"),
+                                AssetImage("lib/assets/images/wall_0.png"),
                             fit: BoxFit.fill,
                           ),
                         ),
@@ -789,7 +789,7 @@ class _GridWidget extends State<GridWidget> {
                           border: Border.all(color: Colors.black),
                           image: const DecorationImage(
                             image:
-                                AssetImage("lib/assets/images/brick_wall.png"),
+                                AssetImage("lib/assets/images/wall_0.png"),
                             fit: BoxFit.fill,
                           ),
                         ),
