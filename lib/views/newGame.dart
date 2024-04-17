@@ -42,7 +42,7 @@ class _NewGamePageState extends State<NewGame> {
   };
 
   void _launchGame() {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => Game(
