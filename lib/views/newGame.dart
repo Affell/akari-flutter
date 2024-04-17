@@ -2,26 +2,30 @@ import 'package:akari/views/game.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'New Game',
       theme: ThemeData(
-        primaryColor: Color.fromARGB(255, 192, 195, 197),
-        scaffoldBackgroundColor: Color.fromARGB(255, 192, 195, 197),
+        primaryColor: const Color.fromARGB(255, 192, 195, 197),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 192, 195, 197),
       ),
-      home: NewGame(),
+      home: const NewGame(),
     );
   }
 }
 
 class NewGame extends StatefulWidget {
+  const NewGame({super.key});
+
   @override
-  _NewGamePageState createState() => _NewGamePageState();
+  State<StatefulWidget> createState() => _NewGamePageState();
 }
 
 class _NewGamePageState extends State<NewGame> {
@@ -60,7 +64,7 @@ class _NewGamePageState extends State<NewGame> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Game'),
+        title: const Text('New Game'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -92,7 +96,7 @@ class _NewGamePageState extends State<NewGame> {
               },
               label: '${sizeMap[_sizeIndex.toInt()]}',
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -118,10 +122,10 @@ class _NewGamePageState extends State<NewGame> {
               },
               label: '${difficultyMap[_difficultyIndex.toInt()]}',
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _launchGame,
-              child: Text('Launch Game'),
+              child: const Text('Launch Game'),
             ),
           ],
         ),
