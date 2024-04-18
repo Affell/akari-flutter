@@ -1,3 +1,5 @@
+import 'package:akari/utils/save.dart';
+import 'package:akari/views/loadGame.dart';
 import 'package:akari/views/newGame.dart';
 import 'package:akari/views/settings.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +62,14 @@ class _HomeState extends State<Home> {
             padding:
                 EdgeInsets.symmetric(vertical: 16.0, horizontal: width * 0.1),
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GamesListPage(mode: SaveMode.classic,),
+                  ),
+                );
+              },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
                     const Color.fromARGB(255, 128, 127, 127)),

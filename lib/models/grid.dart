@@ -1,7 +1,8 @@
 import 'dart:math';
-
+import 'dart:async';
 import 'package:akari/main.dart';
 import 'package:akari/models/action.dart';
+import 'package:akari/utils/save.dart';
 import 'package:akari/views/home.dart';
 import 'package:akari/views/settings.dart';
 import 'package:flutter/material.dart';
@@ -14,31 +15,46 @@ const List<double> ratiosChiffreMurs = [0.6, 0.7, 0.8];
 final lampBuild = AudioPlayer();
 final lampBreak = AudioPlayer();
 
+String formatTime(int seconds) {
+  int minutes = seconds ~/ 60;
+  int remainingSeconds = seconds % 60;
+  return '$minutes:${remainingSeconds.toString().padLeft(2, '0')}';
+}
+
+
 class Grid {
   int difficulty;
   int gridSize;
+  int time;
   int creationTime;
   List<List<int>> startGrid = [];
   List<List<int>> currentGrid = [];
   List<Tuple2<int, int>> lights = [];
   List<Tuple2<int, int>> actionsPassees = [];
   List<Tuple2<int, int>> actionsFutures = [];
-  List<GridAction> actions =
-      []; //inutile, mais encore là car jsp comment modif la save
+  List<GridAction> actions = []; //inutile, mais encore là car jsp comment modif la save
 
   Grid.createGrid(
       {required this.difficulty,
       required this.gridSize,
-      required this.creationTime}) {
+      required this.creationTime,
+      this.time = 0}) {
     generateGrid();
     initCurrentGrid();
   }
 
-  Grid(this.creationTime, this.difficulty, this.gridSize, this.startGrid,
+  Grid(this.creationTime, this.time, this.difficulty, this.gridSize, this.startGrid,
       this.lights, this.actions);
 
-  //Méthodes
 
+  Grid.loadGrid(
+      {required this.creationTime, required this.time, required this.difficulty, required this.gridSize, required this.startGrid,
+      required this.lights, required this.actions}) {
+    initCurrentGrid();
+    gridFromLights(lights);
+  }
+
+  //Méthodes
   bool isInGrid(int x, int y) {
     if (x < 0 || y < 0 || x >= gridSize || y >= gridSize) {
       return false;
@@ -522,6 +538,7 @@ class GridWidget extends StatefulWidget {
 }
 
 class _GridWidget extends State<GridWidget> {
+  late Timer _timer;
   ///Lorsqu'on clique sur une case
   void clickDetected(int index) {
     List<List<int>> currentGrid = widget.grid.currentGrid;
@@ -697,10 +714,22 @@ class _GridWidget extends State<GridWidget> {
     }
   }
 
+  void _startTimer() {
+  _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      widget.grid.time++;
+      setState(() {});
+  });
+}
+
+
+
   @override
   void initState() {
     super.initState();
+    _startTimer();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -902,12 +931,30 @@ class _GridWidget extends State<GridWidget> {
           ],
         ),
         const Spacer(),
+        SizedBox(
+        height: 50,
+        width: 100,
+        child: Container(
+          color: Colors.grey[200],
+          child: Center(
+            child: Text(
+              formatTime(widget.grid.time),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ),
+      const Spacer(),
         // Ajout du NavigationBar
         NavigationBar(
           onDestinationSelected: (int index) {
             setState(() {
               if (index == 0 &&
                   ModalRoute.of(context)?.settings.name != '/') {
+                    saveGame(widget.grid, SaveMode.classic);
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -928,6 +975,8 @@ class _GridWidget extends State<GridWidget> {
             NavigationDestination(
               icon: InkWell(
                 onTap: () {
+                  _timer.cancel();
+                  saveGame(widget.grid, SaveMode.classic);
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -938,6 +987,8 @@ class _GridWidget extends State<GridWidget> {
               ),
               selectedIcon: InkWell(
                 onTap: () {
+                  _timer.cancel();
+                  saveGame(widget.grid, SaveMode.classic);
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -964,21 +1015,25 @@ class _GridWidget extends State<GridWidget> {
             NavigationDestination(
               icon: InkWell(
                 onTap: () {
-                  
+                  _timer.cancel();
                   Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Settings()),
-                  );
+            context,
+            MaterialPageRoute(builder: (context) => const Settings()),
+          ).then((_) {
+            _startTimer(); // Reprendre le timer lorsque vous revenez de Settings
+          });
                 },
                 child: const Icon(Icons.settings),
               ),
               selectedIcon: InkWell(
                 onTap: () {
-                  
+                  _timer.cancel();
                   Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Settings()),
-                  );
+            context,
+            MaterialPageRoute(builder: (context) => const Settings()),
+          ).then((_) {
+            _startTimer(); // Reprendre le timer lorsque vous revenez de Settings
+          });
                 },
                 child: const Icon(Icons.settings),
               ),

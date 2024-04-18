@@ -26,7 +26,7 @@ void saveGame(Grid game, SaveMode mode) {
       "creation_time": game.creationTime,
       "difficulty": game.difficulty,
       "size": game.gridSize,
-      "time_spent": 0, // TODO Timer
+      "time_spent": game.time,
       "start_grid": startGridText,
       "lights": lightsText
     };
@@ -35,6 +35,7 @@ void saveGame(Grid game, SaveMode mode) {
       values["actions"] =
           jsonEncode(game.actions.map((a) => a.toMap()).toList());
     }
+    print(values);
 
     // Insert or Update
     databaseManager.database!.insert(mode.tableName, values,
@@ -59,6 +60,7 @@ Future<Grid?> loadGame(int creationTime, SaveMode mode) async {
         whereArgs: [creationTime]);
 
     if (results.length == 1) {
+      int time = results[0]["time_spend"] as int;
       int difficulty = results[0]["difficulty"] as int;
       int gridSize = results[0]["size"] as int;
       List<List<int>> startGrid = jsonDecode(results[0]["start_grid"] as String)
@@ -78,9 +80,18 @@ Future<Grid?> loadGame(int creationTime, SaveMode mode) async {
               .toList();
 
       return Grid(
-          creationTime, difficulty, gridSize, startGrid, lights, actions);
+          creationTime, time, difficulty, gridSize, startGrid, lights, actions);
     }
   }
 
   return null;
+}
+
+
+
+Future<List<Map<String, Object?>>> getAllGames(SaveMode mode) async {
+  if (databaseManager.database != null) {
+    return await databaseManager.database!.query(mode.tableName);
+  }
+  return [];
 }
