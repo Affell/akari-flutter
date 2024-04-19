@@ -77,7 +77,6 @@ class _GamesListPageState extends State<GamesListPage> {
   itemCount: snapshot.data!.length,
   itemBuilder: (context, index) {
     Map<String, dynamic> gameData = snapshot.data![index];
-    print(gameData);
 
     int creationTime = gameData['creation_time'] as int;
     int difficulty = gameData['difficulty'] as int;

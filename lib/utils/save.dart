@@ -35,8 +35,6 @@ void saveGame(Grid game, SaveMode mode) {
       values["actions"] =
           jsonEncode(game.actions.map((a) => a.toMap()).toList());
     }
-    print(values);
-
     // Insert or Update
     databaseManager.database!.insert(mode.tableName, values,
         conflictAlgorithm: ConflictAlgorithm.replace);

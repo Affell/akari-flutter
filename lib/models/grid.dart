@@ -828,6 +828,7 @@ class _GridWidget extends State<GridWidget> {
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.none,
                               fontSize: (1/9*(340-10*gridSize))  //Taille des chiffres inversement proportionnelle à la taille de la grille pour Ctrl F
                             ),
                           ),
@@ -895,6 +896,7 @@ class _GridWidget extends State<GridWidget> {
                                 ? currentGrid[row][col].toString()
                                 : '',
                             style: const TextStyle(
+                              decoration: TextDecoration.none,
                               color: Colors.white,
                             ),
                           ),
@@ -939,9 +941,10 @@ class _GridWidget extends State<GridWidget> {
           child: Center(
             child: Text(
               formatTime(widget.grid.time),
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
+                decoration: TextDecoration.none,
               ),
             ),
           ),
