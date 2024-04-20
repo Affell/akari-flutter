@@ -18,7 +18,8 @@ class DatabaseManager {
             time_spent INTEGER,
             start_grid TEXT,
             lights TEXT,
-            actions TEXT
+            actions_passees TEXT,
+            actions_futures TEXT
           )''');
         db.execute('''
           CREATE TABLE IF NOT EXISTS completed(
@@ -27,7 +28,9 @@ class DatabaseManager {
             size INTEGER,
             time_spent INTEGER,
             start_grid TEXT,
-            lights TEXT
+            lights TEXT,
+            actions_passees TEXT,
+            actions_futures TEXT
           );
         ''');
       },
