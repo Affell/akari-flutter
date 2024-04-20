@@ -149,6 +149,13 @@ class _HomeState extends State<Home> {
                         builder: (context) => const Home(title: "Akari")),
                   );
                 } else if (index == 1 &&
+                    ModalRoute.of(context)?.settings.name != '/history') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => History(mode: SaveMode.archive,)),
+                  );
+                }
+                else if (index == 2 &&
                     ModalRoute.of(context)?.settings.name != '/settings') {
                   Navigator.push(
                     context,
