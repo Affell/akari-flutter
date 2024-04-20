@@ -46,15 +46,17 @@ class _NewGamePageState extends State<NewGame> {
   };
 
   void _launchGame() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Game(
-          size: [7, 10, 14, 25][_sizeIndex.toInt()],
-          difficulty: _difficultyIndex.toInt(),
-        ),
-      ),
-    );
+    Navigator.pushAndRemoveUntil(
+  context,
+  MaterialPageRoute(
+    builder: (context) => Game(
+      size: [7, 10, 14, 25][_sizeIndex.toInt()],
+      difficulty: _difficultyIndex.toInt(),
+    ),
+  ),
+  (Route<dynamic> route) => false,
+);
+
   }
 
   @override
