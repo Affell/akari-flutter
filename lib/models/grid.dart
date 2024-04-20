@@ -1,7 +1,8 @@
 import 'dart:math';
-
+import 'dart:async';
 import 'package:akari/main.dart';
 import 'package:akari/models/action.dart';
+import 'package:akari/utils/save.dart';
 import 'package:akari/views/home.dart';
 import 'package:akari/views/settings.dart';
 import 'package:flutter/material.dart';
@@ -14,31 +15,51 @@ const List<double> ratiosChiffreMurs = [0.6, 0.7, 0.8];
 final lampBuild = AudioPlayer();
 final lampBreak = AudioPlayer();
 
+String formatTime(int seconds) {
+  int minutes = seconds ~/ 60;
+  int remainingSeconds = seconds % 60;
+  return '$minutes:${remainingSeconds.toString().padLeft(2, '0')}';
+}
+
 class Grid {
   int difficulty;
   int gridSize;
+  int time;
   int creationTime;
   List<List<int>> startGrid = [];
   List<List<int>> currentGrid = [];
   List<Tuple2<int, int>> lights = [];
   List<Tuple2<int, int>> actionsPassees = [];
   List<Tuple2<int, int>> actionsFutures = [];
-  List<GridAction> actions =
-      []; //inutile, mais encore là car jsp comment modif la save
+  //List<GridAction> actions =
+  //    []; //inutile, mais encore là car jsp comment modif la save
 
   Grid.createGrid(
       {required this.difficulty,
       required this.gridSize,
-      required this.creationTime}) {
+      required this.creationTime,
+      this.time = 0}) {
     generateGrid();
     initCurrentGrid();
   }
 
-  Grid(this.creationTime, this.difficulty, this.gridSize, this.startGrid,
-      this.lights, this.actions);
+  Grid(this.creationTime, this.time, this.difficulty, this.gridSize,
+      this.startGrid, this.lights, this.actionsPassees, this.actionsFutures);
+
+  Grid.loadGrid(
+      {required this.creationTime,
+      required this.time,
+      required this.difficulty,
+      required this.gridSize,
+      required this.startGrid,
+      required this.lights,
+      required this.actionsPassees,
+      required this.actionsFutures}) {
+    initCurrentGrid();
+    gridFromLights(lights);
+  }
 
   //Méthodes
-
   bool isInGrid(int x, int y) {
     if (x < 0 || y < 0 || x >= gridSize || y >= gridSize) {
       return false;
@@ -270,7 +291,6 @@ class Grid {
           }
           if (nb != grid[i][j]) {
             // If the expected number does not match the found number then return false
-            //print("pas le bon nombre d'ampoules en $i $j");
             return false;
           }
         }
@@ -329,7 +349,10 @@ class Grid {
           }
           */
         }
-
+        if (grid[i][j] == -2) {
+          //print("Case vide $i $j");
+          return false;
+        }
         /*
         if (grid[i][j] == -2 || grid[i][j] <= -4) {
           // White cell, we must check if it is illuminated, if it is not then no solution
@@ -383,10 +406,6 @@ class Grid {
           }
         }
         */
-        if (grid[i][j] == -2) {
-          //print("il y a une case non éclairée en $i $j");
-          return false;
-        }
         // If the cell is -1 (wall), nothing to check
       }
     }
@@ -534,6 +553,8 @@ class GridWidget extends StatefulWidget {
 }
 
 class _GridWidget extends State<GridWidget> {
+  late Timer _timer;
+
   ///Lorsqu'on clique sur une case
   void clickDetected(int index) {
     List<List<int>> currentGrid = widget.grid.currentGrid;
@@ -686,8 +707,7 @@ class _GridWidget extends State<GridWidget> {
 
       setState(() {});
     }
-    print(
-        "Grille terminée et valide : ${widget.grid.solutionChecker(widget.grid.currentGrid)}");
+    //print(widget.grid.solutionChecker(widget.grid.startGrid));
   }
 
   ///Undo <-> Ctrl+Z
@@ -710,9 +730,17 @@ class _GridWidget extends State<GridWidget> {
     }
   }
 
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      widget.grid.time++;
+      setState(() {});
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    _startTimer();
   }
 
   @override
@@ -720,284 +748,363 @@ class _GridWidget extends State<GridWidget> {
     int gridSize = widget.grid.gridSize;
     List<List<int>> currentGrid = widget.grid.currentGrid;
     var currentPageIndex = 1;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const SizedBox(height: 30),
-        SizedBox(
-          height: 470,
-          child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: gridSize),
-            itemCount: gridSize * gridSize,
-            itemBuilder: (BuildContext context, int index) {
-              int row = index ~/ gridSize;
-              int col = index % gridSize;
-
-              if (currentGrid[row][col] == 5) {
-                //Ampoule valide
-                return GestureDetector(
-                  onTap: () {
-                    clickDetected(index);
-                  },
-                  child: GridTile(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          color: Colors.lightBlue),
-                      child: Center(
-                        child: Image.asset("lib/assets/images/bulb.png"),
-                      ),
-                    ),
-                  ),
-                );
-              } else if (currentGrid[row][col] > 5) {
-                //Ampoule invalide
-                return GestureDetector(
-                  onTap: () {
-                    clickDetected(index);
-                  },
-                  child: GridTile(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                        color: wrongLamp ? Colors.red : Colors.lightBlue,
-                      ),
-                      child: Center(
-                        child: Image.asset("lib/assets/images/bulb.png"),
-                      ),
-                    ),
-                  ),
-                );
-              } else if (currentGrid[row][col] == -1) {
-                //Murs de base
-                return GestureDetector(
-                  onTap: () {
-                    clickDetected(index);
-                  },
-                  child: GridTile(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                        image: const DecorationImage(
-                          image: AssetImage("lib/assets/images/brick_wall.png"),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              } else if (currentGrid[row][col] >= 0) {
-                //Murs avec contraintes
-                return GestureDetector(
-                  onTap: () {
-                    clickDetected(index);
-                  },
-                  child: GridTile(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                        image: const DecorationImage(
-                          image: AssetImage("lib/assets/images/brick_wall.png"),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "${currentGrid[row][col]}",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: (1 /
-                                  9 *
-                                  (340 -
-                                      10 *
-                                          gridSize)) //Taille des chiffres inversement proportionnelle à la taille de la grille pour Ctrl F
-                              ),
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }
-              /* Débug
-        else if (currentGrid[row][col] <= -4) {
-          return GestureDetector(
-            onTap: () {
-              clickDetected(index);
-            },
-            child: GridTile(
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                  color: passLamp ? Colors.yellow : Colors.white,
-                ),
-                child: Center(
-                  child: Text(
-                    "${currentGrid[row][col]}",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          );
-          }
-        */
-              else if (currentGrid[row][col] <= -4) {
-                //Cases éclairées
-                return GestureDetector(
-                  onTap: () {
-                    clickDetected(index);
-                  },
-                  child: GridTile(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                        color: passLamp ? Colors.yellow : Colors.white,
-                      ),
-                    ),
-                  ),
-                );
-              } else {
-                //Cases vides
-                return GestureDetector(
-                  onTap: () {
-                    clickDetected(index);
-                  },
-                  child: GridTile(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          color: Colors.white),
-                      child: Center(
-                        child: Text(
-                          currentGrid[row][col] >= 0
-                              ? currentGrid[row][col].toString()
-                              : '',
-                          style: const TextStyle(
-                            color: Colors.white,
+    return Scaffold(
+      backgroundColor: Colors.grey, // Définition de la couleur de fond en gris
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(height: 30),
+          SizedBox(
+            height: 470,
+            child: InteractiveViewer(
+              boundaryMargin: const EdgeInsets.all(5.0),
+              minScale: 0.1,
+              maxScale: 4,
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: gridSize),
+                itemCount: gridSize * gridSize,
+                itemBuilder: (BuildContext context, int index) {
+                  int row = index ~/ gridSize;
+                  int col = index % gridSize;
+                  if (currentGrid[row][col] == 5) {
+                    //Ampoule valide
+                    return GestureDetector(
+                      onTap: () {
+                        clickDetected(index);
+                      },
+                      child: GridTile(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              color: Colors.lightBlue),
+                          child: Center(
+                            child: Image.asset("lib/assets/images/bulb_0.png"),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                );
-              }
-            },
+                    );
+                  } else if (currentGrid[row][col] > 5) {
+                    //Ampoule invalide
+                    return GestureDetector(
+                      onTap: () {
+                        clickDetected(index);
+                      },
+                      child: GridTile(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            color: wrongLamp ? Colors.red : Colors.lightBlue,
+                          ),
+                          child: Center(
+                            child: Image.asset("lib/assets/images/bulb_0.png"),
+                          ),
+                        ),
+                      ),
+                    );
+                  } else if (currentGrid[row][col] == -1) {
+                    //Murs de base
+                    return GestureDetector(
+                      onTap: () {
+                        clickDetected(index);
+                      },
+                      child: GridTile(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            image: const DecorationImage(
+                              image: AssetImage("lib/assets/images/wall_0.png"),
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  } else if (currentGrid[row][col] >= 0) {
+                    //Murs avec contraintes
+                    return GestureDetector(
+                      onTap: () {
+                        clickDetected(index);
+                      },
+                      child: GridTile(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            image: const DecorationImage(
+                              image: AssetImage("lib/assets/images/wall_0.png"),
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "${currentGrid[row][col]}",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.none,
+                                  fontSize: (1 /
+                                      9 *
+                                      (340 -
+                                          10 *
+                                              gridSize)) //Taille des chiffres inversement proportionnelle à la taille de la grille pour Ctrl F
+                                  ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  } else if (currentGrid[row][col] <= -4) {
+                    //Cases éclairées
+                    return GestureDetector(
+                      onTap: () {
+                        clickDetected(index);
+                      },
+                      child: GridTile(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            color: passLamp ? Colors.yellow : Colors.white,
+                          ),
+                        ),
+                      ),
+                    );
+                  } else {
+                    //Cases vides
+                    return GestureDetector(
+                      onTap: () {
+                        clickDetected(index);
+                      },
+                      child: GridTile(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              color: Colors.white),
+                          child: Center(
+                            child: Text(
+                              currentGrid[row][col] >= 0
+                                  ? currentGrid[row][col].toString()
+                                  : '',
+                              style: const TextStyle(
+                                decoration: TextDecoration.none,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
           ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            FloatingActionButton(
-              heroTag: "Undo",
-              onPressed: undo,
-              backgroundColor: Colors.white,
-              child: const Icon(Icons.arrow_back),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FloatingActionButton(
+                onPressed: undo,
+                backgroundColor: Colors.white,
+                child: const Icon(Icons.arrow_back),
+              ),
+              const SizedBox(width: 10),
+              FloatingActionButton(
+                onPressed: redo,
+                backgroundColor: Colors.white,
+                child: const Icon(Icons.arrow_forward),
+              ),
+              const SizedBox(width: 10),
+              FloatingActionButton(
+                onPressed: () {
+                  _timer.cancel();
+                  int i = Random().nextInt(2);
+                  if (widget.grid.solutionChecker(currentGrid)) {
+                    saveGame(widget.grid, SaveMode.archive);
+                    int time = widget.grid.time;
+
+                    int hours = time ~/ 3600;
+                    int minutes = (time % 3600) ~/ 60;
+                    int seconds = time % 60;
+
+                    String formattedTime = '$hours h $minutes min $seconds sec';
+
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Félicitation!'),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset('lib/assets/images/congrat_$i.gif',
+                                  height:
+                                      100), // Remplacez 'bravo.gif' par le chemin de votre GIF
+                              const SizedBox(height: 16),
+                              Text(
+                                  'Vous avez réussi à résoudre cette grille en : $formattedTime'),
+                            ],
+                          ),
+                          actions: [
+                            TextButton(
+                              child: const Text('OK'),
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Ferme le popup
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text("Vous n'avez pas réussi!"),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset('lib/assets/images/fail_$i.gif',
+                                  height:
+                                      100), // Remplacez 'bravo.gif' par le chemin de votre GIF
+                              const SizedBox(height: 16),
+                              const Text(
+                                  "La solution proposée est incorrecte."),
+                            ],
+                          ),
+                          actions: [
+                            TextButton(
+                              child: const Text('OK'),
+                              onPressed: () {
+                                _startTimer();
+                                Navigator.of(context).pop(); // Ferme le popup
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                }, //A faire : Validation + animation si valide
+                backgroundColor: Colors.green.shade200,
+                child: const Icon(Icons.check),
+              ),
+            ],
+          ),
+          const Spacer(),
+          SizedBox(
+            height: 50,
+            width: 100,
+            child: Container(
+              color: Colors.grey[200],
+              child: Center(
+                child: Text(
+                  formatTime(widget.grid.time),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.none,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
             ),
-            const SizedBox(width: 10),
-            FloatingActionButton(
-              heroTag: "Redo",
-              onPressed: redo,
-              backgroundColor: Colors.white,
-              child: const Icon(Icons.arrow_forward),
-            ),
-            const SizedBox(width: 10),
-            FloatingActionButton(
-              heroTag: "Validate",
-              onPressed: () {}, //A faire : Validation + animation si valide
-              backgroundColor: Colors.green.shade200,
-              child: const Icon(Icons.check),
-            ),
-          ],
-        ),
-        const Spacer(),
-        // Ajout du NavigationBar
-        NavigationBar(
-          onDestinationSelected: (int index) {
-            setState(() {
-              if (index == 0 && ModalRoute.of(context)?.settings.name != '/') {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const Home(title: "Akari")),
-                );
-              } else if (index == 2 &&
-                  ModalRoute.of(context)?.settings.name != '/settings') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Settings()),
-                );
-              }
-            });
-          },
-          indicatorColor: const Color.fromARGB(255, 94, 94, 93),
-          selectedIndex: currentPageIndex,
-          destinations: [
-            NavigationDestination(
-              icon: InkWell(
-                onTap: () {
+          ),
+          const Spacer(),
+          // Ajout du NavigationBar
+          NavigationBar(
+            onDestinationSelected: (int index) {
+              setState(() {
+                if (index == 0 &&
+                    ModalRoute.of(context)?.settings.name != '/') {
+                  saveGame(widget.grid, SaveMode.classic);
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const Home(title: "Akari")),
                   );
-                },
-                child: const Icon(Icons.home),
-              ),
-              selectedIcon: InkWell(
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const Home(title: "Akari")),
-                  );
-                },
-                child: const Icon(Icons.home_filled),
-              ),
-              label: 'Home',
-            ),
-            NavigationDestination(
-              icon: InkWell(
-                onTap: () {},
-                child: const Icon(Icons.games),
-              ),
-              selectedIcon: InkWell(
-                onTap: () {},
-                child: const Icon(Icons.games),
-              ),
-              label: 'Game',
-            ),
-            NavigationDestination(
-              icon: InkWell(
-                onTap: () {
+                } else if (index == 2 &&
+                    ModalRoute.of(context)?.settings.name != '/settings') {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const Settings()),
                   );
-                },
-                child: const Icon(Icons.settings),
+                }
+              });
+            },
+            indicatorColor: const Color.fromARGB(255, 94, 94, 93),
+            selectedIndex: currentPageIndex,
+            destinations: [
+              NavigationDestination(
+                icon: InkWell(
+                  onTap: () {
+                    _timer.cancel();
+                    saveGame(widget.grid, SaveMode.classic);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Home(title: "Akari")),
+                    );
+                  },
+                  child: const Icon(Icons.home),
+                ),
+                selectedIcon: InkWell(
+                  onTap: () {
+                    _timer.cancel();
+                    saveGame(widget.grid, SaveMode.classic);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Home(title: "Akari")),
+                    );
+                  },
+                  child: const Icon(Icons.home_filled),
+                ),
+                label: 'Home',
               ),
-              selectedIcon: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Settings()),
-                  );
-                },
-                child: const Icon(Icons.settings),
+              NavigationDestination(
+                icon: InkWell(
+                  onTap: () {},
+                  child: const Icon(Icons.games),
+                ),
+                selectedIcon: InkWell(
+                  onTap: () {},
+                  child: const Icon(Icons.games),
+                ),
+                label: 'Game',
               ),
-              label: 'Settings',
-            ),
-          ],
-        ),
-      ],
+              NavigationDestination(
+                icon: InkWell(
+                  onTap: () {
+                    _timer.cancel();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Settings()),
+                    ).then((_) {
+                      _startTimer(); // Reprendre le timer lorsque vous revenez de Settings
+                    });
+                  },
+                  child: const Icon(Icons.settings),
+                ),
+                selectedIcon: InkWell(
+                  onTap: () {
+                    _timer.cancel();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Settings()),
+                    ).then((_) {
+                      _startTimer(); // Reprendre le timer lorsque vous revenez de Settings
+                    });
+                  },
+                  child: const Icon(Icons.settings),
+                ),
+                label: 'Settings',
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

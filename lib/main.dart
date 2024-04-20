@@ -11,6 +11,9 @@ late double backGroungMusicVol;
 late double soundVol;
 late bool wrongLamp;
 late bool passLamp;
+late int iBulb;
+late int iWall;
+late int iCase;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +29,9 @@ _loadData() {
   soundVol = _prefs.getDouble('soundVol') ?? 1;
   wrongLamp = _prefs.getBool('wrongLamp') ?? true;
   passLamp = _prefs.getBool('passLamp') ?? true;
+  iBulb = _prefs.getInt('iBulb') ?? 0;
+  iWall  = _prefs.getInt('iWall')  ?? 0;
+  iCase  = _prefs.getInt('iCase')  ?? 0;
 }
 
 class MainApp extends StatefulWidget {

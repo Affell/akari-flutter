@@ -1,3 +1,6 @@
+import 'package:akari/utils/save.dart';
+import 'package:akari/views/history.dart';
+import 'package:akari/views/loadGame.dart';
 import 'package:akari/views/newGame.dart';
 import 'package:akari/views/settings.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +63,14 @@ class _HomeState extends State<Home> {
             padding:
                 EdgeInsets.symmetric(vertical: 16.0, horizontal: width * 0.1),
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GamesListPage(mode: SaveMode.classic,),
+                  ),
+                );
+              },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
                     const Color.fromARGB(255, 128, 127, 127)),
@@ -78,12 +88,7 @@ class _HomeState extends State<Home> {
                           Text("Continue",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: width / 20,
-                                  color: Colors.black)),
-                          Text("Mettre infos partie en cours",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: width / 30,
+                                  fontSize: width / 15,
                                   color: Colors.black)),
                         ],
                       ),
@@ -99,7 +104,7 @@ class _HomeState extends State<Home> {
                 EdgeInsets.symmetric(vertical: 16.0, horizontal: width * 0.1),
             child: TextButton(
               onPressed: () {
-                Navigator.pushReplacement(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => NewGame(),
@@ -180,6 +185,41 @@ class _HomeState extends State<Home> {
                 ),
                 label: 'Home',
               ),
+
+
+
+
+
+                            NavigationDestination(
+                icon: InkWell(
+                  onTap: () {
+                    
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => History(mode: SaveMode.archive,)),
+                    );
+                  },
+                  child: const Icon(Icons.history),
+                ),
+                selectedIcon: InkWell(
+                  onTap: () {
+                    
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => History(mode: SaveMode.archive,)),
+                    );
+                  },
+                  child: const Icon(Icons.settings),
+                ),
+                label: 'History',
+              ),
+
+
+
+
+
+
+
               NavigationDestination(
                 icon: InkWell(
                   onTap: () {
