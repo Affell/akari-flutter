@@ -265,7 +265,7 @@ class Grid {
     int n = grid.length;
     for (int i = 0; i < n; i++) {
       for (int j = 0; j < n; j++) {
-        if (grid[i][j] >= 0) {
+        if (grid[i][j] >= 0 && grid[i][j] < 5) {
           // Wall with condition
           int nb = 0; // Counter to count the number of bulbs around the cell
           if (i - 1 >= 0) {
@@ -291,10 +291,14 @@ class Grid {
           }
           if (nb != grid[i][j]) {
             // If the expected number does not match the found number then return false
+            //print("Contrainte non respectée $i $j");
             return false;
           }
         }
-        if (grid[i][j] == 5) {
+        if (grid[i][j] > 5) {
+          //print("Ampoule alignée avec une autre $i $j");
+          return false;
+          /*
           // If bulb, check that there is no adjacent bulb
           bool southWall = false; // South wall encountered
           bool northWall = false; // North wall encountered
@@ -344,7 +348,13 @@ class Grid {
             // If bulb found then false
             return false;
           }
+          */
         }
+        if (grid[i][j] == -2) {
+          //print("Case vide $i $j");
+          return false;
+        }
+        /*
         if (grid[i][j] == -2 || grid[i][j] <= -4) {
           // White cell, we must check if it is illuminated, if it is not then no solution
           bool southWall = false; // South wall encountered
@@ -396,6 +406,7 @@ class Grid {
             return false;
           }
         }
+        */
         // If the cell is -1 (wall), nothing to check
       }
     }
@@ -697,7 +708,7 @@ class _GridWidget extends State<GridWidget> {
 
       setState(() {});
     }
-    //print(widget.grid.solutionChecker(widget.grid.startGrid));
+    print(widget.grid.solutionChecker(widget.grid.currentGrid));
   }
 
   ///Undo <-> Ctrl+Z
@@ -721,7 +732,7 @@ class _GridWidget extends State<GridWidget> {
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       widget.grid.time++;
       setState(() {});
     });
@@ -748,7 +759,7 @@ class _GridWidget extends State<GridWidget> {
           SizedBox(
             height: 470,
             child: InteractiveViewer(
-              boundaryMargin: EdgeInsets.all(5.0),
+              boundaryMargin: const EdgeInsets.all(5.0),
               minScale: 0.1,
               maxScale: 4,
               child: GridView.builder(
@@ -875,7 +886,7 @@ class _GridWidget extends State<GridWidget> {
                               currentGrid[row][col] >= 0
                                   ? currentGrid[row][col].toString()
                                   : '',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 decoration: TextDecoration.none,
                                 color: Colors.white,
                               ),
@@ -923,22 +934,21 @@ class _GridWidget extends State<GridWidget> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text('Félicitation!'),
+                          title: const Text('Félicitation!'),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Image.asset('lib/assets/images/congrat_$i.gif',
                                   height:
                                       100), // Remplacez 'bravo.gif' par le chemin de votre GIF
-                              SizedBox(height: 16),
+                              const SizedBox(height: 16),
                               Text(
-                                  'Vous avez réussi à résoudre cette grille en : ' +
-                                      formattedTime),
+                                  'Vous avez réussi à résoudre cette grille en : $formattedTime'),
                             ],
                           ),
                           actions: [
                             TextButton(
-                              child: Text('OK'),
+                              child: const Text('OK'),
                               onPressed: () {
                                 Navigator.of(context).pop(); // Ferme le popup
                               },
@@ -952,20 +962,21 @@ class _GridWidget extends State<GridWidget> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text("Vous n'avez pas réussi!"),
+                          title: const Text("Vous n'avez pas réussi!"),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Image.asset('lib/assets/images/fail_$i.gif',
                                   height:
                                       100), // Remplacez 'bravo.gif' par le chemin de votre GIF
-                              SizedBox(height: 16),
-                              Text("La solution proposée est incorrecte."),
+                              const SizedBox(height: 16),
+                              const Text(
+                                  "La solution proposée est incorrecte."),
                             ],
                           ),
                           actions: [
                             TextButton(
-                              child: Text('OK'),
+                              child: const Text('OK'),
                               onPressed: () {
                                 _startTimer();
                                 Navigator.of(context).pop(); // Ferme le popup
