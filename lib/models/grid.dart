@@ -5,6 +5,7 @@ import 'package:akari/utils/save.dart';
 import 'package:akari/views/home.dart';
 import 'package:akari/views/settings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:tuple/tuple.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -755,83 +756,93 @@ class _GridWidget extends State<GridWidget> {
         children: [
           const SizedBox(height: 30),
           SizedBox(
-            height: 470,
+            height: 394,
             child: InteractiveViewer(
               boundaryMargin: const EdgeInsets.all(5.0),
               minScale: 0.1,
               maxScale: 4,
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: gridSize),
-                itemCount: gridSize * gridSize,
-                itemBuilder: (BuildContext context, int index) {
-                  int row = index ~/ gridSize;
-                  int col = index % gridSize;
-                  if (currentGrid[row][col] == 5) {
-                    //Ampoule valide
-                    return GestureDetector(
-                      onTap: () {
-                        clickDetected(index);
-                      },
-                      child: GridTile(
+              panEnabled:
+                  false, //Pour empecher le scroll (et eviter de gener le physics)
+              child: Container(
+                alignment: Alignment.center,
+                color: Colors
+                    .black, //Arriere noir pour eviter les blancs entre bordures
+                child: GridView.builder(
+                  physics:
+                      const NeverScrollableScrollPhysics(), //Pour empecher le scroll
+                  shrinkWrap: false,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: gridSize,
+                    mainAxisSpacing: 0,
+                    crossAxisSpacing: 0,
+                  ),
+                  itemCount: gridSize * gridSize,
+                  itemBuilder: (BuildContext context, int index) {
+                    int row = index ~/ gridSize;
+                    int col = index % gridSize;
+                    if (currentGrid[row][col] == 5) {
+                      //Ampoule valide
+                      return GestureDetector(
+                        onTap: () {
+                          clickDetected(index);
+                        },
                         child: Container(
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.black),
                               color: Colors.lightBlue),
                           child: Center(
-                            child: Image.asset("lib/assets/images/bulb_0.png"),
+                            child: Image.asset(
+                                "lib/assets/images/bulb_$iBulb.png",
+                                fit: BoxFit.cover),
                           ),
                         ),
-                      ),
-                    );
-                  } else if (currentGrid[row][col] > 5) {
-                    //Ampoule invalide
-                    return GestureDetector(
-                      onTap: () {
-                        clickDetected(index);
-                      },
-                      child: GridTile(
+                      );
+                    } else if (currentGrid[row][col] > 5) {
+                      //Ampoule invalide
+                      return GestureDetector(
+                        onTap: () {
+                          clickDetected(index);
+                        },
                         child: Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.black),
                             color: wrongLamp ? Colors.red : Colors.lightBlue,
                           ),
                           child: Center(
-                            child: Image.asset("lib/assets/images/bulb_0.png"),
+                            child: Image.asset(
+                                "lib/assets/images/bulb_$iBulb.png"),
                           ),
                         ),
-                      ),
-                    );
-                  } else if (currentGrid[row][col] == -1) {
-                    //Murs de base
-                    return GestureDetector(
-                      onTap: () {
-                        clickDetected(index);
-                      },
-                      child: GridTile(
+                      );
+                    } else if (currentGrid[row][col] == -1) {
+                      //Murs de base
+                      return GestureDetector(
+                        onTap: () {
+                          clickDetected(index);
+                        },
                         child: Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.black),
-                            image: const DecorationImage(
-                              image: AssetImage("lib/assets/images/wall_0.png"),
+                            image: DecorationImage(
+                              image: AssetImage(
+                                  "lib/assets/images/wall_$iWall.png"),
                               fit: BoxFit.fill,
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  } else if (currentGrid[row][col] >= 0) {
-                    //Murs avec contraintes
-                    return GestureDetector(
-                      onTap: () {
-                        clickDetected(index);
-                      },
-                      child: GridTile(
+                      );
+                    } else if (currentGrid[row][col] >= 0) {
+                      //Murs avec contraintes
+                      return GestureDetector(
+                        onTap: () {
+                          clickDetected(index);
+                        },
                         child: Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.black),
-                            image: const DecorationImage(
-                              image: AssetImage("lib/assets/images/wall_0.png"),
+                            image: DecorationImage(
+                              image: AssetImage(
+                                  "lib/assets/images/wall_$iWall.png"),
                               fit: BoxFit.fill,
                             ),
                           ),
@@ -851,53 +862,84 @@ class _GridWidget extends State<GridWidget> {
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  } else if (currentGrid[row][col] <= -4) {
-                    //Cases éclairées
-                    return GestureDetector(
-                      onTap: () {
-                        clickDetected(index);
-                      },
-                      child: GridTile(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black),
-                            color: passLamp ? Colors.yellow : Colors.white,
-                          ),
-                        ),
-                      ),
-                    );
-                  } else {
-                    //Cases vides
-                    return GestureDetector(
-                      onTap: () {
-                        clickDetected(index);
-                      },
-                      child: GridTile(
-                        child: Container(
-                          decoration: BoxDecoration(
+                      );
+                    } else if (currentGrid[row][col] <= -4) {
+                      //Cases éclairées
+                      //Sans theme
+                      if (iCase == 0) {
+                        return GestureDetector(
+                          onTap: () {
+                            clickDetected(index);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
                               border: Border.all(color: Colors.black),
-                              color: Colors.white),
-                          child: Center(
-                            child: Text(
-                              currentGrid[row][col] >= 0
-                                  ? currentGrid[row][col].toString()
-                                  : '',
-                              style: const TextStyle(
-                                decoration: TextDecoration.none,
-                                color: Colors.white,
+                              color: passLamp ? Colors.yellow : Colors.white,
+                            ),
+                          ),
+                        );
+                      }
+                      //Avec theme
+                      else {
+                        return GestureDetector(
+                          onTap: () {
+                            clickDetected(index);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              color: Colors.white,
+                              image: DecorationImage(
+                                image: AssetImage(
+                                    "lib/assets/images/case_$iCase.png"),
+                                fit: BoxFit.fill,
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                    );
-                  }
-                },
+                        );
+                      }
+                    } else {
+                      //Cases vides
+                      //Sans theme
+                      if (iCase == 0) {
+                        return GestureDetector(
+                          onTap: () {
+                            clickDetected(index);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              color: Colors.white,
+                            ),
+                          ),
+                        );
+                      }
+                      //Avec theme
+                      else {
+                        return GestureDetector(
+                          onTap: () {
+                            clickDetected(index);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              color: Colors.white,
+                              image: DecorationImage(
+                                image: AssetImage(
+                                    "lib/assets/images/case_dark_$iCase.png"),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  },
+                ),
               ),
             ),
           ),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
