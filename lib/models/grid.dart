@@ -31,8 +31,8 @@ class Grid {
   List<Tuple2<int, int>> lights = [];
   List<Tuple2<int, int>> actionsPassees = [];
   List<Tuple2<int, int>> actionsFutures = [];
-  List<GridAction> actions =
-      []; //inutile, mais encore là car jsp comment modif la save
+  //List<GridAction> actions =
+  //    []; //inutile, mais encore là car jsp comment modif la save
 
   Grid.createGrid(
       {required this.difficulty,
@@ -44,7 +44,7 @@ class Grid {
   }
 
   Grid(this.creationTime, this.time, this.difficulty, this.gridSize,
-      this.startGrid, this.lights, this.actions);
+      this.startGrid, this.lights, this.actionsPassees, this.actionsFutures);
 
   Grid.loadGrid(
       {required this.creationTime,
@@ -53,7 +53,8 @@ class Grid {
       required this.gridSize,
       required this.startGrid,
       required this.lights,
-      required this.actions}) {
+      required this.actionsPassees,
+      required this.actionsFutures}) {
     initCurrentGrid();
     gridFromLights(lights);
   }

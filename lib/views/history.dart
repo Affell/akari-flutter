@@ -25,8 +25,6 @@ class _HistoryPageState extends State<History> {
     games = getAllGames(widget.mode);
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,64 +46,56 @@ class _HistoryPageState extends State<History> {
             return Center(child: Text('Aucune partie terminée'));
           }
 
+          return ListView.builder(
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              Map<String, dynamic> gameData = snapshot.data![index];
 
+              int creationTime = gameData['creation_time'] as int;
+              String dateCreation = DateFormat('dd-MM-yyyy HH:mm:ss').format(
+                  DateTime.fromMillisecondsSinceEpoch(creationTime * 1000));
 
-return ListView.builder(
-  itemCount: snapshot.data!.length,
-  itemBuilder: (context, index) {
-    Map<String, dynamic> gameData = snapshot.data![index];
+              int difficulty = gameData['difficulty'] as int;
+              int size = gameData['size'] as int;
+              int time = gameData['time_spent'] as int;
 
-    int creationTime = gameData['creation_time'] as int;
-    String dateCreation = DateFormat('dd-MM-yyyy HH:mm:ss').format(DateTime.fromMillisecondsSinceEpoch(creationTime * 1000));
-  
-    int difficulty = gameData['difficulty'] as int;
-    int size = gameData['size'] as int;
-    int time = gameData['time_spent'] as int;
+              int hours = time ~/ 3600;
+              int minutes = (time % 3600) ~/ 60;
+              int seconds = time % 60;
 
-int hours = time ~/ 3600;
-int minutes = (time % 3600) ~/ 60;
-int seconds = time % 60;
+              String formattedTime = '$hours h $minutes min $seconds sec';
 
-String formattedTime = '$hours h $minutes min $seconds sec';
-
-    return Card(
-  elevation: 4,
-  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-  shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(15),
-  ),
-  child: ListTile(
-    title: Text(
-      'Partie: $dateCreation',
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    subtitle: Padding(
-      padding: EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Difficulté: $difficulty'),
-          SizedBox(height: 5),
-          Text('Taille: $size'),
-          SizedBox(height: 5),
-          Text('Temps passé: $formattedTime'),
-        ],
-      ),
-    ),
-    onTap: () {
-      
-    },
-  ),
-);
-
-  },
-);
-
-
-
-
+              return Card(
+                elevation: 4,
+                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: ListTile(
+                  title: Text(
+                    'Partie: $dateCreation',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Difficulté: $difficulty'),
+                        SizedBox(height: 5),
+                        Text('Taille: $size'),
+                        SizedBox(height: 5),
+                        Text('Temps passé: $formattedTime'),
+                      ],
+                    ),
+                  ),
+                  onTap: () {},
+                ),
+              );
+            },
+          );
         },
       ),
     );
