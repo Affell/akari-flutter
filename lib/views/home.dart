@@ -1,4 +1,5 @@
 import 'package:akari/utils/save.dart';
+import 'package:akari/views/history.dart';
 import 'package:akari/views/loadGame.dart';
 import 'package:akari/views/newGame.dart';
 import 'package:akari/views/settings.dart';
@@ -189,6 +190,41 @@ class _HomeState extends State<Home> {
                 ),
                 label: 'Home',
               ),
+
+
+
+
+
+                            NavigationDestination(
+                icon: InkWell(
+                  onTap: () {
+                    
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => History(mode: SaveMode.archive,)),
+                    );
+                  },
+                  child: const Icon(Icons.history),
+                ),
+                selectedIcon: InkWell(
+                  onTap: () {
+                    
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => History(mode: SaveMode.archive,)),
+                    );
+                  },
+                  child: const Icon(Icons.settings),
+                ),
+                label: 'History',
+              ),
+
+
+
+
+
+
+
               NavigationDestination(
                 icon: InkWell(
                   onTap: () {
