@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:akari/models/action.dart';
 import 'package:flutter/material.dart';
 import 'package:akari/utils/save.dart';
 import 'package:akari/models/grid.dart';
@@ -10,10 +8,10 @@ import 'package:intl/intl.dart';
 class GamesListPage extends StatefulWidget {
   final SaveMode mode;
 
-  GamesListPage({required this.mode});
+  const GamesListPage({super.key, required this.mode});
 
   @override
-  _GamesListPageState createState() => _GamesListPageState();
+  State<StatefulWidget> createState() => _GamesListPageState();
 }
 
 class _GamesListPageState extends State<GamesListPage> {
@@ -62,22 +60,22 @@ class _GamesListPageState extends State<GamesListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Parties en cours'),
-        
+        title: const Text('Parties en cours'),
       ),
       body: FutureBuilder<List<Map<String, Object?>>>(
         future: games,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text('Erreur de chargement des parties'));
+            return const Center(
+                child: Text('Erreur de chargement des parties'));
           }
 
           if (snapshot.hasData && snapshot.data!.isEmpty) {
-            return Center(child: Text('Aucune partie en cours'));
+            return const Center(child: Text('Aucune partie en cours'));
           }
 
           return ListView.builder(
@@ -101,26 +99,26 @@ class _GamesListPageState extends State<GamesListPage> {
 
               return Card(
                 elevation: 4,
-                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: ListTile(
                   title: Text(
                     'Partie: $dateCreation',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   subtitle: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Difficulté: $difficulty'),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Text('Taille: $size'),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Text('Temps passé: $formattedTime'),
                       ],
                     ),

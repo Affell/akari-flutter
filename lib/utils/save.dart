@@ -1,11 +1,8 @@
 import 'dart:convert';
 
 import 'package:akari/main.dart';
-import 'package:akari/models/action.dart';
 import 'package:akari/models/grid.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:tuple/tuple.dart';
-
 
 enum SaveMode {
   classic(tableName: "ongoing"),
@@ -22,8 +19,10 @@ void saveGame(Grid game, SaveMode mode) {
     String startGridText = jsonEncode(game.startGrid);
     String lightsText =
         jsonEncode(game.lights.map((l) => [l.item1, l.item2]).toList());
-    String actionsPasseesText = jsonEncode(game.actionsPassees.map((a) => [a.item1, a.item2]).toList());
-    String actionsFuturesText = jsonEncode(game.actionsFutures.map((a) => [a.item1, a.item2]).toList());
+    String actionsPasseesText =
+        jsonEncode(game.actionsPassees.map((a) => [a.item1, a.item2]).toList());
+    String actionsFuturesText =
+        jsonEncode(game.actionsFutures.map((a) => [a.item1, a.item2]).toList());
 
     Map<String, Object> values = {
       "creation_time": game.creationTime,
@@ -41,7 +40,6 @@ void saveGame(Grid game, SaveMode mode) {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 }
-
 
 /*
 Future<Grid?> loadGame(int creationTime, SaveMode mode) async {

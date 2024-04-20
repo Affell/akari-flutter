@@ -1,5 +1,4 @@
 import 'package:akari/main.dart';
-import 'package:akari/utils/save.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,7 +7,6 @@ AudioPlayer volSoundTest = AudioPlayer();
 double lastSoundVol = 0.0;
 late SharedPreferences _prefs;
 int nbTheme = 3;
-
 
 void _playSoundIfChanged(double value) {
   int divisionsChanged = ((value - lastSoundVol).abs() * 100).toInt();
@@ -36,7 +34,7 @@ _saveData() async {
 }
 
 class Settings extends StatefulWidget {
-  const Settings({Key? key}) : super(key: key);
+  const Settings({super.key});
 
   @override
   State<StatefulWidget> createState() => _SettingsPageState();
@@ -83,7 +81,7 @@ class _SettingsPageState extends State<Settings> {
       appBar: AppBar(
         title: const Text('Settings'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             _saveData();
             Navigator.pop(context);
@@ -164,11 +162,6 @@ class _SettingsPageState extends State<Settings> {
                 });
               },
             ),
-
-
-
-
-
             const SizedBox(height: 16.0),
             const Text('Available bulbs:'),
             Container(
@@ -192,7 +185,9 @@ class _SettingsPageState extends State<Settings> {
                         width: 50,
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: iBulb == index ? Colors.black : Colors.transparent,
+                            color: iBulb == index
+                                ? Colors.black
+                                : Colors.transparent,
                             width: 3.0,
                           ),
                         ),
@@ -230,7 +225,9 @@ class _SettingsPageState extends State<Settings> {
                         width: 50,
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: iWall == index ? Colors.black : Colors.transparent,
+                            color: iWall == index
+                                ? Colors.black
+                                : Colors.transparent,
                             width: 3.0,
                           ),
                         ),
@@ -268,7 +265,9 @@ class _SettingsPageState extends State<Settings> {
                         width: 50,
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: iCase == index ? Colors.black : Colors.transparent,
+                            color: iCase == index
+                                ? Colors.black
+                                : Colors.transparent,
                             width: 3.0,
                           ),
                         ),
@@ -283,13 +282,6 @@ class _SettingsPageState extends State<Settings> {
                 },
               ),
             ),
-
-
-
-
-
-
-
           ],
         ),
       ),

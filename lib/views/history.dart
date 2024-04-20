@@ -1,19 +1,14 @@
-import 'dart:convert';
-
-import 'package:akari/models/action.dart';
 import 'package:flutter/material.dart';
 import 'package:akari/utils/save.dart';
-import 'package:akari/models/grid.dart';
-import 'package:tuple/tuple.dart';
 import 'package:intl/intl.dart';
 
 class History extends StatefulWidget {
   final SaveMode mode;
 
-  History({required this.mode});
+  const History({super.key, required this.mode});
 
   @override
-  _HistoryPageState createState() => _HistoryPageState();
+  State<StatefulWidget> createState() => _HistoryPageState();
 }
 
 class _HistoryPageState extends State<History> {
@@ -29,21 +24,22 @@ class _HistoryPageState extends State<History> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Parties Terminées'),
+        title: const Text('Parties Terminées'),
       ),
       body: FutureBuilder<List<Map<String, Object?>>>(
         future: games,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text('Erreur de chargement des parties'));
+            return const Center(
+                child: Text('Erreur de chargement des parties'));
           }
 
           if (snapshot.hasData && snapshot.data!.isEmpty) {
-            return Center(child: Text('Aucune partie terminée'));
+            return const Center(child: Text('Aucune partie terminée'));
           }
 
           return ListView.builder(
@@ -67,26 +63,26 @@ class _HistoryPageState extends State<History> {
 
               return Card(
                 elevation: 4,
-                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: ListTile(
                   title: Text(
                     'Partie: $dateCreation',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   subtitle: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Difficulté: $difficulty'),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Text('Taille: $size'),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Text('Temps passé: $formattedTime'),
                       ],
                     ),

@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'dart:async';
 import 'package:akari/main.dart';
-import 'package:akari/models/action.dart';
 import 'package:akari/utils/save.dart';
 import 'package:akari/views/home.dart';
 import 'package:akari/views/settings.dart';
