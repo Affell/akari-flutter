@@ -1,8 +1,6 @@
-import 'dart:convert';
+import 'package:akari/views/game.dart';
 import 'package:flutter/material.dart';
 import 'package:akari/utils/save.dart';
-import 'package:akari/models/grid.dart';
-import 'package:tuple/tuple.dart';
 import 'package:intl/intl.dart';
 
 class GamesListPage extends StatefulWidget {
@@ -24,35 +22,14 @@ class _GamesListPageState extends State<GamesListPage> {
   }
 
   void loadGame(Map<String, Object?> gameData) {
-    Navigator.push(
+    Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (context) => GridWidget(
-          grid: Grid.loadGrid(
-            creationTime: gameData['creation_time'] as int,
-            time: gameData['time_spent'] as int,
-            difficulty: gameData['difficulty'] as int,
-            gridSize: gameData['size'] as int,
-            startGrid: (jsonDecode(gameData['start_grid'] as String) as List)
-                .map((item) => (item as List).map((i) => i as int).toList())
-                .toList(),
-            lights: (jsonDecode(gameData['lights'] as String) as List)
-                .map((item) => Tuple2<int, int>(
-                    (item as List)[0] as int, (item as List)[1] as int))
-                .toList(),
-            actionsPassees: jsonDecode(gameData["actions_passees"] as String)
-                .map<List<int>>((l) => List<int>.from(l))
-                .toList()
-                .map<Tuple2<int, int>>((e) => Tuple2(e[0] as int, e[1] as int))
-                .toList(),
-            actionsFutures: jsonDecode(gameData["actions_futures"] as String)
-                .map<List<int>>((l) => List<int>.from(l))
-                .toList()
-                .map<Tuple2<int, int>>((e) => Tuple2(e[0] as int, e[1] as int))
-                .toList(),
-          ),
+        builder: (context) => Game2(
+          gameData: gameData,
         ),
       ),
+      (Route<dynamic> route) => false,
     );
   }
 

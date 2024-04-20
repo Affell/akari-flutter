@@ -5,7 +5,6 @@ import 'package:akari/utils/save.dart';
 import 'package:akari/views/home.dart';
 import 'package:akari/views/settings.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:tuple/tuple.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -31,8 +30,6 @@ class Grid {
   List<Tuple2<int, int>> lights = [];
   List<Tuple2<int, int>> actionsPassees = [];
   List<Tuple2<int, int>> actionsFutures = [];
-  //List<GridAction> actions =
-  //    []; //inutile, mais encore là car jsp comment modif la save
 
   Grid.createGrid(
       {required this.difficulty,

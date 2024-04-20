@@ -30,8 +30,8 @@ _loadData() {
   wrongLamp = _prefs.getBool('wrongLamp') ?? true;
   passLamp = _prefs.getBool('passLamp') ?? true;
   iBulb = _prefs.getInt('iBulb') ?? 0;
-  iWall  = _prefs.getInt('iWall')  ?? 0;
-  iCase  = _prefs.getInt('iCase')  ?? 0;
+  iWall = _prefs.getInt('iWall') ?? 0;
+  iCase = _prefs.getInt('iCase') ?? 0;
 }
 
 class MainApp extends StatefulWidget {

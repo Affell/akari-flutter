@@ -67,7 +67,9 @@ class _HomeState extends State<Home> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => GamesListPage(mode: SaveMode.classic,),
+                    builder: (context) => const GamesListPage(
+                      mode: SaveMode.classic,
+                    ),
                   ),
                 );
               },
@@ -107,7 +109,7 @@ class _HomeState extends State<Home> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => NewGame(),
+                    builder: (context) => const NewGame(),
                   ),
                 );
               },
@@ -152,10 +154,12 @@ class _HomeState extends State<Home> {
                     ModalRoute.of(context)?.settings.name != '/history') {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => History(mode: SaveMode.archive,)),
+                    MaterialPageRoute(
+                        builder: (context) => const History(
+                              mode: SaveMode.archive,
+                            )),
                   );
-                }
-                else if (index == 2 &&
+                } else if (index == 2 &&
                     ModalRoute.of(context)?.settings.name != '/settings') {
                   Navigator.push(
                     context,
@@ -170,7 +174,6 @@ class _HomeState extends State<Home> {
               NavigationDestination(
                 icon: InkWell(
                   onTap: () {
-                
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -181,7 +184,6 @@ class _HomeState extends State<Home> {
                 ),
                 selectedIcon: InkWell(
                   onTap: () {
-                   
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -192,45 +194,36 @@ class _HomeState extends State<Home> {
                 ),
                 label: 'Home',
               ),
-
-
-
-
-
-                            NavigationDestination(
+              NavigationDestination(
                 icon: InkWell(
                   onTap: () {
-                    
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => History(mode: SaveMode.archive,)),
+                      MaterialPageRoute(
+                          builder: (context) => const History(
+                                mode: SaveMode.archive,
+                              )),
                     );
                   },
                   child: const Icon(Icons.history),
                 ),
                 selectedIcon: InkWell(
                   onTap: () {
-                    
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => History(mode: SaveMode.archive,)),
+                      MaterialPageRoute(
+                          builder: (context) => const History(
+                                mode: SaveMode.archive,
+                              )),
                     );
                   },
                   child: const Icon(Icons.settings),
                 ),
                 label: 'History',
               ),
-
-
-
-
-
-
-
               NavigationDestination(
                 icon: InkWell(
                   onTap: () {
-                    
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const Settings()),
@@ -240,7 +233,6 @@ class _HomeState extends State<Home> {
                 ),
                 selectedIcon: InkWell(
                   onTap: () {
-                    
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const Settings()),

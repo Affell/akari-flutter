@@ -29,8 +29,8 @@ class NewGame extends StatefulWidget {
 }
 
 class _NewGamePageState extends State<NewGame> {
-  double _sizeIndex = 1.0; // Corresponds to 10x10
-  double _difficultyIndex = 1.0; // Corresponds to Medium
+  double _sizeIndex = 1.0; // Corresponds à 10x10
+  double _difficultyIndex = 1.0; // Corresponds à Medium
 
   Map<int, String> sizeMap = {
     0: '7x7',
@@ -47,16 +47,15 @@ class _NewGamePageState extends State<NewGame> {
 
   void _launchGame() {
     Navigator.pushAndRemoveUntil(
-  context,
-  MaterialPageRoute(
-    builder: (context) => Game(
-      size: [7, 10, 14, 25][_sizeIndex.toInt()],
-      difficulty: _difficultyIndex.toInt(),
-    ),
-  ),
-  (Route<dynamic> route) => false,
-);
-
+      context,
+      MaterialPageRoute(
+        builder: (context) => Game(
+          size: [7, 10, 14, 25][_sizeIndex.toInt()],
+          difficulty: _difficultyIndex.toInt(),
+        ),
+      ),
+      (Route<dynamic> route) => false,
+    );
   }
 
   @override
