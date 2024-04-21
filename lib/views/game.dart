@@ -74,12 +74,12 @@ class MyGridWidget2 extends StatelessWidget {
             .map((item) => Tuple2<int, int>(
                 (item as List)[0] as int, (item as List)[1] as int))
             .toList(),
-        actionsPassees: jsonDecode(gameData["actions_passees"] as String)
+        pastActions: jsonDecode(gameData["actions_passees"] as String)
             .map<List<int>>((l) => List<int>.from(l))
             .toList()
             .map<Tuple2<int, int>>((e) => Tuple2(e[0] as int, e[1] as int))
             .toList(),
-        actionsFutures: jsonDecode(gameData["actions_futures"] as String)
+        futureActions: jsonDecode(gameData["actions_futures"] as String)
             .map<List<int>>((l) => List<int>.from(l))
             .toList()
             .map<Tuple2<int, int>>((e) => Tuple2(e[0] as int, e[1] as int))

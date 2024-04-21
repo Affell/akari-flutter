@@ -151,7 +151,7 @@ class _HomeState extends State<Home> {
                         builder: (context) => const Home(title: "Akari")),
                   );
                 } else if (index == 1 &&
-                    ModalRoute.of(context)?.settings.name != '/history') {
+                    ModalRoute.of(context)?.settings.name != '/historical') {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -219,7 +219,7 @@ class _HomeState extends State<Home> {
                   },
                   child: const Icon(Icons.settings),
                 ),
-                label: 'History',
+                label: 'historical',
               ),
               NavigationDestination(
                 icon: InkWell(

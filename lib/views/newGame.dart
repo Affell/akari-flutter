@@ -1,6 +1,21 @@
 import 'package:akari/views/game.dart';
 import 'package:flutter/material.dart';
 
+
+  Map<int, String> sizeMap = {
+    0: '7x7',
+    1: '10x10',
+    2: '14x14',
+    3: '25x25',
+  };
+
+  Map<int, String> difficultyMap = {
+    0: 'Easy',
+    1: 'Medium',
+    2: 'Hard',
+  };
+
+  
 void main() {
   runApp(const MyApp());
 }
@@ -29,21 +44,10 @@ class NewGame extends StatefulWidget {
 }
 
 class _NewGamePageState extends State<NewGame> {
-  double _sizeIndex = 1.0; // Corresponds à 10x10
-  double _difficultyIndex = 1.0; // Corresponds à Medium
+  double _sizeIndex = 1.0; // Corresponds to 10x10
+  double _difficultyIndex = 1.0; // Corresponds to Medium
 
-  Map<int, String> sizeMap = {
-    0: '7x7',
-    1: '10x10',
-    2: '14x14',
-    3: '25x25',
-  };
 
-  Map<int, String> difficultyMap = {
-    0: 'Easy',
-    1: 'Medium',
-    2: 'Hard',
-  };
 
   void _launchGame() {
     Navigator.pushAndRemoveUntil(

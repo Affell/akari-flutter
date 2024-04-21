@@ -5,6 +5,8 @@ import 'package:sqflite/sqflite.dart';
 class DatabaseManager {
   Database? database;
 
+
+  // Database initialisation
   void initDatabase() async {
     WidgetsFlutterBinding.ensureInitialized();
     openDatabase(

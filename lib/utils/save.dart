@@ -17,10 +17,10 @@ void saveGame(Grid game, SaveMode mode) {
     String startGridText = jsonEncode(game.startGrid);
     String lightsText =
         jsonEncode(game.lights.map((l) => [l.item1, l.item2]).toList());
-    String actionsPasseesText =
-        jsonEncode(game.actionsPassees.map((a) => [a.item1, a.item2]).toList());
-    String actionsFuturesText =
-        jsonEncode(game.actionsFutures.map((a) => [a.item1, a.item2]).toList());
+    String pastActionsText =
+        jsonEncode(game.pastActions.map((a) => [a.item1, a.item2]).toList());
+    String futureActionsText =
+        jsonEncode(game.futureActions.map((a) => [a.item1, a.item2]).toList());
 
     Map<String, Object> values = {
       "creation_time": game.creationTime,
@@ -29,8 +29,8 @@ void saveGame(Grid game, SaveMode mode) {
       "time_spent": game.time,
       "start_grid": startGridText,
       "lights": lightsText,
-      "actions_passees": actionsPasseesText,
-      "actions_futures": actionsFuturesText
+      "actions_passees": pastActionsText,
+      "actions_futures": futureActionsText
     };
 
     // Insert or Update
@@ -46,4 +46,15 @@ Future<List<Map<String, Object?>>> getAllGames(SaveMode mode) async {
     return await databaseManager.database!.query(mode.tableName);
   }
   return [];
+}
+
+
+void supprimerPartie(int creation_time, SaveMode mode) {
+  if (databaseManager.database != null) {
+    databaseManager.database!.delete(
+      mode.tableName,
+      where: 'creation_time = ?',
+      whereArgs: [creation_time],
+    );
+  }
 }
