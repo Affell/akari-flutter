@@ -20,8 +20,7 @@ class _HistoryPageState extends State<History> {
     games = getAllGames(widget.mode);
   }
 
-
-   Future<void> _confirmationSuppression(Map<String, Object?> gameData) async {
+  Future<void> _confirmationSuppression(Map<String, Object?> gameData) async {
     return showDialog(
       context: context,
       barrierDismissible: false,
@@ -39,10 +38,10 @@ class _HistoryPageState extends State<History> {
             TextButton(
               child: const Text('Delete'),
               onPressed: () {
-supprimerPartie(gameData['creation_time'] as int, widget.mode);
+                deleteGame(gameData['creation_time'] as int, widget.mode);
                 Navigator.of(context).pop();
                 setState(() {
-                  games = getAllGames(widget.mode);  // Refresh the list of games
+                  games = getAllGames(widget.mode); // Refresh the list of games
                 });
               },
             ),
@@ -51,8 +50,6 @@ supprimerPartie(gameData['creation_time'] as int, widget.mode);
       },
     );
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +65,7 @@ supprimerPartie(gameData['creation_time'] as int, widget.mode);
           }
 
           if (snapshot.hasError) {
-            return const Center(
-                child: Text('Error loading games'));
+            return const Center(child: Text('Error loading games'));
           }
 
           if (snapshot.hasData && snapshot.data!.isEmpty) {
@@ -96,40 +92,40 @@ supprimerPartie(gameData['creation_time'] as int, widget.mode);
               String formattedTime = '$hours h $minutes min $seconds sec';
 
               return Card(
-          elevation: 4,
-          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: ListTile(
-            title: Text(
-              'Game: $dateCreation',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            subtitle: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Difficulty: $difficulty'),
-                  const SizedBox(height: 5),
-                  Text('Size: $size'),
-                  const SizedBox(height: 5),
-                  Text('Time Spent: $formattedTime'),
-                ],
-              ),
-            ),
-            trailing: IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {
-                _confirmationSuppression(gameData);
-              },
-            ),
-            onTap: () {},
-          ),
-        );
+                elevation: 4,
+                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: ListTile(
+                  title: Text(
+                    'Game: $dateCreation',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Difficulty: $difficulty'),
+                        const SizedBox(height: 5),
+                        Text('Size: $size'),
+                        const SizedBox(height: 5),
+                        Text('Time Spent: $formattedTime'),
+                      ],
+                    ),
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () {
+                      _confirmationSuppression(gameData);
+                    },
+                  ),
+                  onTap: () {},
+                ),
+              );
             },
           );
         },

@@ -49,7 +49,7 @@ Future<List<Map<String, Object?>>> getAllGames(SaveMode mode) async {
 }
 
 
-void supprimerPartie(int creation_time, SaveMode mode) {
+void deleteGame(creation_time, SaveMode mode) {
   if (databaseManager.database != null) {
     databaseManager.database!.delete(
       mode.tableName,

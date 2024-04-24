@@ -1008,6 +1008,7 @@ class _GridWidget extends State<GridWidget> {
                   int i = Random().nextInt(2);
                   if (widget.grid.solutionChecker(currentGrid)) {
                     saveGame(widget.grid, SaveMode.archive);
+                    deleteGame(widget.grid.creationTime, SaveMode.classic);
                     int time = widget.grid.time;
 
                     int hours = time ~/ 3600;
