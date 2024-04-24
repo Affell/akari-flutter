@@ -38,24 +38,22 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int currentPageIndex = 0;
 
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    final double width = size.width;
 
-
-    @override
-Widget build(BuildContext context) {
-  var size = MediaQuery.of(context).size;
-  final double width = size.width;
-
-  return SafeArea(
-    child: Scaffold(
+    return SafeArea(
+      child: Scaffold(
         body: Column(
           children: [
             Center(
               child: Text(
                 widget.title,
-                style: TextStyle(fontSize: width / 5, fontWeight: FontWeight.bold),
+                style:
+                    TextStyle(fontSize: width / 5, fontWeight: FontWeight.bold),
               ),
             ),
-          
             Expanded(
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: width * 0.1),
@@ -234,7 +232,7 @@ Widget build(BuildContext context) {
                     },
                     child: const Icon(Icons.settings),
                   ),
-                  label: 'historical',
+                  label: 'Historical',
                 ),
                 NavigationDestination(
                   icon: InkWell(

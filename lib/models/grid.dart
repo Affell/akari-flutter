@@ -924,22 +924,41 @@ class _GridWidget extends State<GridWidget> {
                       }
                       //With theme
                       else {
-                        return GestureDetector(
-                          onTap: () {
-                            clickDetected(index);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black),
-                              color: Colors.white,
-                              image: DecorationImage(
-                                image: AssetImage(
-                                    "lib/assets/images/case_$iCase.png"),
-                                fit: BoxFit.fill,
+                        if (!passLamp) {
+                          return GestureDetector(
+                            onTap: () {
+                              clickDetected(index);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black),
+                                color: Colors.white,
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      "lib/assets/images/case_dark_$iCase.png"),
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                             ),
-                          ),
-                        );
+                          );
+                        } else {
+                          return GestureDetector(
+                            onTap: () {
+                              clickDetected(index);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black),
+                                color: Colors.white,
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      "lib/assets/images/case_$iCase.png"),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                          );
+                        }
                       }
                     } else {
                       //Empty box
@@ -1083,12 +1102,12 @@ class _GridWidget extends State<GridWidget> {
               setState(() {
                 if (index == 0 &&
                     ModalRoute.of(context)?.settings.name != '/') {
-                      if (finish==true){
-                        deleteGame(widget.grid.creationTime, SaveMode.classic);
-                        saveGame(widget.grid, SaveMode.archive);
-                      }else{
-                        saveGame(widget.grid, SaveMode.classic);
-                      }
+                  if (finish == true) {
+                    deleteGame(widget.grid.creationTime, SaveMode.classic);
+                    saveGame(widget.grid, SaveMode.archive);
+                  } else {
+                    saveGame(widget.grid, SaveMode.classic);
+                  }
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
