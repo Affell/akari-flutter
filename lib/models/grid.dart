@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
 import 'dart:math';
 import 'dart:async';
 import 'package:akari/main.dart';
@@ -14,6 +16,8 @@ const List<double> ratiosNumberWalls = [0.6, 0.7, 0.8];
 
 final lampBuild = AudioPlayer();
 final lampBreak = AudioPlayer();
+
+bool finish = false;
 
 // Formatting Time in Seconds in String
 String formatTime(int time) {
@@ -746,6 +750,7 @@ class _GridWidget extends State<GridWidget> {
 
   @override
   Widget build(BuildContext context) {
+    finish = false;
     int gridSize = widget.grid.gridSize;
     List<List<int>> currentGrid = widget.grid.currentGrid;
     var currentPageIndex = 1;
@@ -999,8 +1004,8 @@ class _GridWidget extends State<GridWidget> {
                   _timer.cancel();
                   int i = Random().nextInt(2);
                   if (widget.grid.solutionChecker(currentGrid)) {
-                    saveGame(widget.grid, SaveMode.archive);
-                    deleteGame(widget.grid.creationTime, SaveMode.classic);
+                    finish = true;
+
                     int time = widget.grid.time;
 
                     int hours = time ~/ 3600;
@@ -1078,7 +1083,12 @@ class _GridWidget extends State<GridWidget> {
               setState(() {
                 if (index == 0 &&
                     ModalRoute.of(context)?.settings.name != '/') {
-                  saveGame(widget.grid, SaveMode.classic);
+                      if (finish==true){
+                        deleteGame(widget.grid.creationTime, SaveMode.classic);
+                        saveGame(widget.grid, SaveMode.archive);
+                      }else{
+                        saveGame(widget.grid, SaveMode.classic);
+                      }
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
