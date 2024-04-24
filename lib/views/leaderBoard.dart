@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:akari/utils/save.dart';
 import 'package:intl/intl.dart';
 
-class History extends StatefulWidget {
+// A faire quand api
+
+class LeaderBoard extends StatefulWidget {
   final SaveMode mode;
 
-  const History({super.key, required this.mode});
+  const LeaderBoard({super.key, required this.mode});
 
   @override
   State<StatefulWidget> createState() => _HistoryPageState();
 }
 
-class _HistoryPageState extends State<History> {
+class _HistoryPageState extends State<LeaderBoard> {
   late Future<List<Map<String, Object?>>> games;
 
   @override
@@ -56,7 +58,7 @@ class _HistoryPageState extends State<History> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Completed games'),
+          title: const Text('LeaderBoard'),
         ),
         body: FutureBuilder<List<Map<String, Object?>>>(
           future: games,
@@ -120,7 +122,7 @@ class _HistoryPageState extends State<History> {
                       ),
                     ),
                     trailing: IconButton(
-                      icon: Icon(Icons.delete),
+                      icon: const Icon(Icons.delete),
                       onPressed: () {
                         _confirmationSuppression(gameData);
                       },

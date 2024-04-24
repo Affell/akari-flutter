@@ -7,13 +7,13 @@ class Game extends StatelessWidget {
   final int size;
   final int difficulty;
 
-  Game({required this.size, required this.difficulty});
+  const Game({super.key, required this.size, required this.difficulty});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Akari Game'),
+        title: const Text('Akari Game'),
       ),
       body: MyGridWidget(size: size, difficulty: difficulty),
     );
@@ -24,7 +24,7 @@ class MyGridWidget extends StatelessWidget {
   final int size;
   final int difficulty;
 
-  MyGridWidget({required this.size, required this.difficulty});
+  const MyGridWidget({super.key, required this.size, required this.difficulty});
 
   @override
   Widget build(BuildContext context) {
@@ -41,15 +41,17 @@ class MyGridWidget extends StatelessWidget {
 class Game2 extends StatelessWidget {
   final Map<String, Object?> gameData;
 
-  Game2({Key? key, required this.gameData}) : super(key: key);
+  const Game2({Key? key, required this.gameData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Akari Game'),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Akari Game'),
+        ),
+        body: MyGridWidget2(gameData: gameData),
       ),
-      body: MyGridWidget2(gameData: gameData),
     );
   }
 }
@@ -57,7 +59,7 @@ class Game2 extends StatelessWidget {
 class MyGridWidget2 extends StatelessWidget {
   final Map<String, Object?> gameData;
 
-  MyGridWidget2({required this.gameData});
+  const MyGridWidget2({super.key, required this.gameData});
 
   @override
   Widget build(BuildContext context) {

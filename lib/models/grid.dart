@@ -15,17 +15,15 @@ const List<double> ratiosNumberWalls = [0.6, 0.7, 0.8];
 final lampBuild = AudioPlayer();
 final lampBreak = AudioPlayer();
 
-
 // Formatting Time in Seconds in String
 String formatTime(int time) {
-                int hours = time ~/ 3600;
-              int minutes = (time % 3600) ~/ 60;
-              int seconds = time % 60;
+  int hours = time ~/ 3600;
+  int minutes = (time % 3600) ~/ 60;
+  int seconds = time % 60;
 
-              String formattedTime = '$hours : $minutes : $seconds';
+  String formattedTime = '$hours : $minutes : $seconds';
   return formattedTime.toString();
 }
-
 
 class Grid {
   int difficulty;
@@ -74,7 +72,6 @@ class Grid {
     }
   }
 
-
 // Generates a grid
   void generateGrid() {
     for (int i = 0; i < gridSize; i++) {
@@ -85,8 +82,7 @@ class Grid {
       startGrid.add(startRow);
     }
     //Calculating the number of walls to be placed
-    int nbMurs =
-        (ratiosWallsArea[difficulty] * (gridSize * gridSize)).round();
+    int nbMurs = (ratiosWallsArea[difficulty] * (gridSize * gridSize)).round();
 
     //Wall Placement
     Random rand = Random();
@@ -425,8 +421,7 @@ class Grid {
     int line = coords.item1;
     int column = coords.item2;
 
-    if (currentGrid[line][column] == -2 ||
-        currentGrid[line][column] <= -4) {
+    if (currentGrid[line][column] == -2 || currentGrid[line][column] <= -4) {
       currentGrid[line][column] = 5;
 
       //Eclairage des cases en line / column
@@ -445,8 +440,8 @@ class Grid {
         x++;
       }
       x = column;
-      while (x >= 0 &&
-          (currentGrid[line][x] < -1 || currentGrid[line][x] >= 5)) {
+      while (
+          x >= 0 && (currentGrid[line][x] < -1 || currentGrid[line][x] >= 5)) {
         if (currentGrid[line][x] == -2) {
           currentGrid[line][x] = -4;
         } else if (currentGrid[line][x] <= -4) {
@@ -503,8 +498,8 @@ class Grid {
         x++;
       }
       x = column;
-      while (x >= 0 &&
-          (currentGrid[line][x] < -1 || currentGrid[line][x] >= 5)) {
+      while (
+          x >= 0 && (currentGrid[line][x] < -1 || currentGrid[line][x] >= 5)) {
         if (currentGrid[line][x] == -4) {
           currentGrid[line][x] = -2;
         } else if (currentGrid[line][x] < -4) {
@@ -575,8 +570,7 @@ class _GridWidget extends State<GridWidget> {
       widget.grid.futureActions.clear();
     }
 
-    if (currentGrid[line][column] == -2 ||
-        currentGrid[line][column] <= -4) {
+    if (currentGrid[line][column] == -2 || currentGrid[line][column] <= -4) {
       lampBuild.setVolume(soundVol);
       lampBuild.setUrl('asset:lib/assets/musics/lampBuildSound.mp3');
       lampBuild.play();
@@ -599,8 +593,8 @@ class _GridWidget extends State<GridWidget> {
         x++;
       }
       x = column;
-      while (x >= 0 &&
-          (currentGrid[line][x] < -1 || currentGrid[line][x] >= 5)) {
+      while (
+          x >= 0 && (currentGrid[line][x] < -1 || currentGrid[line][x] >= 5)) {
         if (currentGrid[line][x] == -2) {
           currentGrid[line][x] = -4;
         } else if (currentGrid[line][x] <= -4) {
@@ -667,8 +661,8 @@ class _GridWidget extends State<GridWidget> {
         x++;
       }
       x = column;
-      while (x >= 0 &&
-          (currentGrid[line][x] < -1 || currentGrid[line][x] >= 5)) {
+      while (
+          x >= 0 && (currentGrid[line][x] < -1 || currentGrid[line][x] >= 5)) {
         if (currentGrid[line][x] == -4) {
           currentGrid[line][x] = -2;
         } else if (currentGrid[line][x] < -4) {
@@ -715,7 +709,6 @@ class _GridWidget extends State<GridWidget> {
 
       setState(() {});
     }
-   
   }
 
   ///Undo <-> Ctrl+Z
@@ -764,42 +757,41 @@ class _GridWidget extends State<GridWidget> {
         children: [
           const SizedBox(height: 15),
           Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              '  Size: $gridSize * $gridSize',
-              style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.none,
-                    color: Colors.black,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '  Size: $gridSize * $gridSize',
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.none,
+                  color: Colors.black,
+                ),
               ),
-            ),
-            Text(
-              'Difficulty: ${difficultyMap[widget.grid.difficulty]}',
-              style: const TextStyle(
-                                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.none,
-                    color: Colors.black,
+              Text(
+                'Difficulty: ${difficultyMap[widget.grid.difficulty]}',
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.none,
+                  color: Colors.black,
+                ),
               ),
-            ),
-            SizedBox(
-
-              child: Center(
-                child: Text(
-                  formatTime(widget.grid.time)+'  ',
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.none,
-                    color: Colors.black,
+              SizedBox(
+                child: Center(
+                  child: Text(
+                    '${formatTime(widget.grid.time)}  ',
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.none,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
           const SizedBox(height: 15),
           SizedBox(
             height: 394,
@@ -811,8 +803,8 @@ class _GridWidget extends State<GridWidget> {
                   false, //To prevent scrolling (and avoid disturbing physics)
               child: Container(
                 alignment: Alignment.center,
-                color: Colors
-                    .black, //Black back to avoid blanks between borders
+                color:
+                    Colors.black, //Black back to avoid blanks between borders
                 child: GridView.builder(
                   physics:
                       const NeverScrollableScrollPhysics(), //To prevent scrolling
@@ -1026,8 +1018,7 @@ class _GridWidget extends State<GridWidget> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Image.asset('lib/assets/images/congrat_$i.gif',
-                                  height:
-                                      100), 
+                                  height: 100),
                               const SizedBox(height: 16),
                               Text(
                                   'Vous avez réussi à résoudre cette grille en : $formattedTime'),
@@ -1037,7 +1028,7 @@ class _GridWidget extends State<GridWidget> {
                             TextButton(
                               child: const Text('OK'),
                               onPressed: () {
-                                Navigator.of(context).pop(); 
+                                Navigator.of(context).pop();
                               },
                             ),
                           ],
@@ -1054,8 +1045,7 @@ class _GridWidget extends State<GridWidget> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Image.asset('lib/assets/images/fail_$i.gif',
-                                  height:
-                                      100),
+                                  height: 100),
                               const SizedBox(height: 16),
                               const Text(
                                   "La solution proposée est incorrecte."),
@@ -1066,7 +1056,7 @@ class _GridWidget extends State<GridWidget> {
                               child: const Text('OK'),
                               onPressed: () {
                                 _startTimer();
-                                Navigator.of(context).pop(); 
+                                Navigator.of(context).pop();
                               },
                             ),
                           ],
@@ -1074,14 +1064,14 @@ class _GridWidget extends State<GridWidget> {
                       },
                     );
                   }
-                }, 
+                },
                 backgroundColor: Colors.green.shade200,
                 child: const Icon(Icons.check),
               ),
             ],
           ),
           const Spacer(),
-          
+
           // Added the NavigationBar
           NavigationBar(
             onDestinationSelected: (int index) {

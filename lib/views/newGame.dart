@@ -1,21 +1,19 @@
 import 'package:akari/views/game.dart';
 import 'package:flutter/material.dart';
 
+Map<int, String> sizeMap = {
+  0: '7x7',
+  1: '10x10',
+  2: '14x14',
+  3: '25x25',
+};
 
-  Map<int, String> sizeMap = {
-    0: '7x7',
-    1: '10x10',
-    2: '14x14',
-    3: '25x25',
-  };
+Map<int, String> difficultyMap = {
+  0: 'Easy',
+  1: 'Medium',
+  2: 'Hard',
+};
 
-  Map<int, String> difficultyMap = {
-    0: 'Easy',
-    1: 'Medium',
-    2: 'Hard',
-  };
-
-  
 void main() {
   runApp(const MyApp());
 }
@@ -25,13 +23,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'New Game',
-      theme: ThemeData(
-        primaryColor: const Color.fromARGB(255, 192, 195, 197),
-        scaffoldBackgroundColor: const Color.fromARGB(255, 192, 195, 197),
+    return SafeArea(
+      child: MaterialApp(
+        title: 'New Game',
+        theme: ThemeData(
+          primaryColor: const Color.fromARGB(255, 192, 195, 197),
+          scaffoldBackgroundColor: const Color.fromARGB(255, 192, 195, 197),
+        ),
+        home: const NewGame(),
       ),
-      home: const NewGame(),
     );
   }
 }
@@ -46,8 +46,6 @@ class NewGame extends StatefulWidget {
 class _NewGamePageState extends State<NewGame> {
   double _sizeIndex = 1.0; // Corresponds to 10x10
   double _difficultyIndex = 1.0; // Corresponds to Medium
-
-
 
   void _launchGame() {
     Navigator.pushAndRemoveUntil(

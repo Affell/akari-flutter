@@ -66,84 +66,87 @@ class _GamesListPageState extends State<GamesListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Ongoing Games'),
-      ),
-      body: FutureBuilder<List<Map<String, Object?>>>(
-        future: games,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Ongoing Games'),
+        ),
+        body: FutureBuilder<List<Map<String, Object?>>>(
+          future: games,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-          if (snapshot.hasError) {
-            return const Center(child: Text('Error loading games'));
-          }
+            if (snapshot.hasError) {
+              return const Center(child: Text('Error loading games'));
+            }
 
-          if (snapshot.hasData && snapshot.data!.isEmpty) {
-            return const Center(child: Text('No games in progress'));
-          }
+            if (snapshot.hasData && snapshot.data!.isEmpty) {
+              return const Center(child: Text('No games in progress'));
+            }
 
-          return ListView.builder(
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              Map<String, dynamic> gameData = snapshot.data![index];
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                Map<String, dynamic> gameData = snapshot.data![index];
 
-              int creationTime = gameData['creation_time'] as int;
-              String dateCreation = DateFormat('dd-MM-yyyy HH:mm:ss').format(
-                  DateTime.fromMillisecondsSinceEpoch(creationTime * 1000));
+                int creationTime = gameData['creation_time'] as int;
+                String dateCreation = DateFormat('dd-MM-yyyy HH:mm:ss').format(
+                    DateTime.fromMillisecondsSinceEpoch(creationTime * 1000));
 
-              int difficulty = gameData['difficulty'] as int;
-              int size = gameData['size'] as int;
-              int time = gameData['time_spent'] as int;
+                int difficulty = gameData['difficulty'] as int;
+                int size = gameData['size'] as int;
+                int time = gameData['time_spent'] as int;
 
-              int hours = time ~/ 3600;
-              int minutes = (time % 3600) ~/ 60;
-              int seconds = time % 60;
+                int hours = time ~/ 3600;
+                int minutes = (time % 3600) ~/ 60;
+                int seconds = time % 60;
 
-              String formattedTime = '$hours h $minutes min $seconds sec';
+                String formattedTime = '$hours h $minutes min $seconds sec';
 
-              return Card(
-                elevation: 4,
-                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: ListTile(
-                  title: Text(
-                    'Game: $dateCreation',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+                return Card(
+                  elevation: 4,
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
                   ),
-                  subtitle: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Difficulty: $difficulty'),
-                        const SizedBox(height: 5),
-                        Text('Size: $size'),
-                        const SizedBox(height: 5),
-                        Text('Time spent: $formattedTime'),
-                      ],
+                  child: ListTile(
+                    title: Text(
+                      'Game: $dateCreation',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  trailing: IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () {
-                      _confirmationSuppression(gameData);
+                    subtitle: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Difficulty: $difficulty'),
+                          const SizedBox(height: 5),
+                          Text('Size: $size'),
+                          const SizedBox(height: 5),
+                          Text('Time spent: $formattedTime'),
+                        ],
+                      ),
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        _confirmationSuppression(gameData);
+                      },
+                    ),
+                    onTap: () {
+                      loadGame(gameData);
                     },
                   ),
-                  onTap: () {
-                    loadGame(gameData);
-                  },
-                ),
-              );
-            },
-          );
-        },
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

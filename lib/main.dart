@@ -57,15 +57,17 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Akari',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 192, 195, 197)),
-        useMaterial3: true,
-        scaffoldBackgroundColor: const Color.fromARGB(255, 192, 195, 197),
+    return SafeArea(
+      child: MaterialApp(
+        title: 'Akari',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color.fromARGB(255, 192, 195, 197)),
+          useMaterial3: true,
+          scaffoldBackgroundColor: const Color.fromARGB(255, 192, 195, 197),
+        ),
+        home: const Home(title: "Akari"),
       ),
-      home: const Home(title: "Akari"),
     );
   }
 }

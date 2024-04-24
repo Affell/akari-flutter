@@ -77,212 +77,217 @@ class _SettingsPageState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            _saveData();
-            Navigator.pop(context);
-          },
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Settings'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              _saveData();
+              Navigator.pop(context);
+            },
+          ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Row(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(Icons.close),
-                    SizedBox(width: 16.0),
-                    Text('Show Incompatible Lamps:'),
+                    const Row(
+                      children: [
+                        Icon(Icons.close),
+                        SizedBox(width: 16.0),
+                        Text('Show Incompatible Lamps:'),
+                      ],
+                    ),
+                    Switch(
+                      value: wrongLamp,
+                      onChanged: (value) {
+                        setState(() {
+                          wrongLamp = value;
+                        });
+                      },
+                    ),
                   ],
                 ),
-                Switch(
-                  value: wrongLamp,
+                const SizedBox(height: 16.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(Icons.light_mode),
+                        SizedBox(width: 16.0),
+                        Text('Show Light Pass'),
+                      ],
+                    ),
+                    Switch(
+                      value: passLamp,
+                      onChanged: (value) {
+                        setState(() {
+                          passLamp = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16.0),
+                const Text('Volume Background Music:'),
+                Slider(
+                  value: backGroungMusicVol,
+                  min: 0,
+                  max: 0.5,
+                  divisions: 100,
                   onChanged: (value) {
                     setState(() {
-                      wrongLamp = value;
+                      backGroungMusicVol = value;
+                      player.setVolume(backGroungMusicVol);
                     });
                   },
                 ),
-              ],
-            ),
-            const SizedBox(height: 16.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Row(
-                  children: [
-                    Icon(Icons.light_mode),
-                    SizedBox(width: 16.0),
-                    Text('Show Light Pass'),
-                  ],
-                ),
-                Switch(
-                  value: passLamp,
+                const SizedBox(height: 16.0),
+                const Text('Volume Sounds:'),
+                Slider(
+                  value: soundVol,
+                  min: 0,
+                  max: 1,
+                  divisions: 100,
                   onChanged: (value) {
                     setState(() {
-                      passLamp = value;
+                      soundVol = value;
+                      _playSoundIfChanged(value);
                     });
                   },
                 ),
+                const SizedBox(height: 16.0),
+                const Text('Available bulbs:'),
+                Container(
+                  height: 50,
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: bulbImages.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            iBulb = index;
+                            _saveData();
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: iBulb == index
+                                    ? Colors.black
+                                    : Colors.transparent,
+                                width: 3.0,
+                              ),
+                            ),
+                            child: Image.asset(
+                              bulbImages[index],
+                              width: 50,
+                              height: 50,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                const Text('Available walls:'),
+                Container(
+                  height: 50,
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: wallImages.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            iWall = index;
+                            _saveData();
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: iWall == index
+                                    ? Colors.black
+                                    : Colors.transparent,
+                                width: 3.0,
+                              ),
+                            ),
+                            child: Image.asset(
+                              wallImages[index],
+                              width: 50,
+                              height: 50,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                const Text('Available tile backgrounds:'),
+                Container(
+                  height: 50,
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: caseImages.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            iCase = index;
+                            _saveData();
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: iCase == index
+                                    ? Colors.black
+                                    : Colors.transparent,
+                                width: 3.0,
+                              ),
+                            ),
+                            child: Image.asset(
+                              caseImages[index],
+                              width: 50,
+                              height: 50,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
-            const SizedBox(height: 16.0),
-            const Text('Volume Background Music:'),
-            Slider(
-              value: backGroungMusicVol,
-              min: 0,
-              max: 0.5,
-              divisions: 100,
-              onChanged: (value) {
-                setState(() {
-                  backGroungMusicVol = value;
-                  player.setVolume(backGroungMusicVol);
-                });
-              },
-            ),
-            const SizedBox(height: 16.0),
-            const Text('Volume Sounds:'),
-            Slider(
-              value: soundVol,
-              min: 0,
-              max: 1,
-              divisions: 100,
-              onChanged: (value) {
-                setState(() {
-                  soundVol = value;
-                  _playSoundIfChanged(value);
-                });
-              },
-            ),
-            const SizedBox(height: 16.0),
-            const Text('Available bulbs:'),
-            Container(
-              height: 50,
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                scrollDirection: Axis.horizontal,
-                itemCount: bulbImages.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        iBulb = index;
-                        _saveData();
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: iBulb == index
-                                ? Colors.black
-                                : Colors.transparent,
-                            width: 3.0,
-                          ),
-                        ),
-                        child: Image.asset(
-                          bulbImages[index],
-                          width: 50,
-                          height: 50,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 16.0),
-            const Text('Available walls:'),
-            Container(
-              height: 50,
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                scrollDirection: Axis.horizontal,
-                itemCount: wallImages.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        iWall = index;
-                        _saveData();
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: iWall == index
-                                ? Colors.black
-                                : Colors.transparent,
-                            width: 3.0,
-                          ),
-                        ),
-                        child: Image.asset(
-                          wallImages[index],
-                          width: 50,
-                          height: 50,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 16.0),
-            const Text('Available tile backgrounds:'),
-            Container(
-              height: 50,
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                scrollDirection: Axis.horizontal,
-                itemCount: caseImages.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        iCase = index;
-                        _saveData();
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: iCase == index
-                                ? Colors.black
-                                : Colors.transparent,
-                            width: 3.0,
-                          ),
-                        ),
-                        child: Image.asset(
-                          caseImages[index],
-                          width: 50,
-                          height: 50,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
