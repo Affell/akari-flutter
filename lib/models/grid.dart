@@ -1129,7 +1129,12 @@ class _GridWidget extends State<GridWidget> {
                 icon: InkWell(
                   onTap: () {
                     _timer.cancel();
+                    if (finish == true) {
+                    deleteGame(widget.grid.creationTime, SaveMode.classic);
+                    saveGame(widget.grid, SaveMode.archive);
+                  } else {
                     saveGame(widget.grid, SaveMode.classic);
+                  }
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -1141,7 +1146,12 @@ class _GridWidget extends State<GridWidget> {
                 selectedIcon: InkWell(
                   onTap: () {
                     _timer.cancel();
+                  if (finish == true) {
+                    deleteGame(widget.grid.creationTime, SaveMode.classic);
+                    saveGame(widget.grid, SaveMode.archive);
+                  } else {
                     saveGame(widget.grid, SaveMode.classic);
+                  }
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
