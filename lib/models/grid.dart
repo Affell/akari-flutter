@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 import 'package:just_audio/just_audio.dart';
 
-const List<double> ratiosWallsArea = [0.3, 0.2, 0.1];
+const List<double> ratiosWallsArea = [0.2, 0.3, 0.4];
 const List<double> ratiosNumberWalls = [0.6, 0.7, 0.8];
 
 final lampBuild = AudioPlayer();
@@ -1130,11 +1130,11 @@ class _GridWidget extends State<GridWidget> {
                   onTap: () {
                     _timer.cancel();
                     if (finish == true) {
-                    deleteGame(widget.grid.creationTime, SaveMode.classic);
-                    saveGame(widget.grid, SaveMode.archive);
-                  } else {
-                    saveGame(widget.grid, SaveMode.classic);
-                  }
+                      deleteGame(widget.grid.creationTime, SaveMode.classic);
+                      saveGame(widget.grid, SaveMode.archive);
+                    } else {
+                      saveGame(widget.grid, SaveMode.classic);
+                    }
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -1146,12 +1146,12 @@ class _GridWidget extends State<GridWidget> {
                 selectedIcon: InkWell(
                   onTap: () {
                     _timer.cancel();
-                  if (finish == true) {
-                    deleteGame(widget.grid.creationTime, SaveMode.classic);
-                    saveGame(widget.grid, SaveMode.archive);
-                  } else {
-                    saveGame(widget.grid, SaveMode.classic);
-                  }
+                    if (finish == true) {
+                      deleteGame(widget.grid.creationTime, SaveMode.classic);
+                      saveGame(widget.grid, SaveMode.archive);
+                    } else {
+                      saveGame(widget.grid, SaveMode.classic);
+                    }
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
