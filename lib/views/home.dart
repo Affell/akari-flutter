@@ -1,3 +1,4 @@
+import 'package:akari/main.dart';
 import 'package:akari/utils/save.dart';
 import 'package:akari/views/history.dart';
 import 'package:akari/views/leaderBoard.dart';
@@ -35,6 +36,18 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
+final List<Color> colors = [
+  Colors.white,
+  Colors.white,
+  Colors.white,
+];
+
+
+Color getTextColor() {
+  return colors[iCase];
+}
+
+
 class _HomeState extends State<Home> {
   int currentPageIndex = 0;
 
@@ -44,14 +57,21 @@ class _HomeState extends State<Home> {
     final double width = size.width;
 
     return SafeArea(
-      child: Scaffold(
-        body: Column(
+        child: Scaffold(
+      body: Stack(children: [
+            Positioned.fill(
+              child: Image.asset(
+                "lib/assets/images/backgroung_$iCase.jpeg",
+                fit: BoxFit.cover,
+              ),
+            ),
+        Column(
           children: [
             Center(
               child: Text(
                 widget.title,
                 style:
-                    TextStyle(fontSize: width / 5, fontWeight: FontWeight.bold),
+                    TextStyle(fontSize: width / 5, fontWeight: FontWeight.bold, color: getTextColor(),),
               ),
             ),
             Expanded(
@@ -288,7 +308,7 @@ class _HomeState extends State<Home> {
             ),
           ],
         ),
-      ),
-    );
+      ]),
+    ));
   }
 }

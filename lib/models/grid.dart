@@ -756,7 +756,14 @@ class _GridWidget extends State<GridWidget> {
     var currentPageIndex = 1;
     return Scaffold(
       backgroundColor: Colors.grey,
-      body: Column(
+      body: Stack(children: [
+        Positioned.fill(
+              child: Image.asset(
+                "lib/assets/images/backgroung_$iCase.jpeg",
+                fit: BoxFit.cover,
+              ),
+            ),
+        Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -766,31 +773,31 @@ class _GridWidget extends State<GridWidget> {
             children: [
               Text(
                 '  Size: $gridSize * $gridSize',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                   decoration: TextDecoration.none,
-                  color: Colors.black,
+                  color: getTextColor(),
                 ),
               ),
               Text(
                 'Difficulty: ${difficultyMap[widget.grid.difficulty]}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                   decoration: TextDecoration.none,
-                  color: Colors.black,
+                  color: getTextColor(),
                 ),
               ),
               SizedBox(
                 child: Center(
                   child: Text(
                     '${formatTime(widget.grid.time)}  ',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
                       decoration: TextDecoration.none,
-                      color: Colors.black,
+                      color: getTextColor(),
                     ),
                   ),
                 ),
@@ -1204,6 +1211,6 @@ class _GridWidget extends State<GridWidget> {
           ),
         ],
       ),
-    );
+    ]));
   }
 }
