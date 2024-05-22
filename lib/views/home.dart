@@ -42,14 +42,13 @@ final List<Color> colors = [
   Colors.white,
 ];
 
-
 Color getTextColor() {
   return colors[iCase];
 }
 
-
 class _HomeState extends State<Home> {
   int currentPageIndex = 0;
+  Key _imageKey = UniqueKey(); // Unique key for background image
 
   @override
   Widget build(BuildContext context) {
@@ -59,19 +58,23 @@ class _HomeState extends State<Home> {
     return SafeArea(
         child: Scaffold(
       body: Stack(children: [
-            Positioned.fill(
-              child: Image.asset(
-                "lib/assets/images/backgroung_$iCase.jpeg",
-                fit: BoxFit.cover,
-              ),
-            ),
+        Positioned.fill(
+          child: Image.asset(
+            "lib/assets/images/backgroung_$iCase.jpeg",
+            fit: BoxFit.cover,
+            key: _imageKey,
+          ),
+        ),
         Column(
           children: [
             Center(
               child: Text(
                 widget.title,
-                style:
-                    TextStyle(fontSize: width / 5, fontWeight: FontWeight.bold, color: getTextColor(),),
+                style: TextStyle(
+                  fontSize: width / 5,
+                  fontWeight: FontWeight.bold,
+                  color: getTextColor(),
+                ),
               ),
             ),
             Expanded(
@@ -199,6 +202,15 @@ class _HomeState extends State<Home> {
                       MaterialPageRoute(builder: (context) => const Settings()),
                     );
                   }
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Settings()),
+                  ).then((_) {
+                    setState(() {
+                      _imageKey = UniqueKey();
+                    });
+                  });
                 });
               },
               indicatorColor: const Color.fromARGB(255, 94, 94, 93),
