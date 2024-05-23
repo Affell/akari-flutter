@@ -36,14 +36,34 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-final List<Color> colors = [
+final List<Color> colorsBackGroung = [
   Colors.white,
   Colors.white,
   Colors.white,
 ];
 
-Color getTextColor() {
-  return colors[iCase];
+final List<Color> colorsButtonContinu = [
+  Colors.white,
+  Colors.white,
+  Colors.white,
+];
+
+final List<Color> colorsButtonNewGame = [
+  Colors.white,
+  Colors.white,
+  Colors.black,
+];
+
+Color getTextColorBackGroung() {
+  return colorsBackGroung[iCase];
+}
+
+Color getTextColorButtonNewGame() {
+  return colorsButtonNewGame[iCase];
+}
+
+Color getTextColorButtonContinu() {
+  return colorsButtonContinu[iCase];
 }
 
 class _HomeState extends State<Home> {
@@ -71,9 +91,9 @@ class _HomeState extends State<Home> {
               child: Text(
                 widget.title,
                 style: TextStyle(
-                  fontSize: width / 5,
+                  fontSize: width / 3,
                   fontWeight: FontWeight.bold,
-                  color: getTextColor(),
+                  color: getTextColorBackGroung(),
                 ),
               ),
             ),
@@ -86,12 +106,22 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            Padding(
-              padding:
-                  EdgeInsets.symmetric(vertical: 16.0, horizontal: width * 0.1),
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
+
+
+
+Padding(
+      padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: width * 0.1),
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('lib/assets/images/background_continu_$iCase.jpeg'), // Chemin vers votre image
+            fit: BoxFit.cover,
+          ),
+          borderRadius: BorderRadius.circular(8.0), // Optionnel: pour arrondir les bords
+        ),
+        child: TextButton(
+          onPressed: () {
+            Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const GamesListPage(
@@ -100,73 +130,99 @@ class _HomeState extends State<Home> {
                     ),
                   );
                 },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                      const Color.fromARGB(255, 128, 127, 127)),
-                  minimumSize: MaterialStateProperty.all(Size(width * 0.8, 50)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Continue",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: width / 15,
-                                    color: Colors.black)),
-                          ],
+          style: TextButton.styleFrom(
+            backgroundColor: Colors.transparent, // Rendre le fond du bouton transparent
+            minimumSize: Size(width * 0.8, 50),
+            padding: EdgeInsets.zero, // Supprimer le padding par défaut
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Continue",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: width / 8,
+                          color: getTextColorButtonContinu(),
                         ),
                       ),
-                    ),
-                    Image.asset("lib/assets/images/loadGameButton.png"),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding:
-                  EdgeInsets.symmetric(vertical: 16.0, horizontal: width * 0.1),
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const NewGame(),
-                    ),
-                  );
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                      const Color.fromARGB(255, 128, 127, 127)),
-                  minimumSize: MaterialStateProperty.all(Size(width * 0.8, 50)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("New Game",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: width / 15,
-                                    color: Colors.black)),
-                          ],
+            ],
+          ),
+        ),
+      ),
+    ),
+
+
+Padding(
+      padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: width * 0.1),
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('lib/assets/images/background_newgame_$iCase.jpeg'), // Chemin vers votre image
+            fit: BoxFit.cover,
+          ),
+          borderRadius: BorderRadius.circular(8.0), // Optionnel: pour arrondir les bords
+        ),
+        child: TextButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const NewGame(),
+              ),
+            );
+          },
+          style: TextButton.styleFrom(
+            backgroundColor: Colors.transparent, // Rendre le fond du bouton transparent
+            minimumSize: Size(width * 0.8, 50),
+            padding: EdgeInsets.zero, // Supprimer le padding par défaut
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "New Game",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: width / 8,
+                          color: getTextColorButtonNewGame(),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
+            ],
+          ),
+        ),
+      ),
+    ),
+
+
+
+
+
+
+
+
+
+
             NavigationBar(
               onDestinationSelected: (int index) {
                 setState(() {

@@ -777,7 +777,7 @@ class _GridWidget extends State<GridWidget> {
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                   decoration: TextDecoration.none,
-                  color: getTextColor(),
+                  color: getTextColorBackGroung(),
                 ),
               ),
               Text(
@@ -786,7 +786,7 @@ class _GridWidget extends State<GridWidget> {
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                   decoration: TextDecoration.none,
-                  color: getTextColor(),
+                  color: getTextColorBackGroung(),
                 ),
               ),
               SizedBox(
@@ -797,7 +797,7 @@ class _GridWidget extends State<GridWidget> {
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
                       decoration: TextDecoration.none,
-                      color: getTextColor(),
+                      color: getTextColorBackGroung(),
                     ),
                   ),
                 ),
