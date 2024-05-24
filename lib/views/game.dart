@@ -56,6 +56,15 @@ class Game2 extends StatelessWidget {
   }
 }
 
+typeGame getTypeGameFromLoad(String type){
+  if(type == "Solo"){
+    return typeGame.Solo;
+  }
+  else{
+    return typeGame.VS;
+  }
+}
+
 class MyGridWidget2 extends StatelessWidget {
   final Map<String, Object?> gameData;
 
@@ -69,6 +78,7 @@ class MyGridWidget2 extends StatelessWidget {
         time: gameData['time_spent'] as int,
         difficulty: gameData['difficulty'] as int,
         gridSize: gameData['size'] as int,
+        type: getTypeGameFromLoad(gameData['type'] as String),
         startGrid: (jsonDecode(gameData['start_grid'] as String) as List)
             .map((item) => (item as List).map((i) => i as int).toList())
             .toList(),
