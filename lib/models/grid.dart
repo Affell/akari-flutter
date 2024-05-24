@@ -465,16 +465,16 @@ class _GridWidget extends State<GridWidget> {
     int line = index ~/ widget.grid.gridSize;
     int column = index % widget.grid.gridSize;
 
-    //Undo
-    widget.grid.pastActions.add(Tuple2(line, column));
-    if (widget.grid.futureActions.isNotEmpty) {
-      widget.grid.futureActions.clear();
-    }
-
     if (currentGrid[line][column] == -2 || currentGrid[line][column] <= -4) {
       lampBuild.setVolume(soundVol);
       lampBuild.setUrl('asset:lib/assets/musics/lampBuildSound.mp3');
       lampBuild.play();
+
+      //Undo
+      widget.grid.pastActions.add(Tuple2(line, column));
+      if (widget.grid.futureActions.isNotEmpty) {
+        widget.grid.futureActions.clear();
+      }
 
       currentGrid[line][column] = 5; //Install a light bulb
       widget.grid.lights.add(Tuple2(line, column));
@@ -542,6 +542,12 @@ class _GridWidget extends State<GridWidget> {
       //Removing a light bulb
 
       currentGrid[line][column] = -2;
+
+      //Undo
+      widget.grid.pastActions.add(Tuple2(line, column));
+      if (widget.grid.futureActions.isNotEmpty) {
+        widget.grid.futureActions.clear();
+      }
 
       widget.grid.lights.remove(Tuple2(line, column));
 
@@ -704,17 +710,17 @@ class _GridWidget extends State<GridWidget> {
             ),
             const SizedBox(height: 15),
             SizedBox(
-              height: 394,
+              height: MediaQuery.of(context).size.width,
               child: InteractiveViewer(
                 boundaryMargin: const EdgeInsets.all(5.0),
-                minScale: 0.1,
+                minScale: 1,
                 maxScale: 4,
                 panEnabled:
                     false, //To prevent scrolling (and avoid disturbing physics)
                 child: Container(
                   alignment: Alignment.center,
-                  color:
-                      Colors.black, //Black back to avoid blanks between borders
+                  color: Colors
+                      .black, //Black background to avoid blanks between borders
                   child: GridView.builder(
                     physics:
                         const NeverScrollableScrollPhysics(), //To prevent scrolling
@@ -1011,7 +1017,7 @@ class _GridWidget extends State<GridWidget> {
         backgroundColor: Colors.transparent,
         buttonBackgroundColor: const Color.fromARGB(255, 55, 55, 55),
         height: 60,
-        items: <Widget>[
+        items: const <Widget>[
           Icon(Icons.home, size: 30, color: Colors.white),
           Icon(Icons.games, size: 30, color: Colors.white),
           Icon(Icons.settings, size: 30, color: Colors.white),

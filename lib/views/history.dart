@@ -82,7 +82,22 @@ class _HistoryPageState extends State<History> {
                 String dateCreation = DateFormat('dd-MM-yyyy HH:mm:ss').format(
                     DateTime.fromMillisecondsSinceEpoch(creationTime * 1000));
 
-                int difficulty = gameData['difficulty'] as int;
+                String difficulty;
+                switch (gameData['difficulty'] as int) {
+                  case 0:
+                    difficulty = "Easy";
+                    break;
+                  case 1:
+                    difficulty = "Medium";
+                    break;
+                  case 2:
+                    difficulty = "Hard";
+                    break;
+                  default:
+                    difficulty = "Erreur de chargement";
+                    break;
+                }
+
                 int size = gameData['size'] as int;
                 int time = gameData['time_spent'] as int;
 
@@ -120,7 +135,7 @@ class _HistoryPageState extends State<History> {
                       ),
                     ),
                     trailing: IconButton(
-                      icon: Icon(Icons.delete),
+                      icon: const Icon(Icons.delete),
                       onPressed: () {
                         _confirmationSuppression(gameData);
                       },
