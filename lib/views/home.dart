@@ -69,7 +69,7 @@ Color getTextColorButtonContinu() {
 
 class _HomeState extends State<Home> {
   int currentPageIndex = 0;
-  Key _imageKey = UniqueKey(); // Unique key for background image
+
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +83,7 @@ class _HomeState extends State<Home> {
           child: Image.asset(
             "lib/assets/images/backgroung_$iCase.jpeg",
             fit: BoxFit.cover,
-            key: _imageKey,
+
           ),
         ),
         Column(
@@ -122,7 +122,7 @@ class _HomeState extends State<Home> {
                 ),
                 child: TextButton(
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const GamesListPage(
@@ -178,7 +178,7 @@ class _HomeState extends State<Home> {
                 ),
                 child: TextButton(
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const NewGame(),
@@ -245,28 +245,24 @@ class _HomeState extends State<Home> {
             );
           } else if (index == 1 &&
               ModalRoute.of(context)?.settings.name != '/historical') {
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) => History(mode: SaveMode.archive)),
             );
           } else if (index == 2 &&
               ModalRoute.of(context)?.settings.name != '/leaderBoard') {
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) => LeaderBoard(mode: SaveMode.archive)),
             );
           } else if (index == 3 &&
               ModalRoute.of(context)?.settings.name != '/settings') {
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => Settings()),
-            ).then((_) {
-              setState(() {
-                _imageKey = UniqueKey();
-              });
-            });
+            );
           }
         },
       ),

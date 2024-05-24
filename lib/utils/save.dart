@@ -30,12 +30,10 @@ void saveGame(Grid game, SaveMode mode) {
       "start_grid": startGridText,
       "lights": lightsText,
       "actions_passees": pastActionsText,
-      "actions_futures": futureActionsText
+      "actions_futures": futureActionsText,
+      if (mode == SaveMode.classic) "type" : game.type.toString()
+    
     };
-
-    if (mode == SaveMode.archive) {
-      values["type"] = "";
-    }
 
     // Insert or Update
     databaseManager.database!.insert(mode.tableName, values,

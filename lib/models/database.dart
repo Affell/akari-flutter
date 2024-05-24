@@ -13,7 +13,8 @@ class DatabaseManager {
       onCreate: (db, version) {
         db.execute('''
           CREATE TABLE IF NOT EXISTS ongoing(
-            creation_time INTEGER PRIMARY KEY, 
+            creation_time INTEGER PRIMARY KEY,
+            type TEXT, 
             difficulty INTEGER,
             size INTEGER,
             time_spent INTEGER,

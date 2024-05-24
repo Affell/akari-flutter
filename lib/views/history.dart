@@ -1,3 +1,7 @@
+import 'package:akari/views/home.dart';
+import 'package:akari/views/leaderBoard.dart';
+import 'package:akari/views/settings.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:akari/utils/save.dart';
 import 'package:intl/intl.dart';
@@ -13,6 +17,7 @@ class History extends StatefulWidget {
 
 class _HistoryPageState extends State<History> {
   late Future<List<Map<String, Object?>>> games;
+  int currentPageIndex = 1;
 
   @override
   void initState() {
@@ -132,6 +137,51 @@ class _HistoryPageState extends State<History> {
             );
           },
         ),
+        bottomNavigationBar: CurvedNavigationBar(
+        index: currentPageIndex,
+        color: const Color.fromARGB(255, 55, 55, 55),
+        backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+        buttonBackgroundColor: Color.fromARGB(255, 55, 55, 55),
+        height: 60,
+        items: <Widget>[
+          Icon(Icons.home, size: 30, color: Colors.white),
+          Icon(Icons.history, size: 30, color: Colors.white),
+          Icon(Icons.leaderboard_rounded, size: 30, color: Colors.white),
+          Icon(Icons.settings, size: 30, color: Colors.white),
+        ],
+        onTap: (index) {
+          setState(() {
+            currentPageIndex = index;
+          });
+          // Navigation logic
+          if (index == 0 && ModalRoute.of(context)?.settings.name != '/') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => Home(title: "Akari")),
+            );
+          } else if (index == 1 &&
+              ModalRoute.of(context)?.settings.name != '/historical') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => History(mode: SaveMode.archive)),
+            );
+          } else if (index == 2 &&
+              ModalRoute.of(context)?.settings.name != '/leaderBoard') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => LeaderBoard(mode: SaveMode.archive)),
+            );
+          } else if (index == 3 &&
+              ModalRoute.of(context)?.settings.name != '/settings') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => Settings()),
+            );
+          }
+        },
+      )
       ),
     );
   }
