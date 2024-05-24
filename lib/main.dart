@@ -14,6 +14,7 @@ late bool passLamp;
 late int iBulb;
 late int iWall;
 late int iCase;
+late String token;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +33,8 @@ _loadData() {
   iBulb = _prefs.getInt('iBulb') ?? 0;
   iWall = _prefs.getInt('iWall') ?? 0;
   iCase = _prefs.getInt('iCase') ?? 0;
+  // Token vide par défaut
+  token = _prefs.getString('INSAkari-Connect-Token') ?? "";
 }
 
 class MainApp extends StatefulWidget {
