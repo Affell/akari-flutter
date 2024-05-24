@@ -31,8 +31,7 @@ void saveGame(Grid game, SaveMode mode) {
       "lights": lightsText,
       "actions_passees": pastActionsText,
       "actions_futures": futureActionsText,
-      if (mode == SaveMode.classic) "type" : game.type.toString()
-    
+      "type" : game.type.toString()
     };
 
     // Insert or Update

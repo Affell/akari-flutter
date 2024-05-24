@@ -57,7 +57,7 @@ class Game2 extends StatelessWidget {
 }
 
 typeGame getTypeGameFromLoad(String type){
-  if(type == "Solo"){
+  if(type == "typeGame.Solo"){
     return typeGame.Solo;
   }
   else{
