@@ -6,6 +6,8 @@ import 'package:akari/views/history.dart';
 import 'package:akari/views/home.dart';
 import 'package:akari/views/leaderBoard.dart';
 import 'package:akari/views/settings.dart';
+import 'package:akari/views/battle.dart';
+import 'package:akari/views/tuto.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -69,6 +71,15 @@ class _NewGamePageState extends State<NewGame> {
     );
   }
 
+  void _launchBattle() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const Battle(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -76,7 +87,26 @@ class _NewGamePageState extends State<NewGame> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New Game'),
+        title: Text(
+          'New Game',
+          style: TextStyle(fontSize: width / 10, fontWeight: FontWeight.bold),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.help_outline,
+              size: width / 10,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Tuto(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -160,7 +190,7 @@ class _NewGamePageState extends State<NewGame> {
             ),
             const SizedBox(height: 15),
             ElevatedButton(
-              onPressed: _launchGame,
+              onPressed: _launchBattle,
               child: const Text('Launch Battle'),
             ),
           ],
