@@ -52,7 +52,7 @@ final List<Color> colorsButtonContinu = [
 final List<Color> colorsButtonNewGame = [
   Colors.white,
   Colors.white,
-  Colors.black,
+  Colors.white,
 ];
 
 Color getTextColorBackGroung() {
@@ -112,6 +112,7 @@ class _HomeState extends State<Home> {
                   EdgeInsets.symmetric(vertical: 16.0, horizontal: width * 0.1),
               child: Container(
                 decoration: BoxDecoration(
+                  border: Border.all(color: colorsBackGroung[iCase], width: 2),
                   image: DecorationImage(
                     image: AssetImage(
                         'lib/assets/images/background_continu_$iCase.jpeg'), // Chemin vers votre image
@@ -120,7 +121,7 @@ class _HomeState extends State<Home> {
                   borderRadius: BorderRadius.circular(
                       8.0), // Optionnel: pour arrondir les bords
                 ),
-                child: TextButton(
+                child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -131,10 +132,11 @@ class _HomeState extends State<Home> {
                       ),
                     );
                   },
-                  style: TextButton.styleFrom(
+                  style: ElevatedButton.styleFrom(
                     backgroundColor: Colors
                         .transparent, // Rendre le fond du bouton transparent
                     minimumSize: Size(width * 0.8, 50),
+                    elevation: 10,
                     padding: EdgeInsets.zero, // Supprimer le padding par défaut
                   ),
                   child: Row(
@@ -168,6 +170,7 @@ class _HomeState extends State<Home> {
                   EdgeInsets.symmetric(vertical: 16.0, horizontal: width * 0.1),
               child: Container(
                 decoration: BoxDecoration(
+                  border: Border.all(color: colorsBackGroung[iCase], width: 2),
                   image: DecorationImage(
                     image: AssetImage(
                         'lib/assets/images/background_newgame_$iCase.jpeg'), // Chemin vers votre image
@@ -176,7 +179,7 @@ class _HomeState extends State<Home> {
                   borderRadius: BorderRadius.circular(
                       8.0), // Optionnel: pour arrondir les bords
                 ),
-                child: TextButton(
+                child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -185,10 +188,11 @@ class _HomeState extends State<Home> {
                       ),
                     );
                   },
-                  style: TextButton.styleFrom(
+                  style: ElevatedButton.styleFrom(
                     backgroundColor: Colors
                         .transparent, // Rendre le fond du bouton transparent
                     minimumSize: Size(width * 0.8, 50),
+                    elevation: 10,
                     padding: EdgeInsets.zero, // Supprimer le padding par défaut
                   ),
                   child: Row(
