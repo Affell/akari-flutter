@@ -25,8 +25,23 @@ String formatTime(int time) {
   int hours = time ~/ 3600;
   int minutes = (time % 3600) ~/ 60;
   int seconds = time % 60;
+  String formattedTime = "";
+  if (hours < 10) {
+    formattedTime = "0$hours : ";
+  } else {
+    formattedTime = "$hours : ";
+  }
+  if (minutes < 10) {
+    formattedTime += "0$minutes : ";
+  } else {
+    formattedTime += "$minutes : ";
+  }
+  if (seconds < 10) {
+    formattedTime += "0$seconds";
+  } else {
+    formattedTime += "$seconds";
+  }
 
-  String formattedTime = '$hours : $minutes : $seconds';
   return formattedTime.toString();
 }
 
