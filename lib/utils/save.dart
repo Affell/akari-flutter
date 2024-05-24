@@ -33,13 +33,15 @@ void saveGame(Grid game, SaveMode mode) {
       "actions_futures": futureActionsText
     };
 
+    if (mode == SaveMode.archive) {
+      values["type"] = "";
+    }
+
     // Insert or Update
     databaseManager.database!.insert(mode.tableName, values,
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 }
-
-
 
 Future<List<Map<String, Object?>>> getAllGames(SaveMode mode) async {
   if (databaseManager.database != null) {
@@ -47,7 +49,6 @@ Future<List<Map<String, Object?>>> getAllGames(SaveMode mode) async {
   }
   return [];
 }
-
 
 void deleteGame(int creation_time, SaveMode mode) {
   if (databaseManager.database != null) {

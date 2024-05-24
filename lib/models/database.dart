@@ -5,7 +5,6 @@ import 'package:sqflite/sqflite.dart';
 class DatabaseManager {
   Database? database;
 
-
   // Database initialisation
   void initDatabase() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +25,7 @@ class DatabaseManager {
         db.execute('''
           CREATE TABLE IF NOT EXISTS completed(
             creation_time INTEGER PRIMARY KEY, 
+            type TEXT,
             difficulty INTEGER,
             size INTEGER,
             time_spent INTEGER,
