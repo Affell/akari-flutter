@@ -3,6 +3,7 @@ import 'package:akari/models/database.dart';
 import 'package:just_audio/just_audio.dart';
 import 'views/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:akari/models/api.dart' as api;
 
 DatabaseManager databaseManager = DatabaseManager();
 AudioPlayer player = AudioPlayer();
@@ -15,6 +16,8 @@ late int iBulb;
 late int iWall;
 late int iCase;
 late String token;
+late String username;
+late String email;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,8 +36,10 @@ _loadData() {
   iBulb = _prefs.getInt('iBulb') ?? 0;
   iWall = _prefs.getInt('iWall') ?? 0;
   iCase = _prefs.getInt('iCase') ?? 0;
-  // Token vide par défaut
+  // Token, username, email
   token = _prefs.getString('INSAkari-Connect-Token') ?? "";
+  username = _prefs.getString('username') ?? "";
+  email = _prefs.getString('email') ?? "";
 }
 
 class MainApp extends StatefulWidget {
