@@ -45,11 +45,16 @@ String formatTime(int time) {
   return formattedTime.toString();
 }
 
+
+enum typeGame { Solo , VS }
+
+
 class Grid {
   int difficulty;
   int gridSize;
   int time;
   int creationTime;
+  typeGame type = typeGame.Solo;
   List<List<int>> startGrid = [];
   List<List<int>> currentGrid = [];
   List<Tuple2<int, int>> lights = [];
@@ -61,13 +66,14 @@ class Grid {
       {required this.difficulty,
       required this.gridSize,
       required this.creationTime,
-      this.time = 0}) {
+      this.time = 0,
+      this.type = typeGame.Solo}) {
     generateGrid();
     initCurrentGrid();
   }
 
   Grid(this.creationTime, this.time, this.difficulty, this.gridSize,
-      this.startGrid, this.lights, this.pastActions, this.futureActions);
+      this.startGrid, this.lights, this.pastActions, this.futureActions, this.type);
 
 //Loading a Game Grid
   Grid.loadGrid(
@@ -75,10 +81,11 @@ class Grid {
       required this.time,
       required this.difficulty,
       required this.gridSize,
+      required this.type,
       required this.startGrid,
       required this.lights,
       required this.pastActions,
-      required this.futureActions}) {
+      required this.futureActions,}) {
     initCurrentGrid();
     gridFromLights(lights);
   }
@@ -1053,7 +1060,7 @@ class _GridWidget extends State<GridWidget> {
               );
             } else if (index == 2 &&
                 ModalRoute.of(context)?.settings.name != '/settings') {
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const Settings()),
               ).then((_) {
