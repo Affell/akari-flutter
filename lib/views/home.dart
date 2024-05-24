@@ -69,7 +69,7 @@ Color getTextColorButtonContinu() {
 
 class _HomeState extends State<Home> {
   int currentPageIndex = 0;
-
+  Key _imageKey = UniqueKey(); // Unique key for background image
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -82,6 +82,7 @@ class _HomeState extends State<Home> {
           child: Image.asset(
             "lib/assets/images/backgroung_$iCase.jpeg",
             fit: BoxFit.cover,
+            key: _imageKey,
           ),
         ),
         Column(
@@ -263,10 +264,16 @@ class _HomeState extends State<Home> {
             );
           } else if (index == 3 &&
               ModalRoute.of(context)?.settings.name != '/settings') {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => Settings()),
-            );
+            ).then((_) {
+                setState(() {
+                  setState(() {
+                _imageKey = UniqueKey();
+              });
+                });
+              });
           }
         },
       ),

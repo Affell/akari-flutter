@@ -1060,11 +1060,10 @@ class _GridWidget extends State<GridWidget> {
               );
             } else if (index == 2 &&
                 ModalRoute.of(context)?.settings.name != '/settings') {
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const Settings()),
               ).then((_) {
-                // Set the index to the middle icon
                 setState(() {
                   currentPageIndex = 1; // Index of the middle icon
                   _navKey = UniqueKey();

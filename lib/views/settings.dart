@@ -87,6 +87,13 @@ class _SettingsPageState extends State<Settings> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Settings'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              _saveData();
+              Navigator.pop(context);
+            },
+          ),
         ),
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -288,52 +295,6 @@ class _SettingsPageState extends State<Settings> {
             ),
           ),
         ),
-        bottomNavigationBar: CurvedNavigationBar(
-        index: currentPageIndex,
-        color: const Color.fromARGB(255, 55, 55, 55),
-        backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-        buttonBackgroundColor: Color.fromARGB(255, 55, 55, 55),
-        height: 60,
-        items: <Widget>[
-          Icon(Icons.home, size: 30, color: Colors.white),
-          Icon(Icons.history, size: 30, color: Colors.white),
-          Icon(Icons.leaderboard_rounded, size: 30, color: Colors.white),
-          Icon(Icons.settings, size: 30, color: Colors.white),
-        ],
-        onTap: (index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-
-          // Navigation logic
-          if (index == 0 && ModalRoute.of(context)?.settings.name != '/') {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => Home(title: "Akari")),
-            );
-          } else if (index == 1 &&
-              ModalRoute.of(context)?.settings.name != '/historical') {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => History(mode: SaveMode.archive)),
-            );
-          } else if (index == 2 &&
-              ModalRoute.of(context)?.settings.name != '/leaderBoard') {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => LeaderBoard(mode: SaveMode.archive)),
-            );
-          } else if (index == 3 &&
-              ModalRoute.of(context)?.settings.name != '/settings') {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => Settings()),
-            );
-          }
-        },
-      ),
       ),
       
     );

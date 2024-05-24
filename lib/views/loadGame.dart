@@ -219,7 +219,7 @@ class _GamesListPageState extends State<GamesListPage> {
             );
           } else if (index == 4 &&
               ModalRoute.of(context)?.settings.name != '/settings') {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => Settings()),
             );

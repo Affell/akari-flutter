@@ -177,7 +177,7 @@ class _HistoryPageState extends State<LeaderBoard> {
             );
           } else if (index == 3 &&
               ModalRoute.of(context)?.settings.name != '/settings') {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => Settings()),
             );
