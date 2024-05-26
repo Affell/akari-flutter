@@ -53,6 +53,7 @@ class _NewGamePageState extends State<NewGame> {
   double _sizeIndex = 1.0; // Corresponds to 10x10
   double _difficultyIndex = 1.0; // Corresponds to Medium
   int currentPageIndex = 2;
+  Key navKey = UniqueKey(); 
 
   void _launchGame() {
     Navigator.pushAndRemoveUntil(
@@ -142,6 +143,7 @@ class _NewGamePageState extends State<NewGame> {
       ),
       
         bottomNavigationBar: CurvedNavigationBar(
+        key: navKey,
         index: currentPageIndex,
         color: const Color.fromARGB(255, 55, 55, 55),
         backgroundColor: const Color.fromARGB(0, 0, 0, 0),
@@ -194,7 +196,10 @@ class _NewGamePageState extends State<NewGame> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => Settings()),
-            );
+            ).then((_) {
+              currentPageIndex=2;
+                navKey = UniqueKey();
+              });
           }
         },
       ),

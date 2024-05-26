@@ -69,7 +69,7 @@ Color getTextColorButtonContinu() {
 
 class _HomeState extends State<Home> {
   int currentPageIndex = 0;
-  Key _imageKey = UniqueKey(); // Unique key for background image
+  Key navKey = UniqueKey(); 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -82,7 +82,6 @@ class _HomeState extends State<Home> {
           child: Image.asset(
             "lib/assets/images/backgroung_$iCase.jpeg",
             fit: BoxFit.cover,
-            key: _imageKey,
           ),
         ),
         Column(
@@ -224,6 +223,7 @@ class _HomeState extends State<Home> {
         ),
       ]),
       bottomNavigationBar: CurvedNavigationBar(
+        key: navKey,
         index: currentPageIndex,
         color: const Color.fromARGB(255, 55, 55, 55),
         backgroundColor: const Color.fromARGB(0, 0, 0, 0),
@@ -269,9 +269,8 @@ class _HomeState extends State<Home> {
               MaterialPageRoute(builder: (context) => Settings()),
             ).then((_) {
                 setState(() {
-                  setState(() {
-                _imageKey = UniqueKey();
-              });
+                  currentPageIndex=0;
+                  navKey = UniqueKey();
                 });
               });
           }

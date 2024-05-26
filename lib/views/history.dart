@@ -22,6 +22,7 @@ class _HistoryPageState extends State<History> {
   int currentPageIndex = 1;
   int gameToDisplay = 0; // 0: All, 1: Solo, 2: 1V1
   Key refreshList = UniqueKey();
+  Key navKey = UniqueKey(); 
 
   @override
   void initState() {
@@ -234,6 +235,7 @@ class _HistoryPageState extends State<History> {
             ],
           ),
           bottomNavigationBar: CurvedNavigationBar(
+            key: navKey,
             index: currentPageIndex,
             color: const Color.fromARGB(255, 55, 55, 55),
             backgroundColor: const Color.fromARGB(0, 0, 0, 0),
@@ -275,7 +277,12 @@ class _HistoryPageState extends State<History> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Settings()),
-                );
+                ).then((_) {
+                setState(() {
+                  currentPageIndex=1;
+                navKey = UniqueKey();
+                });
+              });
               }
             },
           )),

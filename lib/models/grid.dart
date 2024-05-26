@@ -675,7 +675,7 @@ class _GridWidget extends State<GridWidget> {
 
   @override
   Widget build(BuildContext context) {
-    Key _navKey = UniqueKey();
+    Key navKey = UniqueKey();
     finish = false;
     int gridSize = widget.grid.gridSize;
     List<List<int>> currentGrid = widget.grid.currentGrid;
@@ -1033,7 +1033,7 @@ class _GridWidget extends State<GridWidget> {
         ),
       ]),
       bottomNavigationBar: CurvedNavigationBar(
-        key: _navKey,
+        key: navKey,
         index: currentPageIndex,
         color: const Color.fromARGB(255, 55, 55, 55),
         backgroundColor: Colors.transparent,
@@ -1066,7 +1066,7 @@ class _GridWidget extends State<GridWidget> {
               ).then((_) {
                 setState(() {
                   currentPageIndex = 1; // Index of the middle icon
-                  _navKey = UniqueKey();
+                  navKey = UniqueKey();
                 });
               });
             } else {

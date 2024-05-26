@@ -20,6 +20,7 @@ class LeaderBoard extends StatefulWidget {
 class _HistoryPageState extends State<LeaderBoard> {
   late Future<List<Map<String, Object?>>> games;
   int currentPageIndex = 2;
+  Key navKey = UniqueKey(); 
 
   @override
   void initState() {
@@ -140,6 +141,7 @@ class _HistoryPageState extends State<LeaderBoard> {
           },
         ),
         bottomNavigationBar: CurvedNavigationBar(
+        key: navKey,
         index: currentPageIndex,
         color: const Color.fromARGB(255, 55, 55, 55),
         backgroundColor: const Color.fromARGB(0, 0, 0, 0),
@@ -180,7 +182,12 @@ class _HistoryPageState extends State<LeaderBoard> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => Settings()),
-            );
+            ).then((_) {
+                setState(() {
+                currentPageIndex=2;
+                navKey = UniqueKey();
+                });
+              });
           }
         },
       )
