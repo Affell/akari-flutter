@@ -1,9 +1,13 @@
+import 'dart:ui';
+
 import 'package:akari/utils/save.dart';
 import 'package:akari/views/game.dart';
 import 'package:akari/views/history.dart';
 import 'package:akari/views/home.dart';
 import 'package:akari/views/leaderBoard.dart';
 import 'package:akari/views/settings.dart';
+import 'package:akari/views/battle.dart';
+import 'package:akari/views/tuto.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -53,7 +57,7 @@ class _NewGamePageState extends State<NewGame> {
   double _sizeIndex = 1.0; // Corresponds to 10x10
   double _difficultyIndex = 1.0; // Corresponds to Medium
   int currentPageIndex = 2;
-  Key navKey = UniqueKey(); 
+  Key navKey = UniqueKey();
 
   void _launchGame() {
     Navigator.pushAndRemoveUntil(
@@ -68,6 +72,15 @@ class _NewGamePageState extends State<NewGame> {
     );
   }
 
+  void _launchBattle() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const Battle(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -75,13 +88,39 @@ class _NewGamePageState extends State<NewGame> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New Game'),
+        title: Text(
+          'New Game',
+          style: TextStyle(fontSize: width / 10, fontWeight: FontWeight.bold),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.help_outline,
+              size: width / 10,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Tuto(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              'Singleplayer',
+              style: TextStyle(
+                fontSize: width / 10,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -138,18 +177,34 @@ class _NewGamePageState extends State<NewGame> {
               onPressed: _launchGame,
               child: const Text('Launch Game'),
             ),
+            const SizedBox(height: 20),
+            const Divider(
+              color: Colors.black,
+            ),
+            const SizedBox(height: 15),
+            Text(
+              'Multiplayer',
+              style: TextStyle(
+                fontSize: width / 10,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 15),
+            ElevatedButton(
+              onPressed: _launchBattle,
+              child: const Text('Launch Battle'),
+            ),
           ],
-        ),      
+        ),
       ),
-      
-        bottomNavigationBar: CurvedNavigationBar(
+      bottomNavigationBar: CurvedNavigationBar(
         key: navKey,
         index: currentPageIndex,
         color: const Color.fromARGB(255, 55, 55, 55),
         backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-        buttonBackgroundColor: Color.fromARGB(255, 55, 55, 55),
+        buttonBackgroundColor: const Color.fromARGB(255, 55, 55, 55),
         height: 60,
-        items: <Widget>[
+        items: const <Widget>[
           Icon(Icons.home, size: 30, color: Colors.white),
           Icon(Icons.history, size: 30, color: Colors.white),
           Icon(Icons.library_add, size: 30, color: Colors.white),
@@ -165,31 +220,29 @@ class _NewGamePageState extends State<NewGame> {
           if (index == 0 && ModalRoute.of(context)?.settings.name != '/') {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => Home(title: "Akari")),
+              MaterialPageRoute(
+                  builder: (context) => const Home(title: "Akari")),
             );
           } else if (index == 1 &&
               ModalRoute.of(context)?.settings.name != '/historical') {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => History(mode: SaveMode.archive)),
+                  builder: (context) => const History(mode: SaveMode.archive)),
             );
-            
           } else if (index == 2 &&
               ModalRoute.of(context)?.settings.name != '/newGame') {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(
-                  builder: (context) => NewGame()),
+              MaterialPageRoute(builder: (context) => const NewGame()),
             );
-            
-          }
-          else if (index == 3 &&
+          } else if (index == 3 &&
               ModalRoute.of(context)?.settings.name != '/leaderBoard') {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => LeaderBoard(mode: SaveMode.archive)),
+                  builder: (context) =>
+                      const LeaderBoard(mode: SaveMode.archive)),
             );
           } else if (index == 4 &&
               ModalRoute.of(context)?.settings.name != '/settings') {
@@ -197,9 +250,9 @@ class _NewGamePageState extends State<NewGame> {
               context,
               MaterialPageRoute(builder: (context) => Settings()),
             ).then((_) {
-              currentPageIndex=2;
-                navKey = UniqueKey();
-              });
+              currentPageIndex = 2;
+              navKey = UniqueKey();
+            });
           }
         },
       ),
