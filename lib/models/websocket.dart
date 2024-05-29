@@ -83,7 +83,7 @@ onScoreboard() {
 askScoreboard(int offset) {
   socket.sink.add(jsonEncode({
     'name': 'scoreboard',
-    'data': offset,
+    'data': {'offset': offset},
   }));
 }
 
