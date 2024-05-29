@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:akari/config.dart';
 import 'package:web_socket_channel/web_socket_channel.dart' as ws;
-import 'api.dart';
 import '../main.dart' as pref_main;
 
 late ws.WebSocketChannel socket;
@@ -18,10 +17,16 @@ initWebSocket() {
         onAuth();
         break;
       case 'search':
-        onSearch();
+        onSearch(dataJson['data']);
         break;
       case 'scoreboard':
         onScoreboard();
+        break;
+      case 'launchGame':
+        OnLaunchGame(dataJson["data"]);
+        break;
+      case 'authenticated':
+        OnAuthenticated();
         break;
       default:
         print(dataJson);
@@ -42,16 +47,19 @@ onAuth() {
   }));
 }
 
+OnAuthenticated() {
+  //TODO
+}
+
 /// Handles the 'search' event.
-onSearch() {
-  socket.sink.add(jsonEncode({
-    'name': 'search',
-    'data': {},
-  }));
+onSearch(Map data) {
+  bool success = data['success'];
+  print("Search result : " + success.toString());
+  // TODO confirmation visuelle recherche de partie
 }
 
 /// Handles the 'cancelSearch' event.
-onCancelSearch() {
+cancelSearch() {
   socket.sink.add(jsonEncode({
     'name': 'cancelSearch',
     'data': {},
@@ -59,10 +67,10 @@ onCancelSearch() {
 }
 
 /// Handles the 'gridSubmit' event.
-onGridSubmit(List<List<int>> grid) {
+submitGrid(List<List<int>> grid) {
   socket.sink.add(jsonEncode({
     'name': 'gridSubmit',
-    'data': grid,
+    'data': {'grid': grid},
   }));
 }
 
@@ -87,10 +95,19 @@ search() {
   }));
 }
 
+OnLaunchGame(data) {
+  List<dynamic> list = data['grid'] as List<dynamic>;
+  List<List<int>> grid = list
+      .map<List<int>>(
+          (first) => first.map<int>((second) => second as int).toList())
+      .toList();
+  print(grid);
+  // TODO lancer partie graphique
+}
+
 /// The main function of the application.
 Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
   pref_main.prefs = await SharedPreferences.getInstance();
-  await login('rubaine', 'NKr{4;_N7,BuaYWeXS.Hq})-#I-Tsb}y;ub%^#5Nawf3NX');
   initWebSocket();
 }
