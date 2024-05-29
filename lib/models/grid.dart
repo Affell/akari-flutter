@@ -45,9 +45,7 @@ String formatTime(int time) {
   return formattedTime.toString();
 }
 
-
-enum typeGame { Solo , VS }
-
+enum typeGame { Solo, VS }
 
 class Grid {
   int difficulty;
@@ -72,20 +70,29 @@ class Grid {
     initCurrentGrid();
   }
 
-  Grid(this.creationTime, this.time, this.difficulty, this.gridSize,
-      this.startGrid, this.lights, this.pastActions, this.futureActions, this.type);
+  Grid(
+      this.creationTime,
+      this.time,
+      this.difficulty,
+      this.gridSize,
+      this.startGrid,
+      this.lights,
+      this.pastActions,
+      this.futureActions,
+      this.type);
 
 //Loading a Game Grid
-  Grid.loadGrid(
-      {required this.creationTime,
-      required this.time,
-      required this.difficulty,
-      required this.gridSize,
-      required this.type,
-      required this.startGrid,
-      required this.lights,
-      required this.pastActions,
-      required this.futureActions,}) {
+  Grid.loadGrid({
+    required this.creationTime,
+    required this.time,
+    required this.difficulty,
+    required this.gridSize,
+    required this.type,
+    required this.startGrid,
+    required this.lights,
+    required this.pastActions,
+    required this.futureActions,
+  }) {
     initCurrentGrid();
     gridFromLights(lights);
   }

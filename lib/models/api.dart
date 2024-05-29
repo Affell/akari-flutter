@@ -1,37 +1,39 @@
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../config.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
-late SharedPreferences _prefs;
+import '../main.dart' as main;
 
 Future<String?> login(String username, String password) async {
-  String url = "$baseUrl/auth/login";
+  String url = "$apiUrl/auth/login";
   Map data = {
-    'username': '$username',
-    'password': '$password',
+    'username': username,
+    'password': password,
   };
 
   http.Response res =
       await http.post(Uri.parse(url), headers: headers, body: jsonEncode(data));
 
-  Map dataJson = jsonDecode(res.body) as Map;
+  try {
+    Map dataJson = jsonDecode(res.body) as Map;
 
-  if (res.statusCode != 200) {
-    return dataJson['message'];
-  } else {
-    headers['INSAkari-Connect-Token'] = dataJson['token'];
-    await _prefs.setString('INSAkari-Connect-Token', dataJson['token']);
-    await _prefs.setString('username', dataJson['user']['username']);
-    await _prefs.setString('email', dataJson['user']['email']);
-    return null;
+    if (res.statusCode != 200) {
+      return dataJson['message'];
+    } else {
+      headers['INSAkari-Connect-Token'] = dataJson['token'];
+      await main.prefs.setString('INSAkari-Connect-Token', dataJson['token']);
+      await main.prefs.setString('username', dataJson['user']['username']);
+      await main.prefs.setString('email', dataJson['user']['email']);
+      return null;
+    }
+  } catch (e) {
+    return 'Invalid response from server';
   }
 }
 
 Future<bool> checkToken() async {
-  final String? token = _prefs.getString('INSAkari-Connect-Token');
-  String url = "$baseUrl/auth/login";
+  final String? token = main.prefs.getString('INSAkari-Connect-Token');
+  String url = "$apiUrl/auth/login";
   Map data = {
     'token': '$token',
   };
@@ -39,27 +41,32 @@ Future<bool> checkToken() async {
   http.Response res =
       await http.post(Uri.parse(url), headers: headers, body: jsonEncode(data));
 
-  Map dataJson = jsonDecode(res.body);
+  try {
+    Map dataJson = jsonDecode(res.body) as Map;
 
-  if (res.statusCode != 200) {
-    headers['INSAkari-Connect-Token'] = '';
-    await _prefs.remove('username');
-    await _prefs.remove('email');
-    await _prefs.remove('INSAkari-Connect-Token');
+    if (res.statusCode != 200) {
+      headers['INSAkari-Connect-Token'] = '';
+      await main.prefs.remove('username');
+      await main.prefs.remove('email');
+      await main.prefs.remove('INSAkari-Connect-Token');
+      return false;
+    } else {
+      headers['INSAkari-Connect-Token'] = dataJson['token'];
+      await main.prefs.setString('username', dataJson['user']['username']);
+      await main.prefs.setString('email', dataJson['user']['email']);
+      return true;
+    }
+  } catch (e) {
     return false;
   }
-  headers['INSAkari-Connect-Token'] = dataJson['token'];
-  await _prefs.setString('username', dataJson['user']['username']);
-  await _prefs.setString('email', dataJson['user']['email']);
-  return true;
 }
 
 Future<String?> signUp(String username, String email, String password) async {
-  String url = "$baseUrl/auth/signup";
+  String url = "$apiUrl/auth/signup";
   Map data = {
-    'username': '$username',
-    'email': '$email',
-    'password': '$password',
+    'username': username,
+    'email': email,
+    'password': password,
   };
 
   http.Response res = await http.post(
@@ -68,18 +75,27 @@ Future<String?> signUp(String username, String email, String password) async {
     body: jsonEncode(data),
   );
 
-  Map dataJson = jsonDecode(res.body);
+  try {
+    Map dataJson = jsonDecode(res.body) as Map;
 
-  if (res.statusCode != 201) {
-    return dataJson['message'];
+    if (res.statusCode != 201) {
+      return dataJson['message'];
+    } else {
+      headers['INSAkari-Connect-Token'] = dataJson['token'];
+      await main.prefs.setString('INSAkari-Connect-Token', dataJson['token']);
+      await main.prefs.setString('username', dataJson['user']['username']);
+      await main.prefs.setString('email', dataJson['user']['email']);
+      return null;
+    }
+  } catch (e) {
+    return 'Invalid response from server';
   }
-  return null;
 }
 
 Future<String?> updateUserUsername(String username) async {
-  String url = '$baseUrl/auth/user';
+  String url = '$apiUrl/auth/user';
   Map data = {
-    'username': '$username',
+    'username': username,
   };
 
   http.Response res = await http.post(
@@ -88,19 +104,24 @@ Future<String?> updateUserUsername(String username) async {
     body: jsonEncode(data),
   );
 
-  Map dataJson = jsonDecode(res.body);
+  try {
+    Map dataJson = jsonDecode(res.body) as Map;
 
-  if (res.statusCode != 200) {
-    return dataJson['message'];
+    if (res.statusCode != 200) {
+      return dataJson['message'];
+    } else {
+      await main.prefs.setString('username', username);
+      return null;
+    }
+  } catch (e) {
+    return 'Invalid response from server';
   }
-  await _prefs.setString('username', username);
-  return null;
 }
 
 Future<String?> updateUserEmail(String email) async {
-  String url = '$baseUrl/auth/user';
+  String url = '$apiUrl/auth/user';
   Map data = {
-    'email': '$email',
+    'email': email,
   };
 
   http.Response res = await http.post(
@@ -109,19 +130,24 @@ Future<String?> updateUserEmail(String email) async {
     body: jsonEncode(data),
   );
 
-  Map dataJson = jsonDecode(res.body);
+  try {
+    Map dataJson = jsonDecode(res.body) as Map;
 
-  if (res.statusCode != 200) {
-    return dataJson['message'];
+    if (res.statusCode != 200) {
+      return dataJson['message'];
+    } else {
+      await main.prefs.setString('email', email);
+      return null;
+    }
+  } catch (e) {
+    return 'Invalid response from server';
   }
-  await _prefs.setString('email', email);
-  return null;
 }
 
 Future<String?> updateUserPassword(String password) async {
-  String url = '$baseUrl/auth/user';
+  String url = '$apiUrl/auth/user';
   Map data = {
-    'password': '$password',
+    'password': password,
   };
 
   http.Response res = await http.post(
@@ -130,21 +156,15 @@ Future<String?> updateUserPassword(String password) async {
     body: jsonEncode(data),
   );
 
-  Map dataJson = jsonDecode(res.body);
+  try {
+    Map dataJson = jsonDecode(res.body) as Map;
 
-  if (res.statusCode != 200) {
-    return dataJson['message'];
+    if (res.statusCode != 200) {
+      return dataJson['message'];
+    } else {
+      return null;
+    }
+  } catch (e) {
+    return 'Invalid response from server';
   }
-  await _prefs.setString('password', password);
-  return null;
-}
-
-void main(List<String> args) async {
-  WidgetsFlutterBinding.ensureInitialized();
-  _prefs = await SharedPreferences.getInstance();
-  print(await login(
-      'username', 'e}Uv.EsVq!%%6Je;f0RkveQ3-RqS{8V)ySd8Lrrc~^.x4+!ZPj'));
-  print(_prefs.getString('username'));
-  print(await updateUserUsername('rubaine'));
-  print(_prefs.getString('username'));
 }

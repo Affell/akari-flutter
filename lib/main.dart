@@ -3,11 +3,10 @@ import 'package:akari/models/database.dart';
 import 'package:just_audio/just_audio.dart';
 import 'views/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:akari/models/api.dart' as api;
 
 DatabaseManager databaseManager = DatabaseManager();
 AudioPlayer player = AudioPlayer();
-late SharedPreferences _prefs;
+late SharedPreferences prefs;
 late double backGroungMusicVol;
 late double soundVol;
 late bool wrongLamp;
@@ -21,7 +20,7 @@ late String email;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  _prefs = await SharedPreferences.getInstance();
+  prefs = await SharedPreferences.getInstance();
   await _loadData();
 
   databaseManager.initDatabase();
@@ -29,17 +28,17 @@ void main() async {
 }
 
 _loadData() {
-  backGroungMusicVol = _prefs.getDouble('backGroungMusicVol') ?? 0.5;
-  soundVol = _prefs.getDouble('soundVol') ?? 1;
-  wrongLamp = _prefs.getBool('wrongLamp') ?? true;
-  passLamp = _prefs.getBool('passLamp') ?? true;
-  iBulb = _prefs.getInt('iBulb') ?? 0;
-  iWall = _prefs.getInt('iWall') ?? 0;
-  iCase = _prefs.getInt('iCase') ?? 0;
+  backGroungMusicVol = prefs.getDouble('backGroungMusicVol') ?? 0.5;
+  soundVol = prefs.getDouble('soundVol') ?? 1;
+  wrongLamp = prefs.getBool('wrongLamp') ?? true;
+  passLamp = prefs.getBool('passLamp') ?? true;
+  iBulb = prefs.getInt('iBulb') ?? 0;
+  iWall = prefs.getInt('iWall') ?? 0;
+  iCase = prefs.getInt('iCase') ?? 0;
   // Token, username, email
-  token = _prefs.getString('INSAkari-Connect-Token') ?? "";
-  username = _prefs.getString('username') ?? "";
-  email = _prefs.getString('email') ?? "";
+  token = prefs.getString('INSAkari-Connect-Token') ?? "";
+  username = prefs.getString('username') ?? "";
+  email = prefs.getString('email') ?? "";
 }
 
 class MainApp extends StatefulWidget {

@@ -1,4 +1,5 @@
-const String baseUrl = "http://192.168.6.183:4000";
+const String apiUrl = "https://api.insakari.affell.fr";
+const String wsUrl = "wss://api.insakari.affell.fr/ws";
 
 Map<String, String> headers = {
   'Content-type': 'application/json',
