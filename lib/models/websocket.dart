@@ -8,6 +8,7 @@ import '../main.dart' as pref_main;
 
 late ws.WebSocketChannel socket;
 
+/// Initializes the WebSocket connection.
 initWebSocket() {
   socket = ws.WebSocketChannel.connect(Uri.parse(wsUrl));
   socket.stream.listen((data) {
@@ -19,14 +20,8 @@ initWebSocket() {
       case 'search':
         onSearch();
         break;
-      case 'cancelSearch':
-        onCancelSearch();
-        break;
-      case 'gridSubmit':
-        onGridSubmit(dataJson['data']);
-        break;
       case 'scoreboard':
-        onScoreboard(dataJson['data']);
+        onScoreboard();
         break;
       default:
         print(dataJson);
@@ -36,6 +31,7 @@ initWebSocket() {
   });
 }
 
+/// Handles the 'auth' event.
 onAuth() {
   final token = pref_main.prefs.getString('INSAkari-Connect-Token') ?? '';
   socket.sink.add(jsonEncode({
@@ -46,6 +42,7 @@ onAuth() {
   }));
 }
 
+/// Handles the 'search' event.
 onSearch() {
   socket.sink.add(jsonEncode({
     'name': 'search',
@@ -53,6 +50,7 @@ onSearch() {
   }));
 }
 
+/// Handles the 'cancelSearch' event.
 onCancelSearch() {
   socket.sink.add(jsonEncode({
     'name': 'cancelSearch',
@@ -60,6 +58,7 @@ onCancelSearch() {
   }));
 }
 
+/// Handles the 'gridSubmit' event.
 onGridSubmit(List<List<int>> grid) {
   socket.sink.add(jsonEncode({
     'name': 'gridSubmit',
@@ -67,13 +66,20 @@ onGridSubmit(List<List<int>> grid) {
   }));
 }
 
-onScoreboard(Offset int) {
+/// Handles the 'scoreboard' event.
+onScoreboard() {
+  //TODO update scoreboard view
+}
+
+/// Sends a request to get the scoreboard with the specified offset.
+askScoreboard(int offset) {
   socket.sink.add(jsonEncode({
     'name': 'scoreboard',
-    'data': int,
+    'data': offset,
   }));
 }
 
+/// Sends a search request.
 search() {
   socket.sink.add(jsonEncode({
     'name': 'search',
@@ -81,6 +87,7 @@ search() {
   }));
 }
 
+/// The main function of the application.
 Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
   pref_main.prefs = await SharedPreferences.getInstance();
