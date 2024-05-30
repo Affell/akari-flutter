@@ -1,5 +1,29 @@
+import 'package:akari/main.dart';
+import 'package:akari/views/home.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Akari',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 192, 195, 197)),
+        useMaterial3: true,
+        scaffoldBackgroundColor: const Color.fromARGB(255, 192, 195, 197),
+      ),
+      home: const Battle(),
+    );
+  }
+}
 
 class Battle extends StatefulWidget {
   const Battle({Key? key}) : super(key: key);
@@ -41,44 +65,148 @@ class _BattleState extends State<Battle> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    final double width = size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Battle 1v1'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (_isSearching)
-              Text(
-                _searchingText,
-                style: const TextStyle(fontSize: 24),
-              ),
-            const SizedBox(height: 20),
-            if (!_isSearching)
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _isSearching = true;
-                    _startAnimation();
-                  });
-                },
-                child: const Text('Lancer la recherche'),
-              ),
-            if (_isSearching)
-              ElevatedButton(
-                onPressed: _stopAnimation,
-                child: const Text('Arrêter'),
-              ),
-          ],
-        ),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              "lib/assets/images/backgroung_$iCase.jpeg",
+              fit: BoxFit.cover,
+            ),
+          ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (_isSearching)
+                  Column(
+                    children: [
+                      SizedBox(
+                        width: 80,
+                        height: 80,
+                        child: CircularProgressIndicator(
+                          color: getTextColorBackGroung(),
+                          strokeWidth: 8,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        _searchingText,
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: getTextColorBackGroung(),
+                        ),
+                      ),
+                    ],
+                  ),
+                const SizedBox(height: 20),
+                if (!_isSearching)
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: 16.0, horizontal: width * 0.1),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white, width: 2),
+                        image: DecorationImage(
+                          image: AssetImage(
+                              'lib/assets/images/background_newgame_$iCase.jpeg'),
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            _isSearching = true;
+                            _startAnimation();
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          minimumSize: Size(width * 0.8, 50),
+                          elevation: 10,
+                          padding: EdgeInsets.zero,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Lancer la recherche",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: width / 15,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                if (_isSearching)
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: 16.0, horizontal: width * 0.1),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white, width: 2),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: _stopAnimation,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          minimumSize: Size(width * 0.8, 50),
+                          elevation: 10,
+                          padding: EdgeInsets.zero,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Arrêter",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: width / 15,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: Battle(),
-  ));
 }
