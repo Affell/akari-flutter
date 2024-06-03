@@ -20,13 +20,13 @@ initWebSocket() {
         onSearch(dataJson['data']);
         break;
       case 'scoreboard':
-        onScoreboard();
+        onScoreboard(dataJson['data']);
         break;
       case 'launchGame':
-        OnLaunchGame(dataJson["data"]);
+        onLaunchGame(dataJson["data"]);
         break;
       case 'authenticated':
-        OnAuthenticated();
+        onAuthenticated();
         break;
       default:
         print(dataJson);
@@ -47,14 +47,13 @@ onAuth() {
   }));
 }
 
-OnAuthenticated() {
+onAuthenticated() {
   //TODO
 }
 
 /// Handles the 'search' event.
 onSearch(Map data) {
   bool success = data['success'];
-  print("Search result : " + success.toString());
   // TODO confirmation visuelle recherche de partie
 }
 
@@ -75,7 +74,11 @@ submitGrid(List<List<int>> grid) {
 }
 
 /// Handles the 'scoreboard' event.
-onScoreboard() {
+onScoreboard(data) {
+  int offset = data['offset'] as int;
+  List<dynamic> list = data['users'] as List<dynamic>;
+  List<Map<String, dynamic>> users =
+      list.map<Map<String, dynamic>>((e) => e as Map<String, dynamic>).toList();
   //TODO update scoreboard view
 }
 
@@ -95,13 +98,16 @@ search() {
   }));
 }
 
-OnLaunchGame(data) {
+onLaunchGame(data) {
   List<dynamic> list = data['grid'] as List<dynamic>;
   List<List<int>> grid = list
       .map<List<int>>(
           (first) => first.map<int>((second) => second as int).toList())
       .toList();
-  print(grid);
+  int size = data['size'] as int;
+  int difficulty = data['difficulty'] as int;
+  Map<String, dynamic> opponent = data['opponent']
+      as Map<String, dynamic>; // {id:1, "username": "Affell", "score": 500}
   // TODO lancer partie graphique
 }
 
