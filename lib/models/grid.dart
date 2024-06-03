@@ -682,7 +682,7 @@ class _GridWidget extends State<GridWidget> {
 
   @override
   Widget build(BuildContext context) {
-    Key _navKey = UniqueKey();
+    Key navKey = UniqueKey();
     finish = false;
     int gridSize = widget.grid.gridSize;
     List<List<int>> currentGrid = widget.grid.currentGrid;
@@ -1040,7 +1040,7 @@ class _GridWidget extends State<GridWidget> {
         ),
       ]),
       bottomNavigationBar: CurvedNavigationBar(
-        key: _navKey,
+        key: navKey,
         index: currentPageIndex,
         color: const Color.fromARGB(255, 55, 55, 55),
         backgroundColor: Colors.transparent,
@@ -1067,14 +1067,13 @@ class _GridWidget extends State<GridWidget> {
               );
             } else if (index == 2 &&
                 ModalRoute.of(context)?.settings.name != '/settings') {
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const Settings()),
               ).then((_) {
-                // Set the index to the middle icon
                 setState(() {
                   currentPageIndex = 1; // Index of the middle icon
-                  _navKey = UniqueKey();
+                  navKey = UniqueKey();
                 });
               });
             } else {

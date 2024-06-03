@@ -69,7 +69,7 @@ Color getTextColorButtonContinu() {
 
 class _HomeState extends State<Home> {
   int currentPageIndex = 0;
-
+  Key navKey = UniqueKey(); 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -223,6 +223,7 @@ class _HomeState extends State<Home> {
         ),
       ]),
       bottomNavigationBar: CurvedNavigationBar(
+        key: navKey,
         index: currentPageIndex,
         color: const Color.fromARGB(255, 55, 55, 55),
         backgroundColor: const Color.fromARGB(0, 0, 0, 0),
@@ -263,10 +264,15 @@ class _HomeState extends State<Home> {
             );
           } else if (index == 3 &&
               ModalRoute.of(context)?.settings.name != '/settings') {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => Settings()),
-            );
+            ).then((_) {
+                setState(() {
+                  currentPageIndex=0;
+                  navKey = UniqueKey();
+                });
+              });
           }
         },
       ),
