@@ -45,9 +45,7 @@ String formatTime(int time) {
   return formattedTime.toString();
 }
 
-
-enum typeGame { Solo , VS }
-
+enum typeGame { Solo, VS }
 
 class Grid {
   int difficulty;
@@ -72,20 +70,29 @@ class Grid {
     initCurrentGrid();
   }
 
-  Grid(this.creationTime, this.time, this.difficulty, this.gridSize,
-      this.startGrid, this.lights, this.pastActions, this.futureActions, this.type);
+  Grid(
+      this.creationTime,
+      this.time,
+      this.difficulty,
+      this.gridSize,
+      this.startGrid,
+      this.lights,
+      this.pastActions,
+      this.futureActions,
+      this.type);
 
 //Loading a Game Grid
-  Grid.loadGrid(
-      {required this.creationTime,
-      required this.time,
-      required this.difficulty,
-      required this.gridSize,
-      required this.type,
-      required this.startGrid,
-      required this.lights,
-      required this.pastActions,
-      required this.futureActions,}) {
+  Grid.loadGrid({
+    required this.creationTime,
+    required this.time,
+    required this.difficulty,
+    required this.gridSize,
+    required this.type,
+    required this.startGrid,
+    required this.lights,
+    required this.pastActions,
+    required this.futureActions,
+  }) {
     initCurrentGrid();
     gridFromLights(lights);
   }
@@ -675,7 +682,7 @@ class _GridWidget extends State<GridWidget> {
 
   @override
   Widget build(BuildContext context) {
-    Key _navKey = UniqueKey();
+    Key navKey = UniqueKey();
     finish = false;
     int gridSize = widget.grid.gridSize;
     List<List<int>> currentGrid = widget.grid.currentGrid;
@@ -1033,7 +1040,7 @@ class _GridWidget extends State<GridWidget> {
         ),
       ]),
       bottomNavigationBar: CurvedNavigationBar(
-        key: _navKey,
+        key: navKey,
         index: currentPageIndex,
         color: const Color.fromARGB(255, 55, 55, 55),
         backgroundColor: Colors.transparent,
@@ -1060,14 +1067,13 @@ class _GridWidget extends State<GridWidget> {
               );
             } else if (index == 2 &&
                 ModalRoute.of(context)?.settings.name != '/settings') {
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const Settings()),
               ).then((_) {
-                // Set the index to the middle icon
                 setState(() {
                   currentPageIndex = 1; // Index of the middle icon
-                  _navKey = UniqueKey();
+                  navKey = UniqueKey();
                 });
               });
             } else {

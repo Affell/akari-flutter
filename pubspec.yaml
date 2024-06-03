@@ -1,7 +1,7 @@
 name: akari
-description: "A new Flutter project."
+description: "Jouez au Akari en solo ou en duel"
 publish_to: 'none'
-version: 0.1.0
+version: 0.1.3
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
@@ -16,6 +16,9 @@ dependencies:
   shared_preferences: ^2.2.3
   intl: ^0.19.0
   curved_navigation_bar: ^1.0.3
+  http: ^1.2.1
+  web_socket_channel: ^3.0.0
+  logging: ^1.2.0
 
 dev_dependencies:
   flutter_test:
