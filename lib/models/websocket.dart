@@ -6,6 +6,7 @@ import 'package:web_socket_channel/web_socket_channel.dart' as ws;
 import '../main.dart' as pref_main;
 import 'package:akari/views/battle.dart';
 import 'package:akari/models/grid.dart';
+import 'package:akari/views/leaderBoard.dart';
 
 late ws.WebSocketChannel socket;
 
@@ -84,6 +85,7 @@ onScoreboard(data) {
   List<Map<String, dynamic>> users =
       list.map<Map<String, dynamic>>((e) => e as Map<String, dynamic>).toList();
   //TODO update scoreboard view
+  listeScoreboard = users;
 }
 
 /// Sends a request to get the scoreboard with the specified offset.
