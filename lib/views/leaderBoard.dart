@@ -5,7 +5,6 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:akari/utils/save.dart';
 import 'package:akari/models/websocket.dart';
-import 'package:flutter/widgets.dart';
 
 // A faire quand api
 
@@ -73,6 +72,7 @@ class _LeaderBoardState extends State<LeaderBoard> {
             color: const Color.fromARGB(255, 55, 55, 55),
             backgroundColor: const Color.fromARGB(0, 0, 0, 0),
             buttonBackgroundColor: const Color.fromARGB(255, 55, 55, 55),
+            animationDuration: Duration.zero,
             height: 60,
             items: const <Widget>[
               Icon(Icons.home, size: 30, color: Colors.white),
