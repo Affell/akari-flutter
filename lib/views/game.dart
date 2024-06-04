@@ -29,6 +29,7 @@ class MyGridWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridWidget(
+      isOnlineGame: false,
       grid: Grid.createGrid(
         difficulty: difficulty,
         gridSize: size,
@@ -41,7 +42,7 @@ class MyGridWidget extends StatelessWidget {
 class Game2 extends StatelessWidget {
   final Map<String, Object?> gameData;
 
-  const Game2({Key? key, required this.gameData}) : super(key: key);
+  const Game2({super.key, required this.gameData});
 
   @override
   Widget build(BuildContext context) {
@@ -56,11 +57,10 @@ class Game2 extends StatelessWidget {
   }
 }
 
-typeGame getTypeGameFromLoad(String type){
-  if(type == "typeGame.Solo"){
+typeGame getTypeGameFromLoad(String type) {
+  if (type == "typeGame.Solo") {
     return typeGame.Solo;
-  }
-  else{
+  } else {
     return typeGame.VS;
   }
 }
@@ -73,6 +73,7 @@ class MyGridWidget2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridWidget(
+      isOnlineGame: false,
       grid: Grid.loadGrid(
         creationTime: gameData['creation_time'] as int,
         time: gameData['time_spent'] as int,

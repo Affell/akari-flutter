@@ -3,6 +3,7 @@
 import 'dart:math';
 import 'dart:async';
 import 'package:akari/main.dart';
+import 'package:akari/models/websocket.dart';
 import 'package:akari/utils/save.dart';
 import 'package:akari/views/home.dart';
 import 'package:akari/views/newGame.dart';
@@ -479,7 +480,8 @@ class Grid {
 
 class GridWidget extends StatefulWidget {
   final Grid grid;
-  const GridWidget({super.key, required this.grid});
+  final bool isOnlineGame;
+  const GridWidget({super.key, required this.grid, required this.isOnlineGame});
 
   @override
   State<StatefulWidget> createState() => _GridWidget();
@@ -964,6 +966,10 @@ class _GridWidget extends State<GridWidget> {
                     int i = Random().nextInt(2);
                     if (widget.grid.solutionChecker(currentGrid)) {
                       finish = true;
+                      //TODO --> Si on est en multi, faire submitGrid
+                      if (widget.isOnlineGame) {
+                        submitGrid(currentGrid);
+                      }
 
                       int time = widget.grid.time;
 

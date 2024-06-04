@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:akari/config.dart';
 import 'package:web_socket_channel/web_socket_channel.dart' as ws;
 import '../main.dart' as pref_main;
+import 'package:akari/views/battle.dart';
+import 'package:akari/models/grid.dart';
 
 late ws.WebSocketChannel socket;
 
@@ -49,12 +51,14 @@ onAuth() {
 
 onAuthenticated() {
   //TODO
+  authentificationReussie = true;
 }
 
 /// Handles the 'search' event.
 onSearch(Map data) {
   bool success = data['success'];
   // TODO confirmation visuelle recherche de partie
+  isSearching = false;
 }
 
 /// Handles the 'cancelSearch' event.
@@ -109,6 +113,17 @@ onLaunchGame(data) {
   Map<String, dynamic> opponent = data['opponent']
       as Map<String, dynamic>; // {id:1, "username": "Affell", "score": 500}
   // TODO lancer partie graphique
+  isOnGame = true;
+  grilleMulti = Grid.loadGrid(
+      creationTime: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      difficulty: difficulty,
+      startGrid: grid,
+      gridSize: size,
+      type: typeGame.VS,
+      futureActions: [],
+      pastActions: [],
+      lights: [],
+      time: 0);
 }
 
 /// The main function of the application.
