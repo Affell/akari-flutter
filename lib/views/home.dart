@@ -245,6 +245,7 @@ class _HomeState extends State<Home> {
       ]),
       bottomNavigationBar: CurvedNavigationBar(
         key: navKey,
+        animationDuration: Duration.zero,
         index: currentPageIndex,
         color: const Color.fromARGB(255, 55, 55, 55),
         backgroundColor: const Color.fromARGB(0, 0, 0, 0),

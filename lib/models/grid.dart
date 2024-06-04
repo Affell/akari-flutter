@@ -1048,6 +1048,7 @@ class _GridWidget extends State<GridWidget> {
       ]),
       bottomNavigationBar: CurvedNavigationBar(
         key: navKey,
+        animationDuration: Duration.zero,
         index: currentPageIndex,
         color: const Color.fromARGB(255, 55, 55, 55),
         backgroundColor: Colors.transparent,
