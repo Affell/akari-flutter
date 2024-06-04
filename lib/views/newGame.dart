@@ -79,7 +79,7 @@ class _NewGamePageState extends State<NewGame> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const Battle(),
+        builder: (context) => const Battle(title: 'Akari Battle'),
       ),
     );
   }

@@ -31,13 +31,14 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         scaffoldBackgroundColor: const Color.fromARGB(255, 192, 195, 197),
       ),
-      home: const Battle(),
+      home: const Battle(title: 'Akari Battle'),
     );
   }
 }
 
 class Battle extends StatefulWidget {
-  const Battle({super.key});
+  const Battle({super.key, required this.title});
+  final String title;
 
   @override
   _BattleState createState() => _BattleState();
@@ -77,27 +78,7 @@ class _BattleState extends State<Battle> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     final double width = size.width;
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Battle 1v1'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            if (isSearching) {
-              //Quitte la page --> arrêt de la recherche
-              cancelSearch();
-              isSearching = false;
-              _stopAnimation();
-            }
-            if (isOnGame) {
-              //Quitte la page pendant la partie --> arrêt de la partie et abandon
-              //TODO
-            }
-            Navigator.pop(context);
-          },
-        ),
-      ),
       body: Stack(
         children: [
           Positioned.fill(
@@ -106,162 +87,207 @@ class _BattleState extends State<Battle> {
               fit: BoxFit.cover,
             ),
           ),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                //Joueur pas authentifié
-                if (!authentificationReussie)
+          Column(
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: getTextColorBackGroung(),
+                    ),
+                    onPressed: () {
+                      if (isSearching) {
+                        //Quitte la page --> arrêt de la recherche
+                        cancelSearch();
+                        isSearching = false;
+                        _stopAnimation();
+                      }
+                      if (isOnGame) {
+                        //Quitte la page pendant la partie --> arrêt de la partie et abandon
+                        //TODO
+                      }
+                      Navigator.pop(context);
+                    },
+                  ),
                   Center(
                     child: Text(
-                      "You must be logged in in order to access Multiplayer Mode.\nYou can log in through the Home Page.",
-                      textAlign: TextAlign.center,
+                      widget.title,
                       style: TextStyle(
-                        fontSize: 30,
+                        fontSize: width / 7,
+                        fontWeight: FontWeight.bold,
                         color: getTextColorBackGroung(),
                       ),
                     ),
                   ),
-                //Joueur authentifié -> accès au multijoueur
-                if (authentificationReussie && isSearching && !isOnGame)
-                  Column(
+                ],
+              ),
+              Expanded(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        width: 80,
-                        height: 80,
-                        child: CircularProgressIndicator(
-                          color: getTextColorBackGroung(),
-                          strokeWidth: 8,
+                      //Joueur pas authentifié
+                      if (!authentificationReussie)
+                        Center(
+                          child: Text(
+                            "You must be logged in in order to access Multiplayer Mode.\nYou can log in through the Home Page.",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 30,
+                              color: getTextColorBackGroung(),
+                            ),
+                          ),
                         ),
-                      ),
+                      //Joueur authentifié -> accès au multijoueur
+                      if (authentificationReussie && isSearching && !isOnGame)
+                        Column(
+                          children: [
+                            SizedBox(
+                              width: 80,
+                              height: 80,
+                              child: CircularProgressIndicator(
+                                color: getTextColorBackGroung(),
+                                strokeWidth: 8,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              _searchingText,
+                              style: TextStyle(
+                                fontSize: 30,
+                                color: getTextColorBackGroung(),
+                              ),
+                            ),
+                          ],
+                        ),
                       const SizedBox(height: 20),
-                      Text(
-                        _searchingText,
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: getTextColorBackGroung(),
+                      //Etat initial sans partie et sans recherche
+                      if (authentificationReussie && !isSearching && !isOnGame)
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 16.0, horizontal: width * 0.1),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white, width: 2),
+                              image: DecorationImage(
+                                image: AssetImage(
+                                    'lib/assets/images/background_newgame_$iCase.jpeg'),
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  // Lancer la recherche au serveur
+                                  search();
+                                  isSearching = true;
+                                  _startAnimation();
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                minimumSize: Size(width * 0.8, 50),
+                                elevation: 10,
+                                padding: EdgeInsets.zero,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Lancer la recherche",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: width / 15,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                      //Recherche d'une partie
+                      if (authentificationReussie && isSearching && !isOnGame)
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 16.0, horizontal: width * 0.1),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white, width: 2),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                //Arrêter la recherche côté serveur
+                                cancelSearch();
+                                isSearching = false;
+                                _stopAnimation();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                minimumSize: Size(width * 0.8, 50),
+                                elevation: 10,
+                                padding: EdgeInsets.zero,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Arrêter",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: width / 15,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      // Partie trouvée et en cours
+                      if (authentificationReussie && isOnGame)
+                        //TODO Affichage game
+                        Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 16.0, horizontal: width * 0.1),
+                            child: GridWidget(
+                              isOnlineGame: true,
+                              grid: grilleMulti,
+                            )),
                     ],
                   ),
-                const SizedBox(height: 20),
-                //Etat initial sans partie et sans recherche
-                if (authentificationReussie && !isSearching && !isOnGame)
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 16.0, horizontal: width * 0.1),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white, width: 2),
-                        image: DecorationImage(
-                          image: AssetImage(
-                              'lib/assets/images/background_newgame_$iCase.jpeg'),
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            // Lancer la recherche au serveur
-                            search();
-                            isSearching = true;
-                            _startAnimation();
-                          });
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          minimumSize: Size(width * 0.8, 50),
-                          elevation: 10,
-                          padding: EdgeInsets.zero,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Lancer la recherche",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: width / 15,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                //Recherche d'une partie
-                if (authentificationReussie && isSearching && !isOnGame)
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 16.0, horizontal: width * 0.1),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white, width: 2),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          //Arrêter la recherche côté serveur
-                          cancelSearch();
-                          isSearching = false;
-                          _stopAnimation();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          minimumSize: Size(width * 0.8, 50),
-                          elevation: 10,
-                          padding: EdgeInsets.zero,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Arrêter",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: width / 15,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                // Partie trouvée et en cours
-                if (authentificationReussie && isOnGame)
-                  //TODO Affichage game
-                  Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 16.0, horizontal: width * 0.1),
-                      child: GridWidget(
-                        isOnlineGame: true,
-                        grid: grilleMulti,
-                      )),
-              ],
-            ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

@@ -82,6 +82,7 @@ class Grid {
       this.futureActions,
       this.type);
 
+
 //Loading a Game Grid
   Grid.loadGrid({
     required this.creationTime,
