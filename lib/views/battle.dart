@@ -2,6 +2,7 @@ import 'package:akari/main.dart';
 import 'package:akari/views/home.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import '../models/websocket.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
 }
 
 class Battle extends StatefulWidget {
-  const Battle({Key? key}) : super(key: key);
+  const Battle({super.key});
 
   @override
   _BattleState createState() => _BattleState();
@@ -42,7 +43,7 @@ class _BattleState extends State<Battle> {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         _dotCount = (_dotCount + 1) % 4;
-        _searchingText = 'Recherche d\'adversaire' + '.' * _dotCount;
+        _searchingText = 'Recherche d\'adversaire${'.' * _dotCount}';
       });
     });
   }
@@ -95,7 +96,7 @@ class _BattleState extends State<Battle> {
                           strokeWidth: 8,
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Text(
                         _searchingText,
                         style: TextStyle(
@@ -123,8 +124,11 @@ class _BattleState extends State<Battle> {
                       child: ElevatedButton(
                         onPressed: () {
                           setState(() {
+                            // TODO : Lancer la recherche au serveur
+                            //search();
                             _isSearching = true;
                             _startAnimation();
+                            //while(onSearch(data))
                           });
                         },
                         style: ElevatedButton.styleFrom(
@@ -169,7 +173,11 @@ class _BattleState extends State<Battle> {
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: ElevatedButton(
-                        onPressed: _stopAnimation,
+                        onPressed: () {
+                          //TODO : Arrêter la recherche côté serveur
+                          //cancelSearch();
+                          _stopAnimation();
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.transparent,
                           minimumSize: Size(width * 0.8, 50),
