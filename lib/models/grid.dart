@@ -1053,12 +1053,26 @@ class _GridWidget extends State<GridWidget> {
         onTap: (index) {
           setState(() {
             if (index == 0 && ModalRoute.of(context)?.settings.name != '/') {
-              if (finish == true) {
-                deleteGame(widget.grid.creationTime, SaveMode.classic);
-                saveGame(widget.grid, SaveMode.archive);
-              } else {
-                saveGame(widget.grid, SaveMode.classic);
+              //Partie solo
+              if (widget.isOnlineGame == false) {
+                if (finish == true) {
+                  deleteGame(widget.grid.creationTime, SaveMode.classic);
+                  saveGame(widget.grid, SaveMode.archive);
+                } else {
+                  saveGame(widget.grid, SaveMode.classic);
+                }
               }
+              //Partie multi
+              else {
+                if (finish == true) {
+                  //Sauvegarder dans l'historique
+                  saveGame(widget.grid, SaveMode.archive);
+                  //TODO fermer connexion
+                } else {
+                  //TODO Abandon
+                }
+              }
+
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
