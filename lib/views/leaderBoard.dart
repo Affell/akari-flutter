@@ -1,11 +1,12 @@
+import 'dart:io';
+
 import 'package:akari/views/history.dart';
 import 'package:akari/views/home.dart';
 import 'package:akari/views/settings.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:akari/utils/save.dart';
-
-// A faire quand api
+import 'package:akari/models/websocket.dart';
 
 List<Map<String, dynamic>> listeScoreboard = [];
 
@@ -25,6 +26,7 @@ class _LeaderBoardState extends State<LeaderBoard> {
   @override
   void initState() {
     super.initState();
+    askScoreboard(0);
   }
 
   @override
@@ -57,11 +59,14 @@ class _LeaderBoardState extends State<LeaderBoard> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text("${listeScoreboard[index].keys}"),
-                              Text("${listeScoreboard[index].values}"),
+                              const SizedBox(width: 10),
+                              Text("${listeScoreboard[index].values.last}"),
+                              const Spacer(),
+                              Text("${listeScoreboard[index].values.first}"),
+                              const SizedBox(width: 10),
                             ],
                           );
-                        } else {
+                        } else if (listeScoreboard.isEmpty) {
                           return const Center(
                             child: Text("No player found..."),
                           );

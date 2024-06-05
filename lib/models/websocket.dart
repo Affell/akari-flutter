@@ -63,6 +63,8 @@ onAuth() {
 onAuthenticated() {
   //TODO
   print("\n\nonAuthentificated\n\n");
+  //Demande du scoreboard pour la 1° initialisation
+  askScoreboard(0);
 }
 
 /// Handles the 'search' event.
@@ -100,6 +102,7 @@ onScoreboard(data) {
       list.map<Map<String, dynamic>>((e) => e as Map<String, dynamic>).toList();
   //TODO update scoreboard view
   listeScoreboard = users;
+  //print("\n\n Scoreboard reçu \n\n");
 }
 
 /// Sends a request to get the scoreboard with the specified offset.
@@ -108,6 +111,7 @@ askScoreboard(int offset) {
     'name': 'scoreboard',
     'data': {'offset': offset},
   }));
+  //print("\n\n Demande du scoreboard envoyée \n\n");
 }
 
 /// Sends a search request.

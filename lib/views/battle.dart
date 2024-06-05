@@ -295,14 +295,7 @@ class _BattleState extends State<Battle> {
                               onPressed: () {
                                 isOnGame = false;
                                 terminee = false;
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const Home(
-                                      title: 'Akari',
-                                    ),
-                                  ),
-                                );
+                                Navigator.of(context).pop();
                               },
                             ),
                           ],
