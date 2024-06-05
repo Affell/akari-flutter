@@ -1,4 +1,5 @@
 import 'package:akari/main.dart';
+import 'package:akari/utils/save.dart';
 import 'package:akari/views/home.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -7,6 +8,11 @@ import 'package:akari/models/grid.dart';
 
 bool isSearching = false;
 bool isOnGame = false;
+String resultat1v1 = "";
+int eloAugmentation = 0;
+int nouvelElo = 0;
+bool aAbandonne = false;
+bool terminee = false;
 //grille temporaire car on peut pas en avoir une vide
 Grid grilleMulti = Grid.createGrid(
     difficulty: 0,
@@ -107,8 +113,8 @@ class _BattleState extends State<Battle> {
                       }
                       if (isOnGame) {
                         //Quitte la page pendant la partie --> arrêt de la partie et abandon
-                        isOnGame = false;
-                        //TODO
+                        forfeit();
+                        saveGame(grilleMulti, SaveMode.archive);
                       }
                       Navigator.pop(context);
                     },
@@ -264,13 +270,40 @@ class _BattleState extends State<Battle> {
                         ),
                       // Partie trouvée et en cours
                       if (isOnGame)
-                        //TODO Affichage game
                         Expanded(
                           child: GridWidget(
                             isOnlineGame: true,
                             grid: grilleMulti,
                           ),
-                        )
+                        ),
+                      if (terminee)
+                        AlertDialog(
+                          title: Text(resultat1v1),
+                          content: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text("New Elo : $nouvelElo"),
+                              Text("$eloAugmentation"),
+                              if (aAbandonne) const Text("victory by forfeit."),
+                            ],
+                          ),
+                          actions: <Widget>[
+                            IconButton(
+                              icon: const Icon(Icons.close),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Home(
+                                      title: 'Akari',
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                     ],
                   ),
                 ),
