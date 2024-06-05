@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'package:akari/main.dart';
 import 'package:akari/models/grid.dart';
-import 'package:akari/utils/save.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
@@ -89,7 +87,6 @@ class MyGridWidget2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var currentPageIndex = 1;
     return Scaffold(
       backgroundColor: Colors.grey,
       body: Stack(children: [
