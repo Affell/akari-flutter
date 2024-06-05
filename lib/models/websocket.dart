@@ -52,14 +52,15 @@ onAuth() {
 
 onAuthenticated() {
   //TODO
-  authentificationReussie = true;
+  print("\n\nonAuthentificated\n\n");
 }
 
 /// Handles the 'search' event.
 onSearch(Map data) {
   bool success = data['success'];
   // TODO confirmation visuelle recherche de partie
-  isSearching = false;
+  isSearching = true;
+  print("\n\nRecherche d'adversaire : $isSearching \n\n");
 }
 
 /// Handles the 'cancelSearch' event.
@@ -68,6 +69,8 @@ cancelSearch() {
     'name': 'cancelSearch',
     'data': {},
   }));
+  isSearching = false;
+  print("\n\nRecherche d'adversaire annulée : $isSearching \n\n");
 }
 
 /// Handles the 'gridSubmit' event.

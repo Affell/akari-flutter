@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:akari/utils/save.dart';
+import 'package:akari/views/account.dart';
 import 'package:akari/views/game.dart';
 import 'package:akari/views/history.dart';
 import 'package:akari/views/home.dart';
@@ -10,7 +11,7 @@ import 'package:akari/views/battle.dart';
 import 'package:akari/views/tuto.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:akari/models/websocket.dart';
+import 'package:akari/models/api.dart';
 
 Map<int, String> sizeMap = {
   0: '7x7',
@@ -73,15 +74,25 @@ class _NewGamePageState extends State<NewGame> {
     );
   }
 
-  void _launchBattle() {
+  Future<void> _launchBattle() async {
     //TODO init websocket
-    initWebSocket();
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const Battle(title: 'Akari Battle'),
-      ),
-    );
+    bool resultatCheckConnexion = await checkToken();
+    if (resultatCheckConnexion == true) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Battle(title: 'Akari Battle'),
+        ),
+      );
+    } else {
+      print("\n\nNon connecté\n\n");
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Account(),
+        ),
+      );
+    }
   }
 
   @override

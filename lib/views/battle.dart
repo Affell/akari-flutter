@@ -7,7 +7,6 @@ import 'package:akari/models/grid.dart';
 
 bool isSearching = false;
 bool isOnGame = false;
-bool authentificationReussie = false; //TODO -> mettre à false par défaut
 //grille temporaire car on peut pas en avoir une vide
 Grid grilleMulti = Grid.createGrid(
     difficulty: 0,
@@ -47,30 +46,29 @@ class Battle extends StatefulWidget {
 class _BattleState extends State<Battle> {
   String _searchingText = 'Recherche d\'adversaire';
   int _dotCount = 0;
-  late Timer _timer;
+  late Timer? _timer;
 
   void _startAnimation() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        _dotCount = (_dotCount + 1) % 4;
-        _searchingText = 'Recherche d\'adversaire${'.' * _dotCount}';
-      });
+      if (mounted) {
+        setState(() {
+          _dotCount = (_dotCount + 1) % 4;
+          _searchingText = 'Recherche d\'adversaire${'.' * _dotCount}';
+        });
+      }
     });
   }
 
   void _stopAnimation() {
-    _timer.cancel();
+    _timer?.cancel();
     setState(() {
-      isSearching = false;
       _searchingText = 'Recherche d\'adversaire';
     });
   }
 
   @override
   void dispose() {
-    if (_timer.isActive) {
-      _timer.cancel();
-    }
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -100,7 +98,6 @@ class _BattleState extends State<Battle> {
                       if (isSearching) {
                         //Quitte la page --> arrêt de la recherche
                         cancelSearch();
-                        isSearching = false;
                         _stopAnimation();
                       }
                       if (isOnGame) {
@@ -128,6 +125,7 @@ class _BattleState extends State<Battle> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       //Joueur pas authentifié
+                      /*
                       if (!authentificationReussie)
                         Center(
                           child: Text(
@@ -139,8 +137,9 @@ class _BattleState extends State<Battle> {
                             ),
                           ),
                         ),
+                        */
                       //Joueur authentifié -> accès au multijoueur
-                      if (authentificationReussie && isSearching && !isOnGame)
+                      if (isSearching && !isOnGame)
                         Column(
                           children: [
                             SizedBox(
@@ -163,7 +162,7 @@ class _BattleState extends State<Battle> {
                         ),
                       const SizedBox(height: 20),
                       //Etat initial sans partie et sans recherche
-                      if (authentificationReussie && !isSearching && !isOnGame)
+                      if (!isSearching && !isOnGame)
                         Padding(
                           padding: EdgeInsets.symmetric(
                               vertical: 16.0, horizontal: width * 0.1),
@@ -182,7 +181,6 @@ class _BattleState extends State<Battle> {
                                 setState(() {
                                   // Lancer la recherche au serveur
                                   search();
-                                  isSearching = true;
                                   _startAnimation();
                                 });
                               },
@@ -222,7 +220,7 @@ class _BattleState extends State<Battle> {
                           ),
                         ),
                       //Recherche d'une partie
-                      if (authentificationReussie && isSearching && !isOnGame)
+                      if (isSearching && !isOnGame)
                         Padding(
                           padding: EdgeInsets.symmetric(
                               vertical: 16.0, horizontal: width * 0.1),
@@ -235,7 +233,7 @@ class _BattleState extends State<Battle> {
                               onPressed: () {
                                 //Arrêter la recherche côté serveur
                                 cancelSearch();
-                                isSearching = false;
+                                //isSearching = false;
                                 _stopAnimation();
                               },
                               style: ElevatedButton.styleFrom(
@@ -274,7 +272,7 @@ class _BattleState extends State<Battle> {
                           ),
                         ),
                       // Partie trouvée et en cours
-                      if (authentificationReussie && isOnGame)
+                      if (isOnGame)
                         //TODO Affichage game
                         Padding(
                             padding: EdgeInsets.symmetric(

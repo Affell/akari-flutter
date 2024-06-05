@@ -4,7 +4,6 @@ import 'package:akari/views/settings.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:akari/utils/save.dart';
-import 'package:akari/models/websocket.dart';
 
 // A faire quand api
 
@@ -26,7 +25,6 @@ class _LeaderBoardState extends State<LeaderBoard> {
   @override
   void initState() {
     super.initState();
-    initWebSocket();
   }
 
   @override
