@@ -9,37 +9,38 @@ late ws.WebSocketChannel socket;
 
 /// Initializes the WebSocket connection.
 initWebSocket() {
-  if (socket.closeCode != null) {
+  try {
     socket.sink.close();
+  } finally {
+    socket = ws.WebSocketChannel.connect(Uri.parse(wsUrl));
+    socket.stream.listen((data) {
+      Map dataJson = jsonDecode(data) as Map;
+      switch (dataJson['name']) {
+        case 'auth':
+          onAuth();
+          break;
+        case 'search':
+          onSearch(dataJson['data']);
+          break;
+        case 'scoreboard':
+          onScoreboard(dataJson['data']);
+          break;
+        case 'launchGame':
+          onLaunchGame(dataJson["data"]);
+          break;
+        case 'authenticated':
+          onAuthenticated();
+          break;
+        case 'close':
+          socket.sink.close();
+          break;
+        default:
+          print(dataJson);
+      }
+    }, onError: (error) {
+      print('WebSocket connection error: $error');
+    });
   }
-  socket = ws.WebSocketChannel.connect(Uri.parse(wsUrl));
-  socket.stream.listen((data) {
-    Map dataJson = jsonDecode(data) as Map;
-    switch (dataJson['name']) {
-      case 'auth':
-        onAuth();
-        break;
-      case 'search':
-        onSearch(dataJson['data']);
-        break;
-      case 'scoreboard':
-        onScoreboard(dataJson['data']);
-        break;
-      case 'launchGame':
-        onLaunchGame(dataJson["data"]);
-        break;
-      case 'authenticated':
-        onAuthenticated();
-        break;
-      case 'close':
-        socket.sink.close();
-        break;
-      default:
-        print(dataJson);
-    }
-  }, onError: (error) {
-    print('WebSocket connection error: $error');
-  });
 }
 
 /// Handles the 'auth' event.
