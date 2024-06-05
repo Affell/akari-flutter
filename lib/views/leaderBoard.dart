@@ -51,16 +51,23 @@ class _LeaderBoardState extends State<LeaderBoard> {
                     ),
                     child: ListView.builder(
                       scrollDirection: Axis.vertical,
-                      itemCount: listeScoreboard.length,
+                      itemCount: listeScoreboard.length + 1,
                       itemBuilder: (context, index) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text("${listeScoreboard[index].keys}"),
-                            Text("${listeScoreboard[index].values}"),
-                          ],
-                        );
+                        if (listeScoreboard.isNotEmpty &&
+                            index < listeScoreboard.length) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text("${listeScoreboard[index].keys}"),
+                              Text("${listeScoreboard[index].values}"),
+                            ],
+                          );
+                        } else {
+                          return const Center(
+                            child: Text("No player found..."),
+                          );
+                        }
                       },
                     ))
               ],
