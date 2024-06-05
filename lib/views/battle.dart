@@ -107,6 +107,7 @@ class _BattleState extends State<Battle> {
                       }
                       if (isOnGame) {
                         //Quitte la page pendant la partie --> arrêt de la partie et abandon
+                        isOnGame = false;
                         //TODO
                       }
                       Navigator.pop(context);
@@ -129,21 +130,6 @@ class _BattleState extends State<Battle> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      //Joueur pas authentifié
-                      /*
-                      if (!authentificationReussie)
-                        Center(
-                          child: Text(
-                            "You must be logged in in order to access Multiplayer Mode.\nYou can log in through the Home Page.",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 30,
-                              color: getTextColorBackGroung(),
-                            ),
-                          ),
-                        ),
-                        */
-                      //Joueur authentifié -> accès au multijoueur
                       if (isSearching && !isOnGame)
                         Column(
                           children: [
@@ -279,13 +265,12 @@ class _BattleState extends State<Battle> {
                       // Partie trouvée et en cours
                       if (isOnGame)
                         //TODO Affichage game
-                        Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 16.0, horizontal: width * 0.1),
-                            child: GridWidget(
-                              isOnlineGame: true,
-                              grid: grilleMulti,
-                            )),
+                        Expanded(
+                          child: GridWidget(
+                            isOnlineGame: true,
+                            grid: grilleMulti,
+                          ),
+                        )
                     ],
                   ),
                 ),

@@ -60,7 +60,7 @@ onSearch(Map data) {
   bool success = data['success'];
   // TODO confirmation visuelle recherche de partie
   isSearching = true;
-  print("\n\nRecherche d'adversaire : $isSearching \n\n");
+  print("\n\n Recherche d'adversaire : $isSearching \n\n");
 }
 
 /// Handles the 'cancelSearch' event.
@@ -70,7 +70,7 @@ cancelSearch() {
     'data': {},
   }));
   isSearching = false;
-  print("\n\nRecherche d'adversaire annulée : $isSearching \n\n");
+  print("\n\n Recherche d'adversaire annulée : $isSearching \n\n");
 }
 
 /// Handles the 'gridSubmit' event.
@@ -79,6 +79,7 @@ submitGrid(List<List<int>> grid) {
     'name': 'gridSubmit',
     'data': {'grid': grid},
   }));
+  print("\n\n Grille envoyée \n\n");
 }
 
 /// Handles the 'scoreboard' event.
