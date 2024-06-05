@@ -4,6 +4,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:akari/config.dart';
 import 'package:web_socket_channel/web_socket_channel.dart' as ws;
 import '../main.dart' as pref_main;
+import 'package:akari/views/battle.dart';
+import 'package:akari/models/grid.dart';
+import 'package:akari/views/leaderBoard.dart';
 
 late ws.WebSocketChannel socket;
 
@@ -59,12 +62,15 @@ onAuth() {
 
 onAuthenticated() {
   //TODO
+  print("\n\nonAuthentificated\n\n");
 }
 
 /// Handles the 'search' event.
 onSearch(Map data) {
   bool success = data['success'];
   // TODO confirmation visuelle recherche de partie
+  isSearching = true;
+  print("\n\n Recherche d'adversaire : $isSearching \n\n");
 }
 
 /// Handles the 'cancelSearch' event.
@@ -73,6 +79,8 @@ cancelSearch() {
     'name': 'cancelSearch',
     'data': {},
   }));
+  isSearching = false;
+  print("\n\n Recherche d'adversaire annulée : $isSearching \n\n");
 }
 
 /// Handles the 'gridSubmit' event.
@@ -81,6 +89,7 @@ submitGrid(List<List<int>> grid) {
     'name': 'gridSubmit',
     'data': {'grid': grid},
   }));
+  print("\n\n Grille envoyée \n\n");
 }
 
 /// Handles the 'scoreboard' event.
@@ -90,6 +99,7 @@ onScoreboard(data) {
   List<Map<String, dynamic>> users =
       list.map<Map<String, dynamic>>((e) => e as Map<String, dynamic>).toList();
   //TODO update scoreboard view
+  listeScoreboard = users;
 }
 
 /// Sends a request to get the scoreboard with the specified offset.
@@ -119,6 +129,17 @@ onLaunchGame(data) {
   Map<String, dynamic> opponent = data['opponent']
       as Map<String, dynamic>; // {id:1, "username": "Affell", "score": 500}
   // TODO lancer partie graphique
+  isOnGame = true;
+  grilleMulti = Grid.loadGrid(
+      creationTime: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      difficulty: difficulty,
+      startGrid: grid,
+      gridSize: size,
+      type: typeGame.VS,
+      futureActions: [],
+      pastActions: [],
+      lights: [],
+      time: 0);
 }
 
 onGameResult(data) {

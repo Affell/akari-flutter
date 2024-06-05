@@ -16,12 +16,6 @@ class Tuto extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                /*
-Place light bulbs (circles) according to the following rules.
-Light bulbs may be placed in any of the white squares, the number in the square shows how many light bulbs are next to it, vertically and horizontally.
-Each light bulb illuminates from bulb to black square or outer frame in its row and column.
-Every white square must be illuminated and a light bulb can not illuminate another light bulb.
-                */
                 const Text("Objective :",
                     style:
                         TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),

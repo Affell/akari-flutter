@@ -1,5 +1,6 @@
 import 'package:akari/main.dart';
 import 'package:akari/utils/save.dart';
+import 'package:akari/views/account.dart';
 import 'package:akari/views/history.dart';
 import 'package:akari/views/leaderBoard.dart';
 import 'package:akari/views/loadGame.dart';
@@ -69,7 +70,7 @@ Color getTextColorButtonContinu() {
 
 class _HomeState extends State<Home> {
   int currentPageIndex = 0;
-  Key navKey = UniqueKey(); 
+  Key navKey = UniqueKey();
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -86,6 +87,26 @@ class _HomeState extends State<Home> {
         ),
         Column(
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.account_circle,
+                    size: width / 8,
+                    color: getTextColorBackGroung(),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Account(),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
             Center(
               child: Text(
                 widget.title,
@@ -224,6 +245,7 @@ class _HomeState extends State<Home> {
       ]),
       bottomNavigationBar: CurvedNavigationBar(
         key: navKey,
+        animationDuration: Duration.zero,
         index: currentPageIndex,
         color: const Color.fromARGB(255, 55, 55, 55),
         backgroundColor: const Color.fromARGB(0, 0, 0, 0),
@@ -268,11 +290,11 @@ class _HomeState extends State<Home> {
               context,
               MaterialPageRoute(builder: (context) => Settings()),
             ).then((_) {
-                setState(() {
-                  currentPageIndex=0;
-                  navKey = UniqueKey();
-                });
+              setState(() {
+                currentPageIndex = 0;
+                navKey = UniqueKey();
               });
+            });
           }
         },
       ),
