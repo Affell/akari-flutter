@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:akari/main.dart';
 import 'package:akari/models/websocket.dart';
 import 'package:akari/utils/save.dart';
+import 'package:akari/views/battle.dart';
 import 'package:akari/views/home.dart';
 import 'package:akari/views/newGame.dart';
 import 'package:akari/views/settings.dart';
@@ -1064,12 +1065,16 @@ class _GridWidget extends State<GridWidget> {
               }
               //Partie multi
               else {
+                //Sauvegarder dans l'historique
+                saveGame(widget.grid, SaveMode.archive);
                 if (finish == true) {
-                  //Sauvegarder dans l'historique
-                  saveGame(widget.grid, SaveMode.archive);
+                  isOnGame = false;
+                  terminee = false;
                   //TODO fermer connexion
                 } else {
                   //TODO Abandon
+                  terminee = false;
+                  forfeit();
                 }
               }
 

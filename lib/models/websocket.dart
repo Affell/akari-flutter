@@ -45,6 +45,10 @@ initWebSocket() {
   });
 }
 
+closeSocket() {
+  socket.sink.close();
+}
+
 /// Handles the 'auth' event.
 onAuth() {
   final token = pref_main.prefs.getString('INSAkari-Connect-Token') ?? '';
@@ -59,6 +63,8 @@ onAuth() {
 onAuthenticated() {
   //TODO
   print("\n\nonAuthentificated\n\n");
+  //Demande du scoreboard pour la 1° initialisation
+  askScoreboard(0);
 }
 
 /// Handles the 'search' event.
@@ -96,6 +102,7 @@ onScoreboard(data) {
       list.map<Map<String, dynamic>>((e) => e as Map<String, dynamic>).toList();
   //TODO update scoreboard view
   listeScoreboard = users;
+  //print("\n\n Scoreboard reçu \n\n");
 }
 
 /// Sends a request to get the scoreboard with the specified offset.
@@ -104,6 +111,7 @@ askScoreboard(int offset) {
     'name': 'scoreboard',
     'data': {'offset': offset},
   }));
+  //print("\n\n Demande du scoreboard envoyée \n\n");
 }
 
 /// Sends a search request.
@@ -126,6 +134,7 @@ onLaunchGame(data) {
       as Map<String, dynamic>; // {id:1, "username": "Affell", "score": 500}
   // TODO lancer partie graphique
   isOnGame = true;
+  isSearching = false;
   grilleMulti = Grid.loadGrid(
       creationTime: DateTime.now().millisecondsSinceEpoch ~/ 1000,
       difficulty: difficulty,
@@ -143,6 +152,18 @@ onGameResult(data) {
   int newElo = data['newElo'] as int;
   int eloDelta = data['eloDelta'] as int;
   bool forfeit = data['forfeit'] as bool;
+
+  print("Récupération des résultats");
+  if (result == "win") {
+    resultat1v1 = "Win";
+  } else {
+    resultat1v1 = "Defeat";
+  }
+  eloAugmentation = eloDelta;
+  nouvelElo = newElo;
+  aAbandonne = forfeit;
+  terminee = true;
+  isOnGame = false;
 }
 
 forfeit() {
@@ -150,6 +171,8 @@ forfeit() {
     'name': 'forfeit',
     'data': {},
   }));
+  print("\n\nForfait\n\n");
+  isOnGame = false;
 }
 
 /// The main function of the application.
