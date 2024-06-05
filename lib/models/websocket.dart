@@ -31,6 +31,9 @@ initWebSocket() {
         case 'authenticated':
           onAuthenticated();
           break;
+        case 'gameResult':
+          onGameResult(dataJson["data"]);
+          break;
         case 'close':
           socket.sink.close();
           break;
@@ -116,6 +119,20 @@ onLaunchGame(data) {
   Map<String, dynamic> opponent = data['opponent']
       as Map<String, dynamic>; // {id:1, "username": "Affell", "score": 500}
   // TODO lancer partie graphique
+}
+
+onGameResult(data) {
+  String result = data['result'] as String;
+  int newElo = data['newElo'] as int;
+  int eloDelta = data['eloDelta'] as int;
+  bool forfeit = data['forfeit'] as bool;
+}
+
+forfeit() {
+  socket.sink.add(jsonEncode({
+    'name': 'forfeit',
+    'data': {},
+  }));
 }
 
 /// The main function of the application.
