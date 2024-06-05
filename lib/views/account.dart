@@ -34,8 +34,10 @@ class _AccountPageState extends State<Account> {
     super.initState();
     _initPrefs().then((_) {
       setState(() {
-        _usernameController = TextEditingController(text: _prefs.getString('username') ?? '');
-        _passwordController = TextEditingController(text: _prefs.getString('password') ?? '');
+        _usernameController =
+            TextEditingController(text: _prefs.getString('username') ?? '');
+        _passwordController =
+            TextEditingController(text: _prefs.getString('password') ?? '');
         _signupEmailController = TextEditingController();
         _signupUsernameController = TextEditingController();
         _signupPasswordController = TextEditingController();
@@ -74,7 +76,7 @@ class _AccountPageState extends State<Account> {
                 ),
                 TextField(
                   controller: _usernameController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Enter your username',
                   ),
@@ -85,7 +87,7 @@ class _AccountPageState extends State<Account> {
                 ),
                 TextField(
                   controller: _passwordController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Enter your password',
                   ),
@@ -102,7 +104,8 @@ class _AccountPageState extends State<Account> {
                     String password = _passwordController.text;
                     String? resultatConnexion = await login(username, password);
                     if (resultatConnexion == null) {
-                      afficherPopup(context, "Login Successful", "You are now connected.\nYou now have access to the leaderboard and battle mode.");
+                      afficherPopup(context, "Login Successful",
+                          "You are now connected.\nYou now have access to the battle mode.");
                     } else {
                       afficherPopup(context, "Login Failed", resultatConnexion);
                     }
@@ -124,7 +127,7 @@ class _AccountPageState extends State<Account> {
                 ),
                 TextField(
                   controller: _signupEmailController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Enter your email',
                   ),
@@ -135,7 +138,7 @@ class _AccountPageState extends State<Account> {
                 ),
                 TextField(
                   controller: _signupUsernameController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Enter your username',
                   ),
@@ -146,7 +149,7 @@ class _AccountPageState extends State<Account> {
                 ),
                 TextField(
                   controller: _signupPasswordController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Enter your password',
                   ),
@@ -157,7 +160,7 @@ class _AccountPageState extends State<Account> {
                 ),
                 TextField(
                   controller: _signupConfirmPasswordController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Confirm your password',
                   ),
@@ -169,21 +172,36 @@ class _AccountPageState extends State<Account> {
                     padding: EdgeInsets.zero,
                     minimumSize: const Size(100, 50),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     String email = _signupEmailController.text;
                     String username = _signupUsernameController.text;
                     String password = _signupPasswordController.text;
-                    String confirmPassword = _signupConfirmPasswordController.text;
-                    if(email!="" && username!="" && password!="" && confirmPassword!=""){
-if (password != confirmPassword) {
-                      afficherPopup(context, "Sign Up Failed", "Passwords do not match.");
+                    String confirmPassword =
+                        _signupConfirmPasswordController.text;
+                    if (email != "" &&
+                        username != "" &&
+                        password != "" &&
+                        confirmPassword != "") {
+                      if (password != confirmPassword) {
+                        afficherPopup(context, "Sign Up Failed",
+                            "Passwords do not match.");
+                      } else {
+                        String? resultatInscription =
+                            await signUp(username, email, password);
+
+                        // TODO : Vérif que l'inscription se fait correctement pour afficher résultat
+                        if (resultatInscription == null) {
+                          afficherPopup(context, "Registration Successful",
+                              "You are now registered.");
+                        } else {
+                          afficherPopup(context, "Registration Failed",
+                              resultatInscription);
+                        }
+                      }
                     } else {
-                      afficherPopup(context, "Sign Up Successful", "You are now registered.");
+                      afficherPopup(context, "Sign Up Failed",
+                          "One or more fields are empty.");
                     }
-                    }else{
-afficherPopup(context, "Sign Up Failed", "One or more fields are empty.");
-                    }
-                    
                   },
                   child: const Text("Sign Up"),
                 ),
