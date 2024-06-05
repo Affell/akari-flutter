@@ -3,6 +3,7 @@
 import 'dart:math';
 import 'dart:async';
 import 'package:akari/main.dart';
+import 'package:akari/models/websocket.dart';
 import 'package:akari/utils/save.dart';
 import 'package:akari/views/home.dart';
 import 'package:akari/views/newGame.dart';
@@ -479,7 +480,8 @@ class Grid {
 
 class GridWidget extends StatefulWidget {
   final Grid grid;
-  const GridWidget({super.key, required this.grid});
+  final bool isOnlineGame;
+  const GridWidget({super.key, required this.grid, required this.isOnlineGame});
 
   @override
   State<StatefulWidget> createState() => _GridWidget();
@@ -688,236 +690,176 @@ class _GridWidget extends State<GridWidget> {
     List<List<int>> currentGrid = widget.grid.currentGrid;
     var currentPageIndex = 1;
     return Scaffold(
-      backgroundColor: Colors.grey,
-      body: Stack(children: [
-        Positioned.fill(
-          child: Image.asset(
-            "lib/assets/images/backgroung_$iCase.jpeg",
-            fit: BoxFit.cover,
+      backgroundColor: Colors.transparent,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(height: 15),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '  Size: $gridSize * $gridSize',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.none,
+                  color: getTextColorBackGroung(),
+                ),
+              ),
+              Text(
+                'Difficulty: ${difficultyMap[widget.grid.difficulty]}',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.none,
+                  color: getTextColorBackGroung(),
+                ),
+              ),
+              SizedBox(
+                child: Center(
+                  child: Text(
+                    '${formatTime(widget.grid.time)}  ',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.none,
+                      color: getTextColorBackGroung(),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '  Size: $gridSize * $gridSize',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.none,
-                    color: getTextColorBackGroung(),
+          const SizedBox(height: 15),
+          SizedBox(
+            height: MediaQuery.of(context).size.width,
+            child: InteractiveViewer(
+              boundaryMargin: const EdgeInsets.all(5.0),
+              minScale: 1,
+              maxScale: 4,
+              panEnabled:
+                  false, //To prevent scrolling (and avoid disturbing physics)
+              child: Container(
+                alignment: Alignment.center,
+                color: Colors
+                    .black, //Black background to avoid blanks between borders
+                child: GridView.builder(
+                  physics:
+                      const NeverScrollableScrollPhysics(), //To prevent scrolling
+                  shrinkWrap: false,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: gridSize,
+                    mainAxisSpacing: 0,
+                    crossAxisSpacing: 0,
                   ),
-                ),
-                Text(
-                  'Difficulty: ${difficultyMap[widget.grid.difficulty]}',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.none,
-                    color: getTextColorBackGroung(),
-                  ),
-                ),
-                SizedBox(
-                  child: Center(
-                    child: Text(
-                      '${formatTime(widget.grid.time)}  ',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.none,
-                        color: getTextColorBackGroung(),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 15),
-            SizedBox(
-              height: MediaQuery.of(context).size.width,
-              child: InteractiveViewer(
-                boundaryMargin: const EdgeInsets.all(5.0),
-                minScale: 1,
-                maxScale: 4,
-                panEnabled:
-                    false, //To prevent scrolling (and avoid disturbing physics)
-                child: Container(
-                  alignment: Alignment.center,
-                  color: Colors
-                      .black, //Black background to avoid blanks between borders
-                  child: GridView.builder(
-                    physics:
-                        const NeverScrollableScrollPhysics(), //To prevent scrolling
-                    shrinkWrap: false,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: gridSize,
-                      mainAxisSpacing: 0,
-                      crossAxisSpacing: 0,
-                    ),
-                    itemCount: gridSize * gridSize,
-                    itemBuilder: (BuildContext context, int index) {
-                      int row = index ~/ gridSize;
-                      int col = index % gridSize;
-                      if (currentGrid[row][col] == 5) {
-                        //Valide bulb
-                        return GestureDetector(
-                          onTap: () {
-                            clickDetected(index);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black),
-                                color: Colors.lightBlue),
-                            child: Center(
-                              child: Image.asset(
-                                  "lib/assets/images/bulb_$iBulb.png",
-                                  fit: BoxFit.cover),
-                            ),
-                          ),
-                        );
-                      } else if (currentGrid[row][col] > 5) {
-                        // Invalide bulb
-                        return GestureDetector(
-                          onTap: () {
-                            clickDetected(index);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
+                  itemCount: gridSize * gridSize,
+                  itemBuilder: (BuildContext context, int index) {
+                    int row = index ~/ gridSize;
+                    int col = index % gridSize;
+                    if (currentGrid[row][col] == 5) {
+                      //Valide bulb
+                      return GestureDetector(
+                        onTap: () {
+                          clickDetected(index);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
                               border: Border.all(color: Colors.black),
-                              color: wrongLamp ? Colors.red : Colors.lightBlue,
-                            ),
-                            child: Center(
-                              child: Image.asset(
-                                  "lib/assets/images/bulb_$iBulb.png"),
+                              color: Colors.lightBlue),
+                          child: Center(
+                            child: Image.asset(
+                                "lib/assets/images/bulb_$iBulb.png",
+                                fit: BoxFit.cover),
+                          ),
+                        ),
+                      );
+                    } else if (currentGrid[row][col] > 5) {
+                      // Invalide bulb
+                      return GestureDetector(
+                        onTap: () {
+                          clickDetected(index);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            color: wrongLamp ? Colors.red : Colors.lightBlue,
+                          ),
+                          child: Center(
+                            child: Image.asset(
+                                "lib/assets/images/bulb_$iBulb.png"),
+                          ),
+                        ),
+                      );
+                    } else if (currentGrid[row][col] == -1) {
+                      //Base Walls
+                      return GestureDetector(
+                        onTap: () {
+                          clickDetected(index);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            image: DecorationImage(
+                              image: AssetImage(
+                                  "lib/assets/images/wall_$iWall.png"),
+                              fit: BoxFit.fill,
                             ),
                           ),
-                        );
-                      } else if (currentGrid[row][col] == -1) {
-                        //Base Walls
-                        return GestureDetector(
-                          onTap: () {
-                            clickDetected(index);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black),
-                              image: DecorationImage(
-                                image: AssetImage(
-                                    "lib/assets/images/wall_$iWall.png"),
-                                fit: BoxFit.fill,
-                              ),
+                        ),
+                      );
+                    } else if (currentGrid[row][col] >= 0) {
+                      //Constrained Walls
+                      return GestureDetector(
+                        onTap: () {
+                          clickDetected(index);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            image: DecorationImage(
+                              image: AssetImage(
+                                  "lib/assets/images/wall_$iWall.png"),
+                              fit: BoxFit.fill,
                             ),
                           ),
-                        );
-                      } else if (currentGrid[row][col] >= 0) {
-                        //Constrained Walls
-                        return GestureDetector(
-                          onTap: () {
-                            clickDetected(index);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black),
-                              image: DecorationImage(
-                                image: AssetImage(
-                                    "lib/assets/images/wall_$iWall.png"),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "${currentGrid[row][col]}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.none,
-                                    fontSize: (1 /
-                                        9 *
-                                        (340 -
-                                            10 *
-                                                gridSize)) //Digit size inversely proportional to grid size for Ctrl F
-                                    ),
-                              ),
-                            ),
-                          ),
-                        );
-                      } else if (currentGrid[row][col] <= -4) {
-                        //Illuminated Boxes
-                        //Unthemed
-                        if (iCase == 0) {
-                          return GestureDetector(
-                            onTap: () {
-                              clickDetected(index);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black),
-                                color: passLamp ? Colors.yellow : Colors.white,
-                              ),
-                            ),
-                          );
-                        }
-                        //With theme
-                        else {
-                          if (!passLamp) {
-                            return GestureDetector(
-                              onTap: () {
-                                clickDetected(index);
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black),
+                          child: Center(
+                            child: Text(
+                              "${currentGrid[row][col]}",
+                              style: TextStyle(
                                   color: Colors.white,
-                                  image: DecorationImage(
-                                    image: AssetImage(
-                                        "lib/assets/images/case_dark_$iCase.png"),
-                                    fit: BoxFit.fill,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.none,
+                                  fontSize: (1 /
+                                      9 *
+                                      (340 -
+                                          10 *
+                                              gridSize)) //Digit size inversely proportional to grid size for Ctrl F
                                   ),
-                                ),
-                              ),
-                            );
-                          } else {
-                            return GestureDetector(
-                              onTap: () {
-                                clickDetected(index);
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black),
-                                  color: Colors.white,
-                                  image: DecorationImage(
-                                    image: AssetImage(
-                                        "lib/assets/images/case_$iCase.png"),
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }
-                        }
-                      } else {
-                        //Empty box
-                        //Without theme
-                        if (iCase == 0) {
-                          return GestureDetector(
-                            onTap: () {
-                              clickDetected(index);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black),
-                                color: Colors.white,
-                              ),
                             ),
-                          );
-                        }
-                        //With theme
-                        else {
+                          ),
+                        ),
+                      );
+                    } else if (currentGrid[row][col] <= -4) {
+                      //Illuminated Boxes
+                      //Unthemed
+                      if (iCase == 0) {
+                        return GestureDetector(
+                          onTap: () {
+                            clickDetected(index);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              color: passLamp ? Colors.yellow : Colors.white,
+                            ),
+                          ),
+                        );
+                      }
+                      //With theme
+                      else {
+                        if (!passLamp) {
                           return GestureDetector(
                             onTap: () {
                               clickDetected(index);
@@ -934,113 +876,170 @@ class _GridWidget extends State<GridWidget> {
                               ),
                             ),
                           );
+                        } else {
+                          return GestureDetector(
+                            onTap: () {
+                              clickDetected(index);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black),
+                                color: Colors.white,
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      "lib/assets/images/case_$iCase.png"),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                          );
                         }
                       }
-                    },
-                  ),
+                    } else {
+                      //Empty box
+                      //Without theme
+                      if (iCase == 0) {
+                        return GestureDetector(
+                          onTap: () {
+                            clickDetected(index);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              color: Colors.white,
+                            ),
+                          ),
+                        );
+                      }
+                      //With theme
+                      else {
+                        return GestureDetector(
+                          onTap: () {
+                            clickDetected(index);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              color: Colors.white,
+                              image: DecorationImage(
+                                image: AssetImage(
+                                    "lib/assets/images/case_dark_$iCase.png"),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  },
                 ),
               ),
             ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                FloatingActionButton(
-                  onPressed: undo,
-                  backgroundColor: Colors.white,
-                  child: const Icon(Icons.arrow_back),
-                ),
-                const SizedBox(width: 10),
-                FloatingActionButton(
-                  onPressed: redo,
-                  backgroundColor: Colors.white,
-                  child: const Icon(Icons.arrow_forward),
-                ),
-                const SizedBox(width: 10),
-                FloatingActionButton(
-                  onPressed: () {
-                    _timer.cancel();
-                    int i = Random().nextInt(2);
-                    if (widget.grid.solutionChecker(currentGrid)) {
-                      finish = true;
-
-                      int time = widget.grid.time;
-
-                      int hours = time ~/ 3600;
-                      int minutes = (time % 3600) ~/ 60;
-                      int seconds = time % 60;
-
-                      String formattedTime =
-                          '$hours h $minutes min $seconds sec';
-
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Félicitation!'),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Image.asset('lib/assets/images/congrat_$i.gif',
-                                    height: 100),
-                                const SizedBox(height: 16),
-                                Text(
-                                    'Vous avez réussi à résoudre cette grille en : $formattedTime'),
-                              ],
-                            ),
-                            actions: [
-                              TextButton(
-                                child: const Text('OK'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    } else {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text("Vous n'avez pas réussi!"),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Image.asset('lib/assets/images/fail_$i.gif',
-                                    height: 100),
-                                const SizedBox(height: 16),
-                                const Text(
-                                    "La solution proposée est incorrecte."),
-                              ],
-                            ),
-                            actions: [
-                              TextButton(
-                                child: const Text('OK'),
-                                onPressed: () {
-                                  _startTimer();
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FloatingActionButton(
+                onPressed: undo,
+                backgroundColor: Colors.white,
+                child: const Icon(Icons.arrow_back),
+              ),
+              const SizedBox(width: 10),
+              FloatingActionButton(
+                onPressed: redo,
+                backgroundColor: Colors.white,
+                child: const Icon(Icons.arrow_forward),
+              ),
+              const SizedBox(width: 10),
+              FloatingActionButton(
+                onPressed: () {
+                  _timer.cancel();
+                  int i = Random().nextInt(2);
+                  if (widget.grid.solutionChecker(currentGrid)) {
+                    finish = true;
+                    //TODO --> Si on est en multi, faire submitGrid
+                    if (widget.isOnlineGame) {
+                      submitGrid(currentGrid);
                     }
-                  },
-                  backgroundColor: Colors.green.shade200,
-                  child: const Icon(Icons.check),
-                ),
-              ],
-            ),
-            const Spacer(),
-          ],
-        ),
-      ]),
+
+                    int time = widget.grid.time;
+
+                    int hours = time ~/ 3600;
+                    int minutes = (time % 3600) ~/ 60;
+                    int seconds = time % 60;
+
+                    String formattedTime = '$hours h $minutes min $seconds sec';
+
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Félicitation!'),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset('lib/assets/images/congrat_$i.gif',
+                                  height: 100),
+                              const SizedBox(height: 16),
+                              Text(
+                                  'Vous avez réussi à résoudre cette grille en : $formattedTime'),
+                            ],
+                          ),
+                          actions: [
+                            TextButton(
+                              child: const Text('OK'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text("Vous n'avez pas réussi!"),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset('lib/assets/images/fail_$i.gif',
+                                  height: 100),
+                              const SizedBox(height: 16),
+                              const Text(
+                                  "La solution proposée est incorrecte."),
+                            ],
+                          ),
+                          actions: [
+                            TextButton(
+                              child: const Text('OK'),
+                              onPressed: () {
+                                _startTimer();
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                },
+                backgroundColor: Colors.green.shade200,
+                child: const Icon(Icons.check),
+              ),
+            ],
+          ),
+          const Spacer(),
+        ],
+      ),
+      //Navbar
       bottomNavigationBar: CurvedNavigationBar(
         key: navKey,
+        animationDuration: Duration.zero,
         index: currentPageIndex,
         color: const Color.fromARGB(255, 55, 55, 55),
         backgroundColor: Colors.transparent,
@@ -1054,12 +1053,26 @@ class _GridWidget extends State<GridWidget> {
         onTap: (index) {
           setState(() {
             if (index == 0 && ModalRoute.of(context)?.settings.name != '/') {
-              if (finish == true) {
-                deleteGame(widget.grid.creationTime, SaveMode.classic);
-                saveGame(widget.grid, SaveMode.archive);
-              } else {
-                saveGame(widget.grid, SaveMode.classic);
+              //Partie solo
+              if (widget.isOnlineGame == false) {
+                if (finish == true) {
+                  deleteGame(widget.grid.creationTime, SaveMode.classic);
+                  saveGame(widget.grid, SaveMode.archive);
+                } else {
+                  saveGame(widget.grid, SaveMode.classic);
+                }
               }
+              //Partie multi
+              else {
+                if (finish == true) {
+                  //Sauvegarder dans l'historique
+                  saveGame(widget.grid, SaveMode.archive);
+                  //TODO fermer connexion
+                } else {
+                  //TODO Abandon
+                }
+              }
+
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(

@@ -22,7 +22,7 @@ class _HistoryPageState extends State<History> {
   int currentPageIndex = 1;
   int gameToDisplay = 0; // 0: All, 1: Solo, 2: 1V1
   Key refreshList = UniqueKey();
-  Key navKey = UniqueKey(); 
+  Key navKey = UniqueKey();
 
   @override
   void initState() {
@@ -76,8 +76,6 @@ class _HistoryPageState extends State<History> {
     }).toList();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -90,7 +88,7 @@ class _HistoryPageState extends State<History> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Spacer(),
+                  const Spacer(),
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
@@ -100,7 +98,7 @@ class _HistoryPageState extends State<History> {
                     },
                     child: const Text('All Games'),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
@@ -110,7 +108,7 @@ class _HistoryPageState extends State<History> {
                     },
                     child: const Text('Solo Games'),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
@@ -120,7 +118,7 @@ class _HistoryPageState extends State<History> {
                     },
                     child: const Text('1V1 Games'),
                   ),
-                  Spacer(),
+                  const Spacer(),
                 ],
               ),
               Expanded(
@@ -140,12 +138,12 @@ class _HistoryPageState extends State<History> {
                       return const Center(child: Text('No game completed'));
                     }
 
-
                     List<Map<String, Object?>> filteredGames =
                         _filterGames(snapshot.data!);
 
                     if (filteredGames.isEmpty) {
-                      return const Center(child: Text('No game matches the filter'));
+                      return const Center(
+                          child: Text('No game matches the filter'));
                     }
 
                     return ListView.builder(
@@ -176,11 +174,14 @@ class _HistoryPageState extends State<History> {
 
                         int size = gameData['size'] as int;
                         int time = gameData['time_spent'] as int;
-                        typeGame type = getTypeGameFromLoad(gameData['type'] as String);
+                        typeGame type =
+                            getTypeGameFromLoad(gameData['type'] as String);
                         String typebis = "";
-                        if (type == typeGame.Solo){
+                        if (type == typeGame.Solo) {
                           typebis = "Solo";
-                        } else{ typebis="1V1";}
+                        } else {
+                          typebis = "1V1";
+                        }
 
                         int hours = time ~/ 3600;
                         int minutes = (time % 3600) ~/ 60;
@@ -236,6 +237,7 @@ class _HistoryPageState extends State<History> {
           ),
           bottomNavigationBar: CurvedNavigationBar(
             key: navKey,
+            animationDuration: Duration.zero,
             index: currentPageIndex,
             color: const Color.fromARGB(255, 55, 55, 55),
             backgroundColor: const Color.fromARGB(0, 0, 0, 0),
@@ -278,11 +280,11 @@ class _HistoryPageState extends State<History> {
                   context,
                   MaterialPageRoute(builder: (context) => Settings()),
                 ).then((_) {
-                setState(() {
-                  currentPageIndex=1;
-                navKey = UniqueKey();
+                  setState(() {
+                    currentPageIndex = 1;
+                    navKey = UniqueKey();
+                  });
                 });
-              });
               }
             },
           )),
