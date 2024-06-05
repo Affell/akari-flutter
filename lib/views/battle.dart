@@ -46,7 +46,12 @@ class Battle extends StatefulWidget {
 class _BattleState extends State<Battle> {
   String _searchingText = 'Recherche d\'adversaire';
   int _dotCount = 0;
-  late Timer? _timer;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   void _startAnimation() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
