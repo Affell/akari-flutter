@@ -45,6 +45,10 @@ initWebSocket() {
   });
 }
 
+closeSocket() {
+  socket.sink.close();
+}
+
 /// Handles the 'auth' event.
 onAuth() {
   final token = pref_main.prefs.getString('INSAkari-Connect-Token') ?? '';
@@ -126,6 +130,7 @@ onLaunchGame(data) {
       as Map<String, dynamic>; // {id:1, "username": "Affell", "score": 500}
   // TODO lancer partie graphique
   isOnGame = true;
+  isSearching = false;
   grilleMulti = Grid.loadGrid(
       creationTime: DateTime.now().millisecondsSinceEpoch ~/ 1000,
       difficulty: difficulty,
@@ -154,6 +159,7 @@ onGameResult(data) {
   nouvelElo = newElo;
   aAbandonne = forfeit;
   terminee = true;
+  isOnGame = false;
 }
 
 forfeit() {

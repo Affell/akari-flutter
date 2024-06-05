@@ -127,6 +127,7 @@ class _AccountPageState extends State<Account> {
                     if (resultatConnexion == null) {
                       afficherPopup(context, "Login Successful",
                           "You are now connected.\nYou now have access to the battle mode.");
+                      closeSocket();
                       initWebSocket();
                     } else {
                       afficherPopup(context, "Login Failed", resultatConnexion);

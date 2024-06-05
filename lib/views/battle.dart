@@ -114,6 +114,7 @@ class _BattleState extends State<Battle> {
                       if (isOnGame) {
                         //Quitte la page pendant la partie --> arrêt de la partie et abandon
                         forfeit();
+                        terminee = false;
                         saveGame(grilleMulti, SaveMode.archive);
                       }
                       Navigator.pop(context);
@@ -284,14 +285,16 @@ class _BattleState extends State<Battle> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text("New Elo : $nouvelElo"),
-                              Text("$eloAugmentation"),
-                              if (aAbandonne) const Text("victory by forfeit."),
+                              Text("($eloAugmentation elo)"),
+                              if (aAbandonne) const Text("Victory by forfeit."),
                             ],
                           ),
                           actions: <Widget>[
                             IconButton(
                               icon: const Icon(Icons.close),
                               onPressed: () {
+                                isOnGame = false;
+                                terminee = false;
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

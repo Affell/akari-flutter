@@ -1069,9 +1069,11 @@ class _GridWidget extends State<GridWidget> {
                 saveGame(widget.grid, SaveMode.archive);
                 if (finish == true) {
                   isOnGame = false;
+                  terminee = false;
                   //TODO fermer connexion
                 } else {
                   //TODO Abandon
+                  terminee = false;
                   forfeit();
                 }
               }
