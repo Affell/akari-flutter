@@ -9,6 +9,9 @@ late ws.WebSocketChannel socket;
 
 /// Initializes the WebSocket connection.
 initWebSocket() {
+  if (socket.closeCode != null) {
+    socket.sink.close();
+  }
   socket = ws.WebSocketChannel.connect(Uri.parse(wsUrl));
   socket.stream.listen((data) {
     Map dataJson = jsonDecode(data) as Map;
@@ -27,6 +30,9 @@ initWebSocket() {
         break;
       case 'authenticated':
         onAuthenticated();
+        break;
+      case 'close':
+        socket.sink.close();
         break;
       default:
         print(dataJson);
