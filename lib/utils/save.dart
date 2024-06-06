@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 import 'package:akari/main.dart';
 import 'package:akari/models/grid.dart';
@@ -31,7 +33,7 @@ void saveGame(Grid game, SaveMode mode) {
       "lights": lightsText,
       "actions_passees": pastActionsText,
       "actions_futures": futureActionsText,
-      "type" : game.type.toString()
+      "type": game.type.toString()
     };
 
     // Insert or Update

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings
+// ignore_for_file: prefer_interpolation_to_compose_strings, camel_case_types, constant_identifier_names
 
 import 'dart:math';
 import 'dart:async';
@@ -960,7 +960,7 @@ class _GridWidget extends State<GridWidget> {
                   int i = Random().nextInt(2);
                   if (widget.grid.solutionChecker(currentGrid)) {
                     finish = true;
-                    //TODO --> Si on est en multi, faire submitGrid
+                    //Si on est en multi, faire submitGrid
                     if (widget.isOnlineGame) {
                       submitGrid(currentGrid);
                     }
@@ -977,7 +977,7 @@ class _GridWidget extends State<GridWidget> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: const Text('Félicitation!'),
+                          title: const Text('Congratulations!'),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -985,7 +985,7 @@ class _GridWidget extends State<GridWidget> {
                                   height: 100),
                               const SizedBox(height: 16),
                               Text(
-                                  'Vous avez réussi à résoudre cette grille en : $formattedTime'),
+                                  'You have successfully solved this grid in : $formattedTime'),
                             ],
                           ),
                           actions: [
@@ -1004,15 +1004,14 @@ class _GridWidget extends State<GridWidget> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: const Text("Vous n'avez pas réussi!"),
+                          title: const Text("You didn't succeed!"),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Image.asset('lib/assets/images/fail_$i.gif',
                                   height: 100),
                               const SizedBox(height: 16),
-                              const Text(
-                                  "La solution proposée est incorrecte."),
+                              const Text("The proposed solution is incorrect."),
                             ],
                           ),
                           actions: [
@@ -1072,7 +1071,6 @@ class _GridWidget extends State<GridWidget> {
                   terminee = false;
                   //TODO fermer connexion
                 } else {
-                  //TODO Abandon
                   terminee = false;
                   forfeit();
                 }

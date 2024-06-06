@@ -217,6 +217,8 @@ class _AccountPageState extends State<Account> {
                         if (resultatInscription == null) {
                           afficherPopup(context, "Registration Successful",
                               "You are now registered.");
+                          closeSocket();
+                          initWebSocket();
                         } else {
                           afficherPopup(context, "Registration Failed",
                               resultatInscription);

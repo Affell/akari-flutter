@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:akari/views/game.dart';
 import 'package:akari/views/history.dart';
 import 'package:akari/views/home.dart';
@@ -19,8 +21,8 @@ class GamesListPage extends StatefulWidget {
 
 class _GamesListPageState extends State<GamesListPage> {
   late Future<List<Map<String, Object?>>> games;
-    int currentPageIndex = 2;
-    Key navKey = UniqueKey(); 
+  int currentPageIndex = 2;
+  Key navKey = UniqueKey();
 
   @override
   void initState() {
@@ -169,76 +171,72 @@ class _GamesListPageState extends State<GamesListPage> {
             );
           },
         ),
-
         bottomNavigationBar: CurvedNavigationBar(
-        key: navKey,
-        animationDuration: Duration.zero,
-        index: currentPageIndex,
-        color: const Color.fromARGB(255, 55, 55, 55),
-        backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-        buttonBackgroundColor: Color.fromARGB(255, 55, 55, 55),
-        height: 60,
-        items: <Widget>[
-          Icon(Icons.home, size: 30, color: Colors.white),
-          Icon(Icons.history, size: 30, color: Colors.white),
-          Icon(Icons.hourglass_bottom, size: 30, color: Colors.white),
-          Icon(Icons.leaderboard_rounded, size: 30, color: Colors.white),
-          Icon(Icons.settings, size: 30, color: Colors.white),
-        ],
-        onTap: (index) {
-          setState(() {
-            currentPageIndex = index;
-          });
+          key: navKey,
+          animationDuration: Duration.zero,
+          index: currentPageIndex,
+          color: const Color.fromARGB(255, 55, 55, 55),
+          backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+          buttonBackgroundColor: const Color.fromARGB(255, 55, 55, 55),
+          height: 60,
+          items: const <Widget>[
+            Icon(Icons.home, size: 30, color: Colors.white),
+            Icon(Icons.history, size: 30, color: Colors.white),
+            Icon(Icons.hourglass_bottom, size: 30, color: Colors.white),
+            Icon(Icons.leaderboard_rounded, size: 30, color: Colors.white),
+            Icon(Icons.settings, size: 30, color: Colors.white),
+          ],
+          onTap: (index) {
+            setState(() {
+              currentPageIndex = index;
+            });
 
-          // Navigation logic
-          if (index == 0 && ModalRoute.of(context)?.settings.name != '/') {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => Home(title: "Akari")),
-            );
-          } else if (index == 1 &&
-              ModalRoute.of(context)?.settings.name != '/historical') {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => History(mode: SaveMode.archive)),
-            );
-            
-          } else if (index == 2 &&
-              ModalRoute.of(context)?.settings.name != '/loadGame') {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => GamesListPage(mode: SaveMode.classic)),
-            );
-            
-          }
-          else if (index == 3 &&
-              ModalRoute.of(context)?.settings.name != '/leaderBoard') {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => LeaderBoard(mode: SaveMode.archive)),
-            );
-          } else if (index == 4 &&
-              ModalRoute.of(context)?.settings.name != '/settings') {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Settings()),
-            ).then((_) {
+            // Navigation logic
+            if (index == 0 && ModalRoute.of(context)?.settings.name != '/') {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const Home(title: "Akari")),
+              );
+            } else if (index == 1 &&
+                ModalRoute.of(context)?.settings.name != '/historical') {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const History(mode: SaveMode.archive)),
+              );
+            } else if (index == 2 &&
+                ModalRoute.of(context)?.settings.name != '/loadGame') {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const GamesListPage(mode: SaveMode.classic)),
+              );
+            } else if (index == 3 &&
+                ModalRoute.of(context)?.settings.name != '/leaderBoard') {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const LeaderBoard(mode: SaveMode.archive)),
+              );
+            } else if (index == 4 &&
+                ModalRoute.of(context)?.settings.name != '/settings') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Settings()),
+              ).then((_) {
                 setState(() {
-                  currentPageIndex=2;
-                navKey = UniqueKey();
+                  currentPageIndex = 2;
+                  navKey = UniqueKey();
                 });
               });
-          }
-        },
+            }
+          },
+        ),
       ),
-      ),
-
-
-
-      );
-      
+    );
   }
 }

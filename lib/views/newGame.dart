@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_import, file_names
+
 import 'dart:ui';
 
 import 'package:akari/utils/save.dart';
@@ -262,7 +264,7 @@ class _NewGamePageState extends State<NewGame> {
               ModalRoute.of(context)?.settings.name != '/settings') {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Settings()),
+              MaterialPageRoute(builder: (context) => const Settings()),
             ).then((_) {
               currentPageIndex = 2;
               navKey = UniqueKey();

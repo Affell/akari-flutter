@@ -288,7 +288,7 @@ class _HomeState extends State<Home> {
               ModalRoute.of(context)?.settings.name != '/settings') {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Settings()),
+              MaterialPageRoute(builder: (context) => const Settings()),
             ).then((_) {
               setState(() {
                 currentPageIndex = 0;

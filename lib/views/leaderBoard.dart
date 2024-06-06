@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:akari/models/api.dart';
 import 'package:akari/views/history.dart';
 import 'package:akari/views/home.dart';
@@ -99,7 +101,6 @@ class _LeaderBoardState extends State<LeaderBoard> {
                             child: Text("No player found..."),
                           );
                         }
-                        //TODO return utile ?
                         return null;
                       },
                     ),

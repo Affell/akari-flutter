@@ -50,7 +50,7 @@ class Battle extends StatefulWidget {
 }
 
 class _BattleState extends State<Battle> {
-  String _searchingText = 'Recherche d\'adversaire';
+  String _searchingText = 'Looking for an opponent';
   int _dotCount = 0;
   Timer? _timer;
 
@@ -64,7 +64,7 @@ class _BattleState extends State<Battle> {
       if (mounted) {
         setState(() {
           _dotCount = (_dotCount + 1) % 4;
-          _searchingText = 'Recherche d\'adversaire${'.' * _dotCount}';
+          _searchingText = 'Looking for an opponent${'.' * _dotCount}';
         });
       }
     });
@@ -73,7 +73,7 @@ class _BattleState extends State<Battle> {
   void _stopAnimation() {
     _timer?.cancel();
     setState(() {
-      _searchingText = 'Recherche d\'adversaire';
+      _searchingText = 'Looking for an opponent';
     });
   }
 
@@ -201,7 +201,7 @@ class _BattleState extends State<Battle> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "Lancer la recherche",
+                                            "Start Searching",
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: width / 15,
@@ -253,7 +253,7 @@ class _BattleState extends State<Battle> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "Arrêter",
+                                            "Stop",
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: width / 15,
@@ -295,7 +295,6 @@ class _BattleState extends State<Battle> {
                               onPressed: () {
                                 isOnGame = false;
                                 terminee = false;
-                                Navigator.of(context).pop();
                               },
                             ),
                           ],

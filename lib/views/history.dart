@@ -243,7 +243,7 @@ class _HistoryPageState extends State<History> {
             backgroundColor: const Color.fromARGB(0, 0, 0, 0),
             buttonBackgroundColor: const Color.fromARGB(255, 55, 55, 55),
             height: 60,
-            items: <Widget>[
+            items: const <Widget>[
               Icon(Icons.home, size: 30, color: Colors.white),
               Icon(Icons.history, size: 30, color: Colors.white),
               Icon(Icons.leaderboard_rounded, size: 30, color: Colors.white),
@@ -257,14 +257,16 @@ class _HistoryPageState extends State<History> {
               if (index == 0 && ModalRoute.of(context)?.settings.name != '/') {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => Home(title: "Akari")),
+                  MaterialPageRoute(
+                      builder: (context) => const Home(title: "Akari")),
                 );
               } else if (index == 1 &&
                   ModalRoute.of(context)?.settings.name != '/historical') {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => History(mode: SaveMode.archive)),
+                      builder: (context) =>
+                          const History(mode: SaveMode.archive)),
                 );
               } else if (index == 2 &&
                   ModalRoute.of(context)?.settings.name != '/leaderBoard') {
@@ -272,13 +274,13 @@ class _HistoryPageState extends State<History> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          LeaderBoard(mode: SaveMode.archive)),
+                          const LeaderBoard(mode: SaveMode.archive)),
                 );
               } else if (index == 3 &&
                   ModalRoute.of(context)?.settings.name != '/settings') {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Settings()),
+                  MaterialPageRoute(builder: (context) => const Settings()),
                 ).then((_) {
                   setState(() {
                     currentPageIndex = 1;
