@@ -1,7 +1,7 @@
 name: akari
 description: "Jouez au Akari en solo ou en duel"
 publish_to: 'none'
-version: 0.2.0
+version: 1.0.0
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
