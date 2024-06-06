@@ -75,7 +75,6 @@ class _NewGamePageState extends State<NewGame> {
   }
 
   Future<void> _launchBattle() async {
-    //TODO init websocket
     bool resultatCheckConnexion = await checkToken();
     if (resultatCheckConnexion == true) {
       Navigator.push(

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:akari/utils/save.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:akari/config.dart';
@@ -63,14 +64,12 @@ onAuth() {
 onAuthenticated() {
   //TODO
   print("\n\nonAuthentificated\n\n");
-  //Demande du scoreboard pour la 1° initialisation
-  askScoreboard(0);
+  //askScoreboard(0);
 }
 
 /// Handles the 'search' event.
 onSearch(Map data) {
   bool success = data['success'];
-  // TODO confirmation visuelle recherche de partie
   isSearching = true;
   print("\n\n Recherche d'adversaire : $isSearching \n\n");
 }
@@ -92,6 +91,7 @@ submitGrid(List<List<int>> grid) {
     'data': {'grid': grid},
   }));
   print("\n\n Grille envoyée \n\n");
+  saveGame(grilleMulti, SaveMode.archive);
 }
 
 /// Handles the 'scoreboard' event.
@@ -100,9 +100,7 @@ onScoreboard(data) {
   List<dynamic> list = data['users'] as List<dynamic>;
   List<Map<String, dynamic>> users =
       list.map<Map<String, dynamic>>((e) => e as Map<String, dynamic>).toList();
-  //TODO update scoreboard view
-  listeScoreboard = users;
-  //print("\n\n Scoreboard reçu \n\n");
+  updateListeScoreboard(users);
 }
 
 /// Sends a request to get the scoreboard with the specified offset.

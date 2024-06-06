@@ -1,5 +1,6 @@
 import 'package:akari/main.dart';
 import 'package:akari/utils/save.dart';
+import 'package:akari/views/game.dart';
 import 'package:akari/views/history.dart';
 import 'package:akari/views/home.dart';
 import 'package:akari/views/leaderBoard.dart';
@@ -264,6 +265,7 @@ class _SettingsPageState extends State<Settings> {
                         onTap: () {
                           setState(() {
                             iCase = index;
+                            updateBackgroundKey();
                             _saveData();
                           });
                         },
@@ -296,7 +298,6 @@ class _SettingsPageState extends State<Settings> {
           ),
         ),
       ),
-      
     );
   }
 }
