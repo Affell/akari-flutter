@@ -1,10 +1,5 @@
 import 'package:akari/main.dart';
-import 'package:akari/utils/save.dart';
 import 'package:akari/views/game.dart';
-import 'package:akari/views/history.dart';
-import 'package:akari/views/home.dart';
-import 'package:akari/views/leaderBoard.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:shared_preferences/shared_preferences.dart';

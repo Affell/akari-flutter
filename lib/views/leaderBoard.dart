@@ -1,6 +1,4 @@
 import 'package:akari/models/api.dart';
-import 'package:akari/views/account.dart';
-import 'package:akari/views/battle.dart';
 import 'package:akari/views/history.dart';
 import 'package:akari/views/home.dart';
 import 'package:akari/views/settings.dart';
@@ -101,6 +99,8 @@ class _LeaderBoardState extends State<LeaderBoard> {
                             child: Text("No player found..."),
                           );
                         }
+                        //TODO return utile ?
+                        return null;
                       },
                     ),
                   )

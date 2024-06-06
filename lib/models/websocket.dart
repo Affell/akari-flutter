@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:convert';
 import 'package:akari/utils/save.dart';
 import 'package:flutter/material.dart';

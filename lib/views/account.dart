@@ -6,6 +6,7 @@ import 'package:akari/models/websocket.dart';
 
 late SharedPreferences _prefs;
 
+// ignore: unused_element
 _saveData() async {
   await _prefs.setString('username', username);
   await _prefs.setString('INSAkari-Connect-Token', token);
