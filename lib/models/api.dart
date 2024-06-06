@@ -87,7 +87,7 @@ Future<String?> signUp(String username, String email, String password) async {
       return null;
     }
   } catch (e) {
-    return 'Invalid response from server';
+    return res.statusCode != 201 ? 'Invalid response from server' : null;
   }
 }
 
@@ -103,17 +103,16 @@ Future<String?> updateUserUsername(String username) async {
     body: jsonEncode(data),
   );
 
-  try {
-    Map dataJson = jsonDecode(res.body) as Map;
-
-    if (res.statusCode != 200) {
+  if (res.statusCode != 200) {
+    try {
+      Map dataJson = jsonDecode(res.body) as Map;
       return dataJson['message'];
-    } else {
-      await main.prefs.setString('username', username);
-      return null;
+    } catch (e) {
+      return 'Invalid response from server';
     }
-  } catch (e) {
-    return 'Invalid response from server';
+  } else {
+    await main.prefs.setString('username', username);
+    return null;
   }
 }
 
@@ -129,17 +128,16 @@ Future<String?> updateUserEmail(String email) async {
     body: jsonEncode(data),
   );
 
-  try {
-    Map dataJson = jsonDecode(res.body) as Map;
-
-    if (res.statusCode != 200) {
+  if (res.statusCode != 200) {
+    try {
+      Map dataJson = jsonDecode(res.body) as Map;
       return dataJson['message'];
-    } else {
-      await main.prefs.setString('email', email);
-      return null;
+    } catch (e) {
+      return 'Invalid response from server';
     }
-  } catch (e) {
-    return 'Invalid response from server';
+  } else {
+    await main.prefs.setString('email', email);
+    return null;
   }
 }
 
