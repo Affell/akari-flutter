@@ -155,15 +155,14 @@ Future<String?> updateUserPassword(String password) async {
     body: jsonEncode(data),
   );
 
-  try {
-    Map dataJson = jsonDecode(res.body) as Map;
-
-    if (res.statusCode != 200) {
+  if (res.statusCode != 200) {
+    try {
+      Map dataJson = jsonDecode(res.body) as Map;
       return dataJson['message'];
-    } else {
-      return null;
+    } catch (e) {
+      return 'Invalid response from server';
     }
-  } catch (e) {
-    return 'Invalid response from server';
+  } else {
+    return null;
   }
 }
