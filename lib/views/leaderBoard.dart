@@ -85,17 +85,79 @@ class _LeaderBoardState extends State<LeaderBoard> {
                       itemBuilder: (context, index) {
                         if (listeScoreboard.isNotEmpty &&
                             index < listeScoreboard.length) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const SizedBox(width: 10),
-                              Text("${listeScoreboard[index].values.last}"),
-                              const Spacer(),
-                              Text("${listeScoreboard[index].values.first}"),
-                              const SizedBox(width: 10),
-                            ],
-                          );
+                          if (index == 0) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const SizedBox(width: 10),
+                                Text(
+                                  "${listeScoreboard[index].values.last}",
+                                  style: const TextStyle(color: Colors.amber),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  "${listeScoreboard[index].values.first}",
+                                  style: const TextStyle(color: Colors.amber),
+                                ),
+                                const SizedBox(width: 10),
+                              ],
+                            );
+                          } else if (index == 1) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const SizedBox(width: 10),
+                                Text(
+                                  "${listeScoreboard[index].values.last}",
+                                  style: const TextStyle(
+                                      color:
+                                          Color.fromARGB(255, 192, 192, 192)),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  "${listeScoreboard[index].values.first}",
+                                  style: const TextStyle(
+                                      color:
+                                          Color.fromARGB(255, 192, 192, 192)),
+                                ),
+                                const SizedBox(width: 10),
+                              ],
+                            );
+                          } else if (index == 2) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const SizedBox(width: 10),
+                                Text(
+                                  "${listeScoreboard[index].values.last}",
+                                  style: const TextStyle(
+                                      color: Color.fromARGB(255, 205, 127, 50)),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  "${listeScoreboard[index].values.first}",
+                                  style: const TextStyle(
+                                      color: Color.fromARGB(255, 205, 127, 50)),
+                                ),
+                                const SizedBox(width: 10),
+                              ],
+                            );
+                          } else {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const SizedBox(width: 10),
+                                Text("${listeScoreboard[index].values.last}"),
+                                const Spacer(),
+                                Text("${listeScoreboard[index].values.first}"),
+                                const SizedBox(width: 10),
+                              ],
+                            );
+                          }
                         } else if (listeScoreboard.isEmpty) {
                           return const Center(
                             child: Text("No player found..."),

@@ -286,9 +286,10 @@ class _BattleState extends State<Battle> {
                             children: [
                               Text("New Elo : $nouvelElo"),
                               Text("($eloAugmentation elo)"),
-                              if (aAbandonne) const Text("Victory by forfeit."),
+                              if (aAbandonne) Text("$resultat1v1 by forfeit."),
                             ],
                           ),
+                          /*
                           actions: <Widget>[
                             IconButton(
                               icon: const Icon(Icons.close),
@@ -298,6 +299,7 @@ class _BattleState extends State<Battle> {
                               },
                             ),
                           ],
+                          */
                         ),
                     ],
                   ),

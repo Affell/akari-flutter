@@ -73,6 +73,7 @@ onAuthenticated() {
 onSearch(Map data) {
   bool success = data['success'];
   isSearching = true;
+  terminee = false;
   print("\n\n Recherche d'adversaire : $isSearching \n\n");
 }
 

@@ -115,26 +115,50 @@ class _AccountPageState extends State<Account> {
                   obscureText: true,
                 ),
                 const SizedBox(height: 20),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    padding: EdgeInsets.zero,
-                    minimumSize: const Size(100, 50),
-                  ),
-                  onPressed: () async {
-                    String username = _usernameController!.text;
-                    String password = _passwordController!.text;
-                    String? resultatConnexion = await login(username, password);
-                    if (resultatConnexion == null) {
-                      afficherPopup(context, "Login Successful",
-                          "You are now connected.\nYou now have access to the battle mode.");
-                      closeSocket();
-                      initWebSocket();
-                    } else {
-                      afficherPopup(context, "Login Failed", resultatConnexion);
-                    }
-                  },
-                  child: const Text("Login"),
+                Row(
+                  children: [
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        padding: EdgeInsets.zero,
+                        minimumSize: const Size(100, 50),
+                      ),
+                      onPressed: () async {
+                        String username = _usernameController!.text;
+                        String password = _passwordController!.text;
+                        String? resultatConnexion =
+                            await login(username, password);
+                        if (resultatConnexion == null) {
+                          afficherPopup(context, "Login Successful",
+                              "You are now connected.\nYou now have access to the battle mode.");
+                          closeSocket();
+                          initWebSocket();
+                        } else {
+                          afficherPopup(
+                              context, "Login Failed", resultatConnexion);
+                        }
+                      },
+                      child: const Text("Log In"),
+                    ),
+                    const SizedBox(width: 20),
+                    /*
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        padding: EdgeInsets.zero,
+                        minimumSize: const Size(100, 50),
+                      ),
+                      onPressed: () async {
+                        bool estConnecte = await checkToken();
+                        if (estConnecte) {
+                          
+
+                        }
+                      },
+                      child: const Text("Log Out"),
+                    ),
+                    */
+                  ],
                 ),
                 const Divider(
                   color: Colors.black,
