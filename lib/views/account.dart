@@ -243,6 +243,7 @@ class _AccountPageState extends State<Account> {
                               "You are now registered.");
                           closeSocket();
                           initWebSocket();
+                          login(username, password);
                         } else {
                           afficherPopup(context, "Registration Failed",
                               resultatInscription);

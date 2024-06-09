@@ -13,6 +13,7 @@ int eloAugmentation = 0;
 int nouvelElo = 0;
 bool aAbandonne = false;
 bool terminee = false;
+Map<String, dynamic> adversaire = {};
 //grille temporaire car on peut pas en avoir une vide
 Grid grilleMulti = Grid.createGrid(
     difficulty: 0,
@@ -271,13 +272,38 @@ class _BattleState extends State<Battle> {
                         ),
                       // Partie trouvée et en cours
                       if (isOnGame)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Opponent : ${adversaire["username"]}",
+                              style: TextStyle(
+                                color: getTextColorBackGroung(),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Spacer(),
+                            Text(
+                              "Elo : ${adversaire["score"]}",
+                              style: TextStyle(
+                                color: getTextColorBackGroung(),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                      if (isOnGame)
                         Expanded(
                           child: GridWidget(
                             isOnlineGame: true,
                             grid: grilleMulti,
                           ),
                         ),
-                      if (terminee)
+
+                      if (terminee && !isOnGame)
                         AlertDialog(
                           title: Text(resultat1v1),
                           content: Column(

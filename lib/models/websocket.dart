@@ -133,9 +133,10 @@ onLaunchGame(data) {
   int difficulty = data['difficulty'] as int;
   Map<String, dynamic> opponent = data['opponent']
       as Map<String, dynamic>; // {id:1, "username": "Affell", "score": 500}
-  // TODO lancer partie graphique
+  terminee = false;
   isOnGame = true;
   isSearching = false;
+  adversaire = opponent;
   grilleMulti = Grid.loadGrid(
       creationTime: DateTime.now().millisecondsSinceEpoch ~/ 1000,
       difficulty: difficulty,

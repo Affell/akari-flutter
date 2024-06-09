@@ -1069,7 +1069,6 @@ class _GridWidget extends State<GridWidget> {
                 if (finish == true) {
                   isOnGame = false;
                   terminee = false;
-                  //TODO fermer connexion
                 } else {
                   terminee = false;
                   forfeit();
