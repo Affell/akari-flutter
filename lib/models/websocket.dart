@@ -156,6 +156,11 @@ onGameResult(data) {
   bool forfeit = data['forfeit'] as bool;
 
   print("Récupération des résultats");
+  saveGame(
+      grilleMulti,
+      SaveMode
+          .archive); //TODO check si ça a bien fix la sauvegarde lors d'un forfeit
+
   if (result == "win") {
     resultat1v1 = "Win";
   } else {

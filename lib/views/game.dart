@@ -26,16 +26,20 @@ class Game extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Akari Game'),
       ),
-      body: MyGridWidget(size: size, difficulty: difficulty),
+      body: MyGridWidget(
+          grille: Grid.createGrid(
+        difficulty: difficulty,
+        gridSize: size,
+        creationTime: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      )),
     );
   }
 }
 
 class MyGridWidget extends StatefulWidget {
-  final int size;
-  final int difficulty;
+  final Grid grille;
 
-  const MyGridWidget({super.key, required this.size, required this.difficulty});
+  const MyGridWidget({super.key, required this.grille});
 
   @override
   State<StatefulWidget> createState() => _MyGridWidgetState();
@@ -61,8 +65,6 @@ class _MyGridWidgetState extends State<MyGridWidget> {
 
   @override
   Widget build(BuildContext context) {
-    int size = widget.size;
-    int difficulty = widget.difficulty;
     return Scaffold(
       backgroundColor: Colors.grey,
       body: Stack(
@@ -78,11 +80,7 @@ class _MyGridWidgetState extends State<MyGridWidget> {
           // Grille
           GridWidget(
             isOnlineGame: false,
-            grid: Grid.createGrid(
-              difficulty: difficulty,
-              gridSize: size,
-              creationTime: DateTime.now().millisecondsSinceEpoch ~/ 1000,
-            ),
+            grid: widget.grille,
           ),
         ],
       ),

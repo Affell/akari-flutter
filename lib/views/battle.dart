@@ -116,7 +116,7 @@ class _BattleState extends State<Battle> {
                         //Quitte la page pendant la partie --> arrêt de la partie et abandon
                         forfeit();
                         terminee = false;
-                        saveGame(grilleMulti, SaveMode.archive);
+                        //saveGame(grilleMulti, SaveMode.archive); //TODO fix sauvegarde lors d'abandon, cf websocket
                       }
                       Navigator.pop(context);
                     },
